@@ -1,4 +1,4 @@
-# Teamagochi - テアマゴチ 
+# Teamagochi - ティーマゴチ
 
 ## Description
 
