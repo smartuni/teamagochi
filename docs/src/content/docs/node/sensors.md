@@ -1,8 +1,9 @@
 ---
-title: sensors
+title: Possible Sensors
 description: list of possible features implemented via sensors
 ---
 
+```
 display status:
 	blue LED
 		=> own pet is currently on this device
@@ -36,6 +37,6 @@ track orientation:
 	=> move pet when device is tilted
 	=> pet moves when device is in motion
 		=> optional: pedometer
-		
+```
 
   
