@@ -6,6 +6,8 @@ Teamagochi is a virtual pet project by the RIOT Project SoSe24 team.
 
 ### [Documentation Page](https://smartuni.github.io/riot-po-2024/)
 
+### [Kanban Board](https://github.com/orgs/smartuni/projects/2)
+
 ## Contributing
 
 ### Workflow
