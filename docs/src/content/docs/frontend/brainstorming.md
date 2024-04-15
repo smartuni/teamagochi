@@ -1,5 +1,5 @@
 ---
-title: Braintorming Results
+title: Brainstorming Results
 description: This page contains the results of the brainstorming session
 ---
 
