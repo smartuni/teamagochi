@@ -1,3 +1,3 @@
-## Teamagochi Backend
+## Teamagochi Backend Architecture
 
-This is the folder for web backend development.
+![IMG20240415181928](https://github.com/smartuni/riot-po-2024/assets/102831965/df1e9e11-421d-417b-a237-67e6496f2918)
