@@ -1,10 +1,12 @@
 name: Website Upload
 on:
   push:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'docs/**'
     # We only run this GitHub action upon new commits to `main`
     branches:
       - main
-      - initialdocs # Temporary branch for initial documentation
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
