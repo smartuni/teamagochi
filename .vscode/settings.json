@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "board.h": "c",
+        "cpu.h": "c",
+        "riot_logo.h": "c",
+        "ili9341_params.h": "c"
+    }
+}
