@@ -1,5 +1,6 @@
 /* Generated file do not edit */
 #define CONFIG_LWM2M_BOOTSTRAP 1
+#define CONFIG_LWM2M_WITH_LOGS 1
 #define DEVELHELP 1
 #define CPU_FAM_NRF52 1
 #define CPU_MODEL_NRF52840XXAA 1
@@ -15,7 +16,8 @@
 #define RTT_FREQUENCY RTT_MAX_FREQUENCY
 #define LWM2M_CLIENT_MODE 1
 #define LWM2M_BOOTSTRAP 1
-#define CONFIG_LWM2M_SERVER_URI "coap://fda9:ed27:e5d3:9f66::1"
+#define LWM2M_WITH_LOGS 1
+#define CONFIG_LWM2M_SERVER_URI "coap://[2001:db8:1::1]"
 #define RIOT_VERSION "UNKNOWN (builddir: /data/riotbuild/riotbase)"
 #define RIOT_VERSION_CODE RIOT_VERSION_NUM(2042,5,23,0)
 #define MODULE_AUTO_INIT 1
