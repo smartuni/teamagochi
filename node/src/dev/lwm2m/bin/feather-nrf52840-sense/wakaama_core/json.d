@@ -38,7 +38,8 @@
  /opt/gcc-arm-none-eabi-10.3-2021.10/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
  /opt/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/sys/stdio.h \
  /data/riotbuild/riotbase/build/pkg/wakaama/core/er-coap-13/er-coap-13.h \
- /opt/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/inttypes.h
+ /opt/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/inttypes.h \
+ /data/riotbuild/riotbase/sys/include/fmt.h
 /data/riotbuild/riotproject/node/src/dev/lwm2m/bin/feather-nrf52840-sense/riotbuild/riotbuild.h:
 /data/riotbuild/riotbase/build/pkg/wakaama/core/internals.h:
 /data/riotbuild/riotbase/build/pkg/wakaama/core/liblwm2m.h:
@@ -78,3 +79,4 @@
 /opt/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/sys/stdio.h:
 /data/riotbuild/riotbase/build/pkg/wakaama/core/er-coap-13/er-coap-13.h:
 /opt/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/inttypes.h:
+/data/riotbuild/riotbase/sys/include/fmt.h:
