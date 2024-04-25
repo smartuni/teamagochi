@@ -1,3 +1,19 @@
 /**
  * Add global custom css here...
  */
+.sl-markdown-content .figure > p > img {
+  margin: 0 auto;
+}
+
+.sl-markdown-content .figure .figure-caption {
+  size: 0.8em;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+@media (min-width: 50rem) {
+  .sl-markdown-content .figure > p > img {
+    max-width: 70%;
+  }
+}
