@@ -1,5 +1,5 @@
 ---
-title: Git Tutorial
+title: Git
 description: Some basic Git commands to get you started.
 ---
 
