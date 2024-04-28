@@ -10,6 +10,20 @@ Teamagochi is a virtual pet project by the RIOT Project SoSe24 team.
 
 ## Contributing
 
+### Cloning
+
+Make sure to clone the repository with the `--recursive` flag to also clone the submodules.
+
+```bash
+git clone --recursive git@github.com:smartuni/teamagochi.git
+```
+
+or if you have already cloned the repository, you can run:
+
+```bash
+git submodule update --init --recursive
+```
+
 ### Workflow
 
 - Create a new branch for your feature or bugfix (`git checkout -b feature/my-feature`)
