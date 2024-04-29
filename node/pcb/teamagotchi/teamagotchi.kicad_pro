@@ -52,10 +52,7 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [
-        "lib_footprint_mismatch|156250000|74446000|293b4a4c-9c94-4503-9452-a6b0b0aa8061|00000000-0000-0000-0000-000000000000",
-        "silk_over_copper|137331395|50736426|9ca16ef5-dad3-45b4-baf0-177570024ab5|00000000-0000-0000-0000-000000000000"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -218,10 +215,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "lib_symbol_issues|1003300|711200|babe7c8c-90d8-4c96-91b9-a4f64b084a30|00000000-0000-0000-0000-000000000000|||",
-      "lib_symbol_issues|1714500|736600|32b2a9f1-f846-4522-8bc0-6f3b2079a4b6|00000000-0000-0000-0000-000000000000|||"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
@@ -471,7 +465,7 @@
       "gencad": "",
       "idf": "teamagotchi.idf",
       "netlist": "",
-      "plot": "",
+      "plot": "gbr/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "teamagotchi.step",
