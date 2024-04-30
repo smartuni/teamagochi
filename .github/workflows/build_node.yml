@@ -1,4 +1,4 @@
-name: Website Upload
+name: Node Build
 on:
   push:
     paths:
