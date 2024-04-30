@@ -1,0 +1,28 @@
+name: Website Upload
+on:
+  push:
+    paths:
+      - 'node/code/**'
+    # We only run this GitHub action upon new commits to `main`
+    branches:
+      - main
+      - node_ci
+  pull_request:
+    paths:
+      - 'node/code/**'
+    branches:
+      - main
+      - node_ci
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Node
+        run: |
+          cd node/code
+          BUILD_IN_DOCKER=1 make all
+          
