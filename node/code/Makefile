@@ -21,6 +21,7 @@ USEMODULE += ztimer_msec
 # the variable to empty
 SHOULD_RUN_KCONFIG ?=
 
+# Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
 CXXEXFLAGS +=
@@ -38,3 +39,5 @@ windows: all
 	@usbipd.exe attach --wsl -i 1209:7d00 
 	@sleep 3
 	@echo "Connected :D"
+	@echo "Cleaning up uf2 flash file"
+	@rm flash.uf2
