@@ -1,22 +1,25 @@
-#include "architecture.h"
-#include "thread.h"
-
-#include "init_display.h"
+/**
+ * @brief Main file for the C++ code.
+ * @author Tom <git@annsann.eu>
+ */
 
 #include <cstdio>
 #include <vector>
 
+#include "architecture.h"
+#include "init_display.h"
+#include "thread.h"
+
 using namespace std;
 
 /* main */
-int main()
-{
-    printf("\n************ We are in C++ 😎 ***********\n");
-    printf("\n");
+int main() {
+  printf("\n************ We are in C++ 😎 ***********\n");
+  printf("\n");
 
-    init_display();
+  init_display();
 
-    puts("{\"result\": \"PASS\"}");
+  puts("{\"result\": \"PASS\"}");
 
-    return 0;
+  return 0;
 }
