@@ -11,6 +11,7 @@
 #include "ping.hpp"
 #include "dispatch_handler.hpp"
 #include "riot/thread.hpp"
+#include "dispatcher.hpp"
 
 using namespace std;
 using namespace riot;
@@ -27,14 +28,20 @@ int main() {
   cout << "Sleeping for 5 seconds...\n" << endl;
   riot::this_thread::sleep_for(chrono::seconds(5));
   cout << "Done sleeping.\n" << endl;
+
+  // Create the dispatcher
+  Dispatcher *dispatcher = new Dispatcher();
+  dispatcher->startInternalThread();
+
+  // Create the ping class
   Ping *ping = new Ping();
-  
   ping->startInternalThread();
+  dispatcher->subscribe({EVENTS::PING}, ping->getPID());
 
   while (true) {
     cout << "Sending ping event" << endl;
     msg_t message;
-    message.content.value = 69;
+    message.type = EVENTS::PING;
 
     msg_try_send(&message, ping->getPID());
 

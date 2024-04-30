@@ -1,10 +1,10 @@
-#pragma once
-
 /**
  * @file ping.hpp
  * @brief Ping is a simple class to showcase the DispatchHandler.
  * @author AnnsAnn <git@annsann.eu>
 */
+#pragma once
+
 #include <iostream>
 
 #include "mbox.h"

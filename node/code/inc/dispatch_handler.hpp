@@ -1,15 +1,15 @@
-#pragma once
-
 /**
  * @brief DispatchHandler is an abstract class that receives events.
  * @author Tom <git@annsann.eu>
  */
+#pragma once
 
 using namespace std;
 
 #include <iostream>
 
 #include "msg.h"
+#include "GLOBALS.hpp"
 #include "thread.h"
 
 /**
@@ -35,6 +35,19 @@ class DispatchHandler {
    * @details Initializes the event queue and starts the event loop.
    */
   DispatchHandler() { }
+
+  /**
+   * @brief Send an event to the dispatcher.
+   * @param event The event to send.
+  */
+  void sendEvent(msg_t *event) {
+    if (DISPATCHER_PID == -1) {
+      cout << "Dispatcher PID not set yet!" << endl;
+      return;
+    }
+
+    msg_try_send(event, DISPATCHER_PID);
+  }
 
   kernel_pid_t getPID() { return this->internal_thread_pid; }
 
@@ -75,6 +88,11 @@ class DispatchHandler {
   virtual void handleEvent(msg_t *event) = 0;
 
  private:
+  /**
+   * @brief Internal thread entry function.
+   * The C++11 thread compat layer doesn't appear to properly support C++ classes
+   * so we have to do some (really) cursed pthread stuff to make it work.
+  */
   static void *internalThreadEntryFunction(void *This) {
     ((DispatchHandler *)This)->startHandler();
 

@@ -1,0 +1,29 @@
+#include "dispatcher.hpp"
+#include "GLOBALS.hpp"
+
+Dispatcher::Dispatcher() {
+    this->subscriptions = list<Subscription>();
+}
+
+void Dispatcher::subscribe(list<EVENTS> events, kernel_pid_t pid) {
+    Subscription sub;
+    sub.event = events;
+    sub.pid = pid;
+
+    this->subscriptions.push_back(sub);
+}
+
+void Dispatcher::handleEvent(msg_t *event) {
+    for (Subscription sub : this->subscriptions) {
+        for (EVENTS e : sub.event) {
+            if (e == event->type) {
+                msg_t msg;
+                msg.content.ptr = event->content.ptr;
+                msg.content.value = event->content.value;
+                msg.type = event->type;
+
+                msg_try_send(&msg, sub.pid);
+            }
+        }
+    }
+}
