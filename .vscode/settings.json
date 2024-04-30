@@ -58,7 +58,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "thread": "cpp",
+        "chrono": "cpp"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,
@@ -68,4 +70,5 @@
         "editor.tabSize": 2,
         "editor.insertSpaces": true,
     },
+    "C_Cpp.errorSquiggles": "disabled",
 }
