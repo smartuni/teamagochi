@@ -60,7 +60,11 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "thread": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "iostream": "cpp",
+        "list": "cpp",
+        "ratio": "cpp",
+        "istream": "cpp"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,

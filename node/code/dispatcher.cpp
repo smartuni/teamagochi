@@ -17,6 +17,8 @@ void Dispatcher::handleEvent(msg_t *event) {
     for (Subscription sub : this->subscriptions) {
         for (EVENTS e : sub.event) {
             if (e == event->type) {
+                cout << "👀 PID: " << sub.pid << " was interested in event " << event->type << " notifying them" << endl;
+
                 msg_t msg;
                 msg.content.ptr = event->content.ptr;
                 msg.content.value = event->content.value;

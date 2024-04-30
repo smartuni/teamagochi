@@ -11,4 +11,4 @@
 /**
  * @brief The dispatcher PID. Used to send events to the dispatcher.
 */
-static kernel_pid_t DISPATCHER_PID = -1;
+extern kernel_pid_t DISPATCHER_PID;

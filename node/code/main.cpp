@@ -7,14 +7,17 @@
 #include <vector>
 
 #include "architecture.h"
+#include "dispatch_handler.hpp"
+#include "dispatcher.hpp"
 #include "init_display.h"
 #include "ping.hpp"
-#include "dispatch_handler.hpp"
+#include "pong.hpp"
 #include "riot/thread.hpp"
-#include "dispatcher.hpp"
 
 using namespace std;
 using namespace riot;
+
+kernel_pid_t DISPATCHER_PID;
 
 /* main */
 int main() {
@@ -33,19 +36,27 @@ int main() {
   Dispatcher *dispatcher = new Dispatcher();
   dispatcher->startInternalThread();
 
+  DISPATCHER_PID = dispatcher->getPID();
+
   // Create the ping class
   Ping *ping = new Ping();
   ping->startInternalThread();
+
+  // Create the pong class
+  Pong *pong = new Pong();
+  pong->startInternalThread();
+
+  // Subscribe the ping and pong classes to each other
   dispatcher->subscribe({EVENTS::PING}, ping->getPID());
+  dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
+
+  cout << "Sending initial ping event" << endl;
+  msg_t message;
+  message.type = EVENTS::PING;
+
+  msg_try_send(&message, dispatcher->getPID());
 
   while (true) {
-    cout << "Sending ping event" << endl;
-    msg_t message;
-    message.type = EVENTS::PING;
-
-    msg_try_send(&message, ping->getPID());
-
-    riot::this_thread::sleep_for(chrono::seconds(1));
   }
 
   return 0;

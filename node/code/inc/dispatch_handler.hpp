@@ -10,6 +10,7 @@ using namespace std;
 
 #include "msg.h"
 #include "GLOBALS.hpp"
+#include "EVENTS.hpp"
 #include "thread.h"
 
 /**
@@ -69,12 +70,15 @@ class DispatchHandler {
   void startHandler() {
     msg_init_queue(rcv_queue, QUEUE_SIZE);
     
+    // Event loop - Blocks when no events are available
     while (true) {
       msg_t message;
       msg_receive(&message);
 
-      cout << "Received message: " << message.type
-           << " from PID: " << message.sender_pid << endl;
+      if (message.type == EVENTS::TERMINATE) {
+        cout << "Received TERMINATE event, exiting..." << endl;
+        return;
+      }
 
       this->handleEvent(&message);
     }
