@@ -87,7 +87,7 @@ int main(void)
     lcd_pixmap(&dev, x1, x1 + RIOT_LOGO_WIDTH - 1, y1, y1 +  RIOT_LOGO_HEIGHT - 1,
                (const uint16_t *)picture);
 #endif
-    while (1) {}
+    puts("{\"result\": \"PASS\"}");
 
     return 0;
 }
