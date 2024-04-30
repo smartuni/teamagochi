@@ -6,14 +6,12 @@ on:
       - '.github/workflows/build_node.yml'
     branches:
       - main
-      - node_ci
   pull_request:
     paths:
       - 'node/code/**'
       - '.github/workflows/build_node.yml'
     branches:
       - main
-      - node_ci
 
 jobs:
   build:
