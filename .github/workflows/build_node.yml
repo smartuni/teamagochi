@@ -3,13 +3,14 @@ on:
   push:
     paths:
       - 'node/code/**'
-    # We only run this GitHub action upon new commits to `main`
+      - '.github/workflows/build_node.yml'
     branches:
       - main
       - node_ci
   pull_request:
     paths:
       - 'node/code/**'
+      - '.github/workflows/build_node.yml'
     branches:
       - main
       - node_ci
@@ -25,4 +26,4 @@ jobs:
         run: |
           cd node/code
           BUILD_IN_DOCKER=1 make all
-          
+
