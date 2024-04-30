@@ -1,22 +1,4 @@
-/*
- * Copyright (C) 2018 Koen Zandberg <koen@bergzand.net>
- *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
- */
-
-/**
- * @ingroup     tests
- * @{
- *
- * @file
- * @brief       Test application for lcd tft displays
- *
- * @author      Koen Zandberg <koen@bergzand.net>
- *
- * @}
- */
+#include "init_display.h"
 
 #include <stdio.h>
 #include "timex.h"
@@ -29,8 +11,7 @@
 #include "ili9341.h"
 #include "ili9341_params.h"
 
-
-int main(void)
+int init_display(void)
 {
     lcd_t dev;
     dev.driver = &lcd_ili9341_driver;
@@ -45,10 +26,12 @@ int main(void)
     BACKLIGHT_ON;
 #endif
 
-    if (lcd_init(&dev, &ili9341_params[0]) == 0) {
+    if (lcd_init(&dev, &ili9341_params[0]) == 0)
+    {
         puts("[OK]");
     }
-    else {
+    else
+    {
         puts("[Failed]");
         return 1;
     }
@@ -84,10 +67,9 @@ int main(void)
     /* Approximate middle of the display */
     uint8_t x1 = (dev.params->lines / 2) - (RIOT_LOGO_WIDTH / 2);
     uint8_t y1 = (dev.params->rgb_channels / 2) - (RIOT_LOGO_HEIGHT / 2);
-    lcd_pixmap(&dev, x1, x1 + RIOT_LOGO_WIDTH - 1, y1, y1 +  RIOT_LOGO_HEIGHT - 1,
+    lcd_pixmap(&dev, x1, x1 + RIOT_LOGO_WIDTH - 1, y1, y1 + RIOT_LOGO_HEIGHT - 1,
                (const uint16_t *)picture);
 #endif
-    puts("{\"result\": \"PASS\"}");
 
     return 0;
 }
