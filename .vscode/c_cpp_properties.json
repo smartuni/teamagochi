@@ -3,8 +3,13 @@
         {
             "name": "Teamagochi",
             "cStandard": "c11",
-            "cppStandard": "c++17",
-            "compileCommands": "${workspaceFolder}/node/code/compile_commands.json"
+            "cppStandard": "c++20",
+            "compileCommands": "${workspaceFolder}/node/code/compile_commands.json",
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/node/code/RIOT/**"
+            ]
         }
     ],
     "version": 4

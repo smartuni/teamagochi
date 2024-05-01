@@ -13,6 +13,7 @@ FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
 #Hardware specific configs
+USEMODULE += cpp11-compat
 USEMODULE += ili9341
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
@@ -24,7 +25,7 @@ SHOULD_RUN_KCONFIG ?=
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
-CXXEXFLAGS +=
+CXXEXFLAGS += 
 
 include $(RIOTBASE)/Makefile.include
 
