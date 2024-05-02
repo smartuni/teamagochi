@@ -1,8 +1,10 @@
-# Teamagochi - ティーマゴチ
+![Teamagochi - てぃーまごっち](./.github/images/banner.png)
 
 ## Description
 
-Teamagochi is a virtual pet project by the RIOT Project SoSe24 team.
+Teamagochi is a synchronized always-online pet simulator with multiplayer functionality​ by the RIOT Project SoSe24 team. 
+
+It consists of a [physical device (Node)](./node/), [web backend](./web_backend/) and [web/mobile frontend](./web_backend/).
 
 ### [Documentation Page](https://smartuni.github.io/teamagochi/)
 
