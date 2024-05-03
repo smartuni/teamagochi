@@ -65,7 +65,7 @@ services:
   keycloak:
     build:
       context: ./keycloak
-    command: ["start", "--optimized"]
+    command: ["start", "--optimized", "--import-realm"]
     environment:
       # NOTE: Uses a preconfigured Dockerfile, see ./keycloak/Dockerfile
       KC_DB_PASSWORD: "${POSTGRES_KC_PASSWORD}"
@@ -80,6 +80,8 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"]
       <<: *common-healthcheck
+    volumes:
+      - "./data/keycloak/import:/opt/keycloak/data/import"
     depends_on:
       postgres:
         condition: service_healthy
@@ -108,7 +110,8 @@ services:
       <<: *common-healthcheck
     volumes:
       - postgres:/var/lib/postgresql/data
-      - "./postgres/initdb.d:/docker-entrypoint-initdb.d"
+      - "./postgres/initdb.d/init-keycloak-db.sh:/docker-entrypoint-initdb.d/init-keycloak-db.sh"
+      - "./data/db/import/keycloak-db.dump:/docker-entrypoint-initdb.d/keycloak-db.dump"
     networks:
       - db
 
