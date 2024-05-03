@@ -1,2 +1,4 @@
 !*.d/
 !.env
+data/keycloak/export/*
+!data/keycloak/export/.gitkeep

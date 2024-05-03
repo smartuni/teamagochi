@@ -1,0 +1,46 @@
+{
+  "realm" : "teamagochi",
+  "users" : [ {
+    "id" : "e1fd1cdf-924c-4c13-b5de-2594ac8f1231",
+    "username" : "testmanager01",
+    "email" : "testmanager01@teamagochi.local",
+    "emailVerified" : true,
+    "createdTimestamp" : 1714741197352,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "29f357f8-436c-4de9-bf37-1bc9a09641ae",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714741213648,
+      "secretData" : "{\"value\":\"IpHgSdTJbyW5WeXxFzJm3368WK1PdM66x1y/IEYcbU/k9pMgOIZMYhjDMlgVwK0pahNynyqMmuz98mjX75GVjA==\",\"salt\":\"oCP0fHj/kzTzKcThoYV0/Q==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-teamagochi" ],
+    "notBefore" : 0,
+    "groups" : [ "/realm-managers" ]
+  }, {
+    "id" : "96daba6c-00ae-4ddb-bea5-e9c0cdb5a459",
+    "username" : "testuser01",
+    "email" : "testuser01@teamagochi.local",
+    "emailVerified" : true,
+    "createdTimestamp" : 1714678192723,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "fd87de86-1723-4eb5-938a-15cc711db58c",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1714678256922,
+      "secretData" : "{\"value\":\"5Q3pdsaeCfrC00wX+dgPKk2p4pi4ZGbipyfZCuofoXPQKnw/lHEqMkaiKbwVS1FMANrSACY6/jNmN7v10bTwMw==\",\"salt\":\"tdkonNxrXFyWkYTIgFe2Xw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-teamagochi" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
