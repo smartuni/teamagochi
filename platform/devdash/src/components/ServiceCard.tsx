@@ -23,7 +23,7 @@ const ServiceCard: React.FC<ServiceCardProps> = (props) => {
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {service.description}
         </Typography>
-        {/* <Typography variant="body2">Lorem ipsum dolores</Typography> */}
+        {service.body && <Typography variant="body2" dangerouslySetInnerHTML={{__html: service.body}}></Typography>}
       </CardContent>
       <CardActions>
        {service.links.map((service) => (
