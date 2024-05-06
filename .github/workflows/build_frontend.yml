@@ -24,12 +24,9 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
-    defaults:
-        run:
-          working-directory: ./frontend
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}frontend/
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,11 +35,20 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: Install
+      - name: CD frontend
+        run: cd frontend
+
+      - name: Install Docs
         run: bun install
 
       - name: Build
         run: bun run build
+
+      - name: Create base dist folder
+        run: mkdir -p ../dist
+
+      - name: Copy frontend dist to base dist
+        run: cp -r .frontend/dist ./dist
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
