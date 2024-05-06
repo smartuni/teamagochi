@@ -31,7 +31,7 @@ jobs:
         run: mkdir frontend && mkdir frontend/frontend
 
       - name: Reparent into dist/frontend
-        run: cp -r dist frontend
+        run: cp -r dist frontend/frontend
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
