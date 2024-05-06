@@ -3,7 +3,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	base: '/teamagochi',
+	base: '/teamagochi/docs',
 	trailingSlash: 'always',
 	site: 'https://smartuni.github.io',
 	integrations: [

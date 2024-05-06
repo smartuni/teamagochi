@@ -35,20 +35,26 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: CD frontend
-        run: cd frontend
+      - name: Install Frontend
+        run: cd frontend && bun install
+
+      - name: Build Frontend
+        run: cd frontend && bun run build
 
       - name: Install Docs
-        run: bun install
+        run: cd docs && bun install
 
-      - name: Build
-        run: bun run build
+      - name: Build Docs
+        run: cd docs && bun run build
 
       - name: Create base dist folder
-        run: mkdir -p ../dist
+        run: mkdir -p ./dist && mkdir -p ./dist/docs
 
       - name: Copy frontend dist to base dist
         run: cp -r .frontend/dist ./dist
+      
+      - name: Copy docs dist to base dist
+        run: cp -r .docs/dist ./dist/docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -57,7 +63,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './frontend/dist'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
