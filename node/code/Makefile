@@ -42,3 +42,37 @@ windows: all
 	@echo "Connected :D"
 	@echo "Cleaning up uf2 flash file"
 	@rm flash.uf2
+
+# Login Process
+# Frontend Mockup
+# Web Backend Authetnication showcase
+# Hardware Details
+# Flow Diagram of App (Node)
+# Lower M2M Objects (Node)
+# Timeline
+
+## Timeline
+# Registration
+# - Frontend
+#   - User enters ID from Device
+# - Backend
+#  - User ID is stored in DB
+#  - Displays ID on Device
+# - Device
+#   - Get and Display ID
+#   - Have some unqiue ID for each device
+# Deadline: 27. May 2024
+
+# Step One
+# - Getting Login to Work in Frontend 
+# - Helping with login for Frontend if neccessary (Web Backend)
+# - Starting the setup for Milestone 2 (Web Backend)
+# - Starting the setup of Node for Milestone 2
+# Deadline: 20 May 2024
+
+# Step Two
+# - Getting Device Registration to Work
+# - Frontend: Modal for Registration
+# - Backend: Store Device ID in DB and send Registration ID to Device
+# - Node: Display Registration ID and authenticate with Backend
+# Deadline 27 May 2024
