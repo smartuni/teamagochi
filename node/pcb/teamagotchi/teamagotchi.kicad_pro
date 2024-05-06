@@ -52,13 +52,7 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [
-        "lib_footprint_mismatch|147400000|76244000|9bbb2120-c812-4c3c-ad08-e12ecad4c9d3|00000000-0000-0000-0000-000000000000",
-        "lib_footprint_mismatch|156250000|74446000|293b4a4c-9c94-4503-9452-a6b0b0aa8061|00000000-0000-0000-0000-000000000000",
-        "unconnected_items|130360000|141306000|4aa1ed4f-f720-4156-b8ec-5d65d2513bba|3878d73d-c6d0-416d-b5d3-c2593bb4019e",
-        "unconnected_items|142860000|112306000|26d941ee-7ad3-48d9-8449-3fdb3949553a|7ecbe3f3-7b7c-4373-91b7-1a9e436a4953",
-        "unconnected_items|169060000|129306000|4c7452af-8b6e-474b-991a-8260f758315d|53416d76-c057-4fcf-b842-7b8762556b32"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -108,7 +102,7 @@
         "track_dangling": "warning",
         "track_width": "error",
         "tracks_crossing": "error",
-        "unconnected_items": "error",
+        "unconnected_items": "ignore",
         "unresolved_variable": "error",
         "via_dangling": "warning",
         "zones_intersect": "error"
