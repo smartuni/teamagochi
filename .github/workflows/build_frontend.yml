@@ -28,7 +28,7 @@ jobs:
         run: bun run build
 
       - name: Create frontend dist folder
-        run: mkdir frontend
+        run: mkdir frontend && mkdir frontend/frontend
 
       - name: Reparent into dist/frontend
         run: cp -r dist frontend
