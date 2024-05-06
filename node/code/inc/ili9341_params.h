@@ -35,7 +35,7 @@ extern "C" {
 #define ILI9341_PARAM_SPI SPI_DEV(0)
 #endif
 #ifndef ILI9341_PARAM_SPI_CLK
-#define ILI9341_PARAM_SPI_CLK SPI_CLK_5MHZ
+#define ILI9341_PARAM_SPI_CLK SPI_CLK_10MHZ
 #endif
 #ifndef ILI9341_PARAM_CS
 // PIN 9 on the feather
