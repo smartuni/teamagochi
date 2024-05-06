@@ -9,7 +9,8 @@
 #include "architecture.h"
 #include "dispatch_handler.hpp"
 #include "dispatcher.hpp"
-#include "init_display.h"
+//#include "init_display.h"
+#include "init_lvgl.h"
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
@@ -23,8 +24,7 @@ kernel_pid_t DISPATCHER_PID;
 int main() {
   printf("\n************ We are in C++ 😎 ***********\n");
   printf("\n");
-
-  init_display();
+  init_lvgl();
 
   puts("{\"result\": \"PASS\"}");
 
