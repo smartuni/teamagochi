@@ -40,10 +40,10 @@ int init_display(void) {
   lcd_fill(&dev, 0, dev.params->lines / 3, 0, dev.params->rgb_channels, 0x001F);
   ztimer_sleep(ZTIMER_MSEC, 1 * MS_PER_SEC);
 
-  puts("Drawing green rectangle");
-  lcd_fill(&dev, dev.params->lines / 3, 2 * (dev.params->lines / 3), 0,
-           dev.params->rgb_channels, 0x07E0);
-  ztimer_sleep(ZTIMER_MSEC, 1 * MS_PER_SEC);
+//   puts("Drawing green rectangle");
+//   lcd_fill(&dev, dev.params->lines / 3, 2 * (dev.params->lines / 3), 0,
+//            dev.params->rgb_channels, 0x07E0);
+//   ztimer_sleep(ZTIMER_MSEC, 1 * MS_PER_SEC);
 
   puts("Drawing red rectangle");
   lcd_fill(&dev, 2 * (dev.params->lines / 3), dev.params->lines, 0,
