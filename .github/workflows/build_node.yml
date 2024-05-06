@@ -6,12 +6,6 @@ on:
       - '.github/workflows/build_node.yml'
     branches:
       - main
-  pull_request:
-    paths:
-      - 'node/code/**'
-      - '.github/workflows/build_node.yml'
-    branches:
-      - main
 
 jobs:
   build:
