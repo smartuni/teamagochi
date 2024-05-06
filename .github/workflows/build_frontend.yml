@@ -51,10 +51,10 @@ jobs:
         run: mkdir -p ./dist && mkdir -p ./dist/docs
 
       - name: Copy frontend dist to base dist
-        run: cp -r ./frontend/dist ./dist
+        run: cp -r ./frontend/dist/* ./dist
       
       - name: Copy docs dist to base dist
-        run: cp -r ./docs/dist ./dist/docs
+        run: cp -r ./docs/dist/* ./dist/docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
