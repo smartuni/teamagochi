@@ -1,0 +1,3 @@
+[submodule "node/code/RIOT"]
+	path = node/code/RIOT
+	url = https://github.com/RIOT-OS/RIOT.git

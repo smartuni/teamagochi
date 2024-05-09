@@ -1,14 +1,13 @@
 ---
-title: RIOT SoSe24 Teamagochi Docs
+title: Teamagochi - ティーマゴチ
 description: Our documentation site for Teamagochi for the RIOT 2024 SoSe project.
 template: splash
 hero:
-  tagline: Our documentation site for Teamagochi for the RIOT 2024 SoSe project.
-  image:
-    file: ../../assets/riot-logo-large.png
+  # Homepage uses special Hero component, see src/components/Hero.astro
+  tagline: Documentation and project overview of our virtual pet project.
   actions:
-    - text: Project Documentation
-      link: basics/example
+    - text: Project Documentation</p>
+      link: get-started/
       icon: right-arrow
       variant: primary
     - text: Read Riot OS documentation
@@ -18,45 +17,36 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-# The Team
+## Meet the Team
 
-### Product Owner
+We are the people behind this project.
 
-- [Tom Hert]()
-
-### Frontend Team
-
-- [Samuel Costa]()
-- [Rares Stefea]()
-- [Yousef Taha]()
-- [Hamdy Elmorsy]()
-- [Yasuaki Kumazaki]() (Team Lead)
-- [Omar Shaban]()
-
-### Web Backend Team
-
-- [Merlin Trefflich]()
-- [Leo Graf]()
-- [Jessica Broese]()
-- [Van Khoi Pham]()
-
-### Node Team
-
-- [Eduard Lomtadze]()
-- [Nils Voepel]()
-- [Moritz Holzer]() (Team Lead)
-- [Dong Yuanzhe]()
-- [Lukas Sebrantke]()
-- [Tom Hert]()
-- [Justin Sanker]()
-
-## Next steps
-
-<CardGrid stagger>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+<CardGrid>
+	<Card title="Frontend" icon="star">
+    - [Samuel Costa]()
+    - [Rares Stefea](https://github.com/stefearares)
+    - [Yousef Taha](https://github.com/yousef-taha1)
+    - [Hamdy Elmorsy](https://github.com/hamdykhfagy)
+    - [Yasuaki Kumazaki](https://github.com/yasuaki-kumazaki) (Team Lead)
+    - [Omar Shaban](https://github.com/omarzohdy55)
 	</Card>
-	<Card title="Plan?" icon="add-document">
-		World Domination of course!
+  <Card title="Nodes" icon="sun">
+    - [Eduard Lomtadze](https://github.com/e-dddos)
+    - [Nils Voepel](https://github.com/nilslabs)
+    - [Moritz Holzer](https://github.com/moritzholzer) (Team Lead)
+    - [Dong Yuanzhe](https://github.com/M18F6FHC)
+    - [Lukas Sebrantke](https://github.com/lukasseb)
+    - [Tom Hert](https://github.com/annsanns)
+    - [Justin Sanker](https://github.com/crashingdrone)
+	</Card>
+  <Card title="Web Backend" icon="moon">
+		- [Merlin Trefflich](https://github.com/wuv129)
+    - [Leo Graf](https://github.com/ozfox)
+    - [Jessica Broese](https://github.com/eritleidet)
+    - [Van Khoi Pham](https://github.com/vankhoipham)
+    - [The Cat](https://cataas.com/cat) (Team Lead)
+	</Card>
+  <Card title="Product Owner" icon="seti:clock">
+    - [Tom Hert](https://github.com/annsanns)
 	</Card>
 </CardGrid>
