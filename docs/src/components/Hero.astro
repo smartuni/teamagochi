@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import type { Props } from '@astrojs/starlight/props';
+import CallToAction from '@astrojs/starlight/components/CallToAction.astro';
+import Default from '@astrojs/starlight/components/Hero.astro';
+
+/**
+ * Custom Hero section which is only rendered on the homepage
+ */
+
+// Hack, cause constants are not exported, see https://github.com/withastro/starlight/issues/860
+//import { PAGE_TITLE_ID } from '@astrojs/starlight/constants';
+const PAGE_TITLE_ID = '_top';
+
+const isHomepage = Astro.props.slug === '';
+
+const { data } = Astro.props.entry;
+const { title = data.title, tagline, image, actions = [] } = data.hero || {};
+
+const imageAttrs = {
+	loading: 'eager' as const,
+	decoding: 'async' as const,
+	width: 400,
+	height: 400,
+};
+
+import riotLogo from '../assets/img/riot-logo-large.png';
+const riotLogoAttrs = {
+	...imageAttrs,
+	alt: 'Logo of RIOT, the friendly Operating System for the Internet of Things.'
+}
+
+import inetLogo from '../assets/img/inet-haw.png';
+const inetLogoAttrs = {
+	...imageAttrs,
+	alt: 'Logo of INET working group at University of Applied Sciences Hamburg.'
+}
+---
+
+{
+	!isHomepage ? (
+		<Default {...Astro.props} />
+	) : (
+		<div class="hero">
+			<div class="sl-flex stack">
+				<div class="sl-flex copy">
+					<h1 id={PAGE_TITLE_ID} data-page-title set:html={title} />
+					{tagline && <div class="tagline" set:html={tagline} />}
+				</div>
+				{
+					actions.length > 0 && (
+						<div class="sl-flex actions">
+							{actions.map(({ text, ...attrs }) => (
+								<CallToAction {...attrs} set:html={text} />
+							))}
+						</div>
+					)
+				}
+			</div>
+			<div class="sl-flex stack hero-org">
+				{riotLogo && <Image src={riotLogo} {...riotLogoAttrs} />}
+				{inetLogo && <Image src={inetLogo} {...inetLogoAttrs} />}
+				<div class="info">
+					<p><a href="https://inet.haw-hamburg.de/teaching/ss-2024/riot-im-internet-of-things">RIOT im Internet of Things</a></p>
+					<p>Computer Science and Electrical Engineering</p>
+					<p>Bachelor Project, 04/2024 - 07/2024</p>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+<style>
+	.hero {
+		display: grid;
+		align-items: center;
+		gap: 1rem;
+		padding-bottom: 1rem;
+	}
+
+	.hero > img,
+	.hero > .hero-html,
+	.hero > .hero-org > img {
+		object-fit: contain;
+		width: min(30%, 20rem);
+		height: auto;
+		margin-inline: auto;
+	}
+
+	.hero > .hero-org {
+		margin-top: 1em;
+	}
+
+	.stack {
+		flex-direction: column;
+		gap: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
+		text-align: center;
+	}
+
+	.copy {
+		flex-direction: column;
+		gap: 1rem;
+		align-items: center;
+	}
+
+	.copy > * {
+		max-width: 50ch;
+	}
+
+	.info {
+		text-align: center;
+	}
+
+	h1 {
+		font-size: clamp(var(--sl-text-3xl), calc(0.25rem + 5vw), var(--sl-text-5xl));
+		line-height: var(--sl-line-height-headings);
+		font-weight: 600;
+		color: var(--sl-color-white);
+	}
+
+	#_top > hr {
+		padding: 2em;
+	}
+
+	.tagline {
+		font-size: clamp(var(--sl-text-base), calc(0.0625rem + 2vw), var(--sl-text-xl));
+		color: var(--sl-color-gray-2);
+	}
+
+	.actions {
+		gap: 1rem 2rem;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	@media (min-width: 50rem) {
+		.hero {
+			grid-template-columns: 8fr 4fr;
+			gap: 3%;
+			padding-block: clamp(2.5rem, calc(1rem + 10vmin), 10rem);
+		}
+
+		.hero > img,
+		.hero > .hero-html,
+		.hero > .hero-org > img {
+			width: min(80%, 25rem);
+		}
+
+		.stack {
+			text-align: start;
+		}
+
+		.copy {
+			align-items: flex-start;
+		}
+
+		.actions {
+			justify-content: flex-start;
+		}
+	}
+</style>
