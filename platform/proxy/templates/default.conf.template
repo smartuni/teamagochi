@@ -1,0 +1,79 @@
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+
+  server_name _;
+
+  #
+  # Development Dashboard
+  #
+  location / {
+    proxy_pass ${DEVDASH_WEB_URL};
+    include proxy_params;
+  }
+
+  #
+  # Leshan Server
+  #
+  location = /leshan {
+    rewrite ^ $scheme://$http_host/leshan/ permanent;
+  }
+
+  location /leshan/ {
+    proxy_pass ${TEASHAN_WEB_URL};
+    include proxy_params;
+  }
+
+  #
+  # Leshan Bootstrap Server
+  #
+  location = /leshan/bs {
+    rewrite ^ $scheme://$http_host/leshan/bs/ permanent;
+  }
+
+  location /leshan/bs/ {
+    proxy_pass ${TEASHAN_WEB_URL};
+    include proxy_params;
+  }
+
+  #
+  # Keycloak
+  #
+  location /kc {
+    proxy_pass ${KEYCLOAK_WEB_URL};
+
+    # Same as proxy_params
+    proxy_set_header Host               $http_host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
+
+    # Additional
+    proxy_set_header X-Forwarded-Host   $host;
+    proxy_set_header X-Forwarded-Server $host;
+    # NOTE: The $server_port is 80 even with docker port binding, see https://serverfault.com/a/1063920
+    #proxy_set_header X-Forwarded-Port   $server_port;
+    proxy_set_header X-Forwarded-Port   ${PROXY_PUBLIC_PORT};
+  }
+
+  #
+  # Mailpit
+  #
+  location = /mailbox {
+    rewrite ^ $scheme://$http_host/mailbox/ permanent;
+  }
+
+  location /mailbox/ {
+    # https://mailpit.axllent.org/docs/configuration/proxy/
+    proxy_pass ${MAILPIT_WEB_URL};
+    include proxy_params;
+
+    proxy_set_header X-Forwarded-Port   ${PROXY_PUBLIC_PORT};
+
+    # Configure the websocket
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header X-Forwarded-Server $host;
+    proxy_set_header Connection "Upgrade";
+  }
+}

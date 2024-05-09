@@ -1,0 +1,22 @@
+name: Node Build
+on:
+  push:
+    paths:
+      - 'node/code/**'
+      - '.github/workflows/build_node.yml'
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Build Node
+        run: |
+          cd node/code
+          BUILD_IN_DOCKER=1 make all
+
