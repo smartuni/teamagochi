@@ -30,6 +30,7 @@ void lwm2m_handler_init(void)
     obj_list[0] = lwm2m_client_get_security_object(&client_data);
     obj_list[1] = lwm2m_client_get_device_object(&client_data);
     obj_list[2] = lwm2m_client_get_server_object(&client_data);
+    obj_list[3] = lwm2m_client_get_pet_object(&client_data);
 
 
     if (!obj_list[0] || !obj_list[1]) {
@@ -46,14 +47,6 @@ int lwm2m_handler_cli(int argc, char **argv){
         goto help_error;
     }
 
-    if (!strcmp(argv[1], "start")) {
-        /* run the LwM2M client */
-        if (!connected && lwm2m_client_run(&client_data, obj_list, OBJ_COUNT)) {
-            connected = 1;
-        }
-        return 0;
-    }
-
     if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "get_reboot")) {
         printf("%d\n",lwm2m_device_reboot_requested());
         return 0;
@@ -61,10 +54,7 @@ int lwm2m_handler_cli(int argc, char **argv){
 
     help_error:
     if (IS_ACTIVE(DEVELHELP)) {
-        printf("usage: %s <start|mem|light>\n", argv[0]);
-    }
-    else {
-        printf("usage: %s <start|light>\n", argv[0]);
+        printf("usage: %s <get_reboot>\n", argv[0]);
     }
     return 1;
 }
@@ -73,8 +63,6 @@ void *handle_thread(void *arg)
 {
     (void) arg;
     while(1){
-        //puts("Test");
-        printf("%d\n",lwm2m_device_reboot_requested());
         xtimer_sleep(5);
     }
     
