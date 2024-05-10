@@ -24,10 +24,12 @@
 #include "objects/common.h"
 #include "objects/device.h"
 
-# define OBJ_COUNT (2)
+# define OBJ_COUNT (3)
 
 void lwm2m_handler_init(void);
 
 void lwm2m_handler_start(void);
 
 void *handle_thread(void *arg);
+
+int lwm2m_handler_cli(int argc, char **argv);

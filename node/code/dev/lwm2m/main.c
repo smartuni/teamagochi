@@ -33,7 +33,6 @@
 #include "lwm2m_client_objects.h"
 #include "lwm2m_platform.h"
 #include "objects/common.h"
-#include "objects/device.h"
 #include "lwm2m_handler.h"
 
 #include "msg.h"
@@ -42,7 +41,9 @@
 #define SHELL_QUEUE_SIZE (8)
 static msg_t _shell_queue[SHELL_QUEUE_SIZE];
 
+extern int lwm2m_handler_cli(int argc, char **argv);
 static const shell_command_t shell_commands[] = {
+    {"lwm2m","Lwm2m Handler", lwm2m_handler_cli},
     { NULL, NULL, NULL }
 };
 
@@ -50,9 +51,11 @@ char handler_thread_stack[THREAD_STACKSIZE_MAIN];
 
 int main(void)
 {
+    lwm2m_handler_init();
+    lwm2m_handler_start();
     thread_create(handler_thread_stack, sizeof(handler_thread_stack),
-                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
-                  handle_thread, NULL, "handle_thread");
+                THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
+                handle_thread, NULL, "handle_thread");
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
