@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openmobilealliance.org/tech/profiles/LWM2M.xsd">
+  <Object ObjectType="MODefinition">
+    <Name>Pet Model</Name>
+    <Description1>Representation of a pet in a teamagotchi application</Description1>
+    <ObjectID>32769</ObjectID>
+    <ObjectURN>urn:oma:lwm2m:oma:32769</ObjectURN>
+    <ObjectVersion>1.0</ObjectVersion>
+    <MultipleInstances>Single</MultipleInstances>
+    <Mandatory>Optional</Mandatory>
+    <Resources>
+      <Item ID="0">
+        <Name>Id</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>Id of the pet on the device</Description>
+      </Item>
+      <Item ID="1">
+        <Name>Hungry</Name>
+        <Operations>E</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type></Type>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>Tell the device that the pet is hungry</Description>
+      </Item>
+      <Item ID="2">
+        <Name>Ill</Name>
+        <Operations>E</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type><Type />
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>Tell the device that the pet is ill</Description>
+      </Item>
+      </Item>
+      <Item ID="3">
+        <Name>Bored</Name>
+        <Operations>E</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type><Type />
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>Tell the device that the pet is bored</Description>
+      </Item>
+      </Item>
+      <Item ID="4">
+        <Name>Dirty</Name>
+        <Operations>E</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type><Type/>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>Tell the device that the pet is dirty</Description>
+      </Item>
+       <Item ID="5">
+        <Name>fed</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>pet has been fed</Description>
+      </Item>
+      <Item ID="6">
+        <Name>medicated</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean<Type/>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>pet has been medicated</Description>
+      </Item>
+      </Item>
+      <Item ID="7">
+        <Name>played</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean<Type/>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>the pet has played</Description>
+      </Item>
+      </Item>
+      <Item ID="8">
+        <Name>cleaned</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean<Type/>
+        <RangeEnumeration />
+        <Units></Units>
+        <Description>the pet has been cleaned</Description>
+      </Item>
+    </Resources>
+    <Description2 />
+  </Object>
+</LWM2M>
