@@ -20,6 +20,8 @@
 // Example Module Import
 #include "external_module.h"
 
+#include "test_folder/test_hello.h"
+
 using namespace std;
 using namespace riot;
 
@@ -34,6 +36,8 @@ int main() {
 
   // Show the example module function
   cout << "Example Module Init: " << external_module_initialized << endl;
+
+  hello();
 
   cout << "Sleeping for 5 seconds...\n" << endl;
   riot::this_thread::sleep_for(chrono::seconds(5));
