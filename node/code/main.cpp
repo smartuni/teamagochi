@@ -5,17 +5,20 @@
 
 #include <cstdio>
 #include <vector>
-#include "shell.h"
 
 #include "architecture.h"
 #include "dispatch_handler.hpp"
 #include "dispatcher.hpp"
-//#include "init_display.h"
+#include "shell.h"
+// #include "init_display.h"
 #include "init_lvgl.h"
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
 #include "shell_commands.hpp"
+
+// Example Module Import
+#include "external_module.h"
 
 using namespace std;
 using namespace riot;
@@ -28,6 +31,9 @@ int main() {
   printf("\n");
 
   puts("{\"result\": \"PASS\"}");
+
+  // Show the example module function
+  cout << "Example Module Init: " << external_module_initialized << endl;
 
   cout << "Sleeping for 5 seconds...\n" << endl;
   riot::this_thread::sleep_for(chrono::seconds(5));
@@ -52,11 +58,11 @@ int main() {
   dispatcher->subscribe({EVENTS::PING}, ping->getPID());
   dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
 
-//   cout << "Sending initial ping event" << endl;
-//   msg_t message;
-//   message.type = EVENTS::PING;
+  //   cout << "Sending initial ping event" << endl;
+  //   msg_t message;
+  //   message.type = EVENTS::PING;
 
-//   msg_try_send(&message, dispatcher->getPID());
+  //   msg_try_send(&message, dispatcher->getPID());
 
   shell_loop();
 
