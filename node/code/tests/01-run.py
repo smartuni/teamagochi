@@ -13,6 +13,11 @@ from testrunner import run
 
 def testfunc(child: pexpect.spawn):
     child.expect("PASS")
+    
+    child.expect("Starting shell loop")
+    
+    child.sendline("send_event 0")
+    child.expect("💣 Received TERMINATE event, exiting...")
 
 
 if __name__ == "__main__":
