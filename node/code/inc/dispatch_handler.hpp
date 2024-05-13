@@ -29,6 +29,7 @@ class DispatchHandler {
   msg_t rcv_queue[QUEUE_SIZE];
   char internal_thread_stack [THREAD_STACKSIZE_MAIN];
   kernel_pid_t internal_thread_pid;
+  bool respect_terminate = true;
 
  public:
   /**
@@ -37,11 +38,15 @@ class DispatchHandler {
    */
   DispatchHandler() { }
 
+  void setRespectTerminate(bool respect_terminate) {
+    this->respect_terminate = respect_terminate;
+  }
+
   /**
    * @brief Send an event to the dispatcher.
    * @param event The event to send.
   */
-  void sendEvent(msg_t *event) {
+  static void sendEvent(msg_t *event) {
     if (DISPATCHER_PID == -1) {
       cout << "Dispatcher PID not set yet!" << endl;
       return;
@@ -76,7 +81,12 @@ class DispatchHandler {
       msg_receive(&message);
 
       if (message.type == EVENTS::TERMINATE) {
-        cout << "Received TERMINATE event, exiting..." << endl;
+        cout << "💣 Received TERMINATE event, exiting..." << endl;
+        if (!this->respect_terminate) {
+            cout << "😎 Not respecting terminate, will handle event anyways" << endl;
+            this->handleEvent(&message);
+            cout << "🌃 Handled Terminate Event, now going offline fr ..." << endl;
+        }
         return;
       }
 

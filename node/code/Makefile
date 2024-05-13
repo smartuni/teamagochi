@@ -12,14 +12,19 @@ DEVELHELP ?= 1
 FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
-#Hardware specific configs
+# Internal Modules
+EXTERNAL_MODULE_DIRS += modules
+USEMODULE += external_module
+
+# External modules
 USEMODULE += cpp11-compat
 USEMODULE += ili9341
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
+USEMODULE += shell
 
+# Lvgl Related Modules
 DISABLE_MODULE += test_utils_interactive_sync
-
 USEPKG += lvgl
 USEMODULE += lvgl_contrib
 USEMODULE += lvgl_extra_widget_chart
@@ -35,7 +40,7 @@ SHOULD_RUN_KCONFIG ?=
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
-CXXEXFLAGS += 
+CXXEXFLAGS += -std=c++17 -Wall -Wextra
 
 include $(RIOTBASE)/Makefile.include
 
