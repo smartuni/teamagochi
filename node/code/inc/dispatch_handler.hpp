@@ -46,7 +46,7 @@ class DispatchHandler {
    * @brief Send an event to the dispatcher.
    * @param event The event to send.
   */
-  static void sendEvent(msg_t *event) {
+  void sendEvent(msg_t *event) {
     if (DISPATCHER_PID == -1) {
       cout << "Dispatcher PID not set yet!" << endl;
       return;
