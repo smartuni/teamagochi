@@ -14,6 +14,7 @@
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
+#include "lvgl/lvgl.h"
 
 using namespace std;
 using namespace riot;
@@ -24,7 +25,8 @@ kernel_pid_t DISPATCHER_PID;
 int main() {
   printf("\n************ We are in C++ 😎 ***********\n");
   printf("\n");
-  init_lvgl();
+
+
 
   puts("{\"result\": \"PASS\"}");
 
@@ -55,8 +57,16 @@ int main() {
   message.type = EVENTS::PING;
 
   msg_try_send(&message, dispatcher->getPID());
+printf("printf success\n");
 
-  while (true) {
+printf("initing\n");
+  init_lvgl();
+  printf("init success\n");
+//   char str[1000]="close world";
+lv_puts();
+    
+
+  while (true) {;
   }
 
   return 0;
