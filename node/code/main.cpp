@@ -38,6 +38,7 @@ int main() {
   dispatcher->startInternalThread();
 
   DISPATCHER_PID = dispatcher->getPID();
+  DISPATCHER_THREAD_ID = DISPATCHER_PID;
 
   // Create the ping class
   Ping *ping = new Ping();
@@ -51,11 +52,11 @@ int main() {
   dispatcher->subscribe({EVENTS::PING}, ping->getPID());
   dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
 
-  cout << "Sending initial ping event" << endl;
-  msg_t message;
-  message.type = EVENTS::PING;
+//   cout << "Sending initial ping event" << endl;
+//   msg_t message;
+//   message.type = EVENTS::PING;
 
-  msg_try_send(&message, dispatcher->getPID());
+//   msg_try_send(&message, dispatcher->getPID());
 
   shell_loop();
 
