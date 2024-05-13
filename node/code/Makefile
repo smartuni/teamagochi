@@ -9,6 +9,9 @@ RIOTBASE ?= $(CURDIR)/RIOT
 # development process:
 DEVELHELP ?= 1
 
+# Include test_folder example to showcase directories being included
+DIR += test_folder
+
 FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
