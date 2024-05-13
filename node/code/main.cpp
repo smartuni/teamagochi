@@ -30,9 +30,6 @@ int main() {
 
   puts("{\"result\": \"PASS\"}");
 
-  cout << "Sleeping for 5 seconds...\n" << endl;
-  riot::this_thread::sleep_for(chrono::seconds(5));
-  cout << "Done sleeping.\n" << endl;
 
   // Create the dispatcher
   Dispatcher *dispatcher = new Dispatcher();
@@ -62,8 +59,7 @@ printf("printf success\n");
 printf("initing\n");
   init_lvgl();
   printf("init success\n");
-//   char str[1000]="close world";
-lv_puts();
+
     
 
   while (true) {;

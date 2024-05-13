@@ -5,8 +5,7 @@ extern "C" {
 #endif
 
 int init_lvgl(void);
-void lv_print(void);
-void lv_puts(void);
+void lv_puts(char *c);
 #ifdef __cplusplus
 }
 #endif
