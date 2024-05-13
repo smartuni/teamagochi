@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include <vector>
+#include "shell.h"
 
 #include "architecture.h"
 #include "dispatch_handler.hpp"
@@ -14,6 +15,7 @@
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
+#include "shell_commands.hpp"
 
 using namespace std;
 using namespace riot;
@@ -24,7 +26,6 @@ kernel_pid_t DISPATCHER_PID;
 int main() {
   printf("\n************ We are in C++ 😎 ***********\n");
   printf("\n");
-  init_lvgl();
 
   puts("{\"result\": \"PASS\"}");
 
@@ -56,8 +57,7 @@ int main() {
 
   msg_try_send(&message, dispatcher->getPID());
 
-  while (true) {
-  }
+  shell_loop();
 
   return 0;
 }

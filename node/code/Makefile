@@ -17,6 +17,7 @@ USEMODULE += cpp11-compat
 USEMODULE += ili9341
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
+USEMODULE += shell
 
 DISABLE_MODULE += test_utils_interactive_sync
 
@@ -35,7 +36,7 @@ SHOULD_RUN_KCONFIG ?=
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
-CXXEXFLAGS += 
+CXXEXFLAGS += -std=c++17 -Wall -Wextra
 
 include $(RIOTBASE)/Makefile.include
 
