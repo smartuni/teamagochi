@@ -18,17 +18,18 @@
   *
   * ## Resources
   * 
-  * |         Name            | ID | Mandatory |  Type   |  Range  | Units | Implemented |
-  * | ----------------------- | -- | --------- | ------- | ------- | ----- | ---------- |
-  * | Id                      |  0 |    Yes    | Integer |         |       |    Yes     |
-  * | Hungry                  |  1 |    Yes    |         |         |       |    Yes     |
-  * | Ill                     |  2 |    Yes    |         |         |       |    Yes     |
-  * | Bored                   |  3 |    Yes    |         |         |       |    Yes     |
-  * | Dirty                   |  4 |    Yes    |         |         |       |    Yes     |
-  * | fed                     |  5 |    Yes    | Boolean |         |       |    Yes     |
-  * | medicated               |  6 |    Yes    | Boolean |         |       |     No     |
-  * | played                  |  7 |    Yes    | Boolean |         |       |     No     |
-  * | cleaned                 |  8 |    Yes    | Boolean |         |       |     No     |
+|         Name            | ID | Mandatory |  Type   |  Range | Units |
+| ----------------------- | -- | --------- | ------- | ------ | ----- | 
+| Id                      |  0 |    Yes    | Integer |        |       |
+|Name                     |  1 |    Yes    | String  |        |       |   
+| Hungry                  |  2 |    Yes    |         |        |       |  
+| Ill                     |  3 |    Yes    |         |        |       |   
+| Bored                   |  4 |    Yes    |         |        |       |   
+| Dirty                   |  5 |    Yes    |         |        |       |
+| fed                     |  6 |    Yes    | Boolean |        |       |    
+| medicated               |  7 |    Yes    | Boolean |        |       |
+| played                  |  8 |    Yes    | Boolean |        |       |
+| cleaned                 |  9 |    Yes    | Boolean |        |       |
   * 
   * @author Moritz Holzer <moritz.holzer@haw-hamburg.de>
   * @}
