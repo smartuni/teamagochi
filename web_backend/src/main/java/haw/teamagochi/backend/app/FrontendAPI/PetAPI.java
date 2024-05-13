@@ -1,5 +1,8 @@
 package haw.teamagochi.backend.app.FrontendAPI;
 
+import haw.teamagochi.backend.app.Mapper.PetDTO;
+import haw.teamagochi.backend.app.Mapper.PetInfoDTO;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
@@ -9,11 +12,12 @@ import java.util.List;
 import org.jboss.resteasy.reactive.RestHeader;
 import org.jboss.resteasy.reactive.RestQuery;
 
-@RegisterRestClient
+//@RegisterRestClient
 @Path("Pet")
 public class PetAPI {
+
+
   /**
-   * @param userID --> keycloak
    * @param petID ID of the Pet
    * @param userAuthToken the Authentification-Token of the User
    * @return PetInfos (toBeDefined --> eg. Stats, Status, Type...)
@@ -21,7 +25,7 @@ public class PetAPI {
    */
   @Path("{petID}")
   @GET
-  public Pet getPetInfos(String petID, @HeaderParam("Authorization") String userAuthToken){ //all Infos
+  public PetDTO getPetInfos(String petID, @HeaderParam("Authorization") String userAuthToken){ //all Infos
     //TODO
     return null;
   }
@@ -32,7 +36,7 @@ public class PetAPI {
    *
    */
   @GET
-  public List<Pet> getPetIDs(@HeaderParam("Authorization") String userAuthToken){ //Name + Type + (looks?)
+  public List<PetInfoDTO> getPetIDs(@HeaderParam("Authorization") String userAuthToken){ //Name + Type + (looks?)
     //TODO
     return null;
   }
@@ -45,9 +49,21 @@ public class PetAPI {
    */
 
   @POST
-  public Pet createPet(@RestQuery List<String> petInfos, @HeaderParam("Authorization") String userAuthToken){
+  public PetDTO createPet(@RestQuery List<String> petInfos, @HeaderParam("Authorization") String userAuthToken){
     //TODO
     return null;
+  }
+
+  /**
+   *
+   * @param petID ID of the pet to be deleted
+   * @param userAuthToken user Authentification Token
+   * @return true if succesfull, false if not succesfull
+   */
+  @DELETE
+  public boolean deletePet(@RestQuery String petID, @HeaderParam("Authorization") String userAuthToken){
+    //TODO
+    return false;
   }
 
 
