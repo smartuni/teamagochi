@@ -6,7 +6,9 @@ Teamagochi is a synchronized always-online pet simulator with multiplayer functi
 
 It consists of a [physical device (Node)](./node/), [web backend](./web_backend/) and [web/mobile frontend](./web_backend/).
 
-### [Documentation Page](https://smartuni.github.io/teamagochi/)
+### [Frontend Page](https://smartuni.github.io/teamagochi) [W.I.P]
+
+### [Documentation Page](https://smartuni.github.io/teamagochi/docs)
 
 ### [Kanban Board](https://github.com/orgs/smartuni/projects/2)
 
