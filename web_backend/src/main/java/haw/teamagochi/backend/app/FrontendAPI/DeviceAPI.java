@@ -8,6 +8,7 @@ import java.util.List;
 import org.jboss.resteasy.reactive.RestCookie;
 import org.jboss.resteasy.reactive.RestQuery;
 
+@RegisterRestClient //needed for oidc??
 @Path("Device")
 public class DeviceAPI {
 
@@ -17,7 +18,7 @@ public class DeviceAPI {
    * @return List of Devices from the given user --> toBeDefined --> what info is needed: Name,ID....
    */
   @GET
-  public List<Device> getDevices(@HeaderParam("UserAuthToken") String userAuthToken){
+  public List<Device> getDevices(@HeaderParam("Authorization") String userAuthToken){ //ID
     //TODO
     return null;
   }
@@ -29,7 +30,7 @@ public class DeviceAPI {
    */
   @Path("{deviceID}")
   @GET
-  public Device getDevice(String deviceID, @HeaderParam("UserAuthToken") String userAuthToken){
+  public Device getDevice(String deviceID, @HeaderParam("Authorization") String userAuthToken){ //ID + Pet ....
     //TODO
     return null;
   }
@@ -42,7 +43,7 @@ public class DeviceAPI {
    */
   @Path("register/{registerCode}")
   @POST
-  public Device registerDevice(String registerCode, @HeaderParam("USerAUthToken") String userAuthToken){
+  public Device registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //ID
     //TODO
     return null;
   }

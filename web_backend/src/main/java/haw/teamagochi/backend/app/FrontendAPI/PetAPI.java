@@ -9,10 +9,11 @@ import java.util.List;
 import org.jboss.resteasy.reactive.RestHeader;
 import org.jboss.resteasy.reactive.RestQuery;
 
+@RegisterRestClient
 @Path("Pet")
 public class PetAPI {
   /**
-   *
+   * @param userID --> keycloak
    * @param petID ID of the Pet
    * @param userAuthToken the Authentification-Token of the User
    * @return PetInfos (toBeDefined --> eg. Stats, Status, Type...)
@@ -20,7 +21,7 @@ public class PetAPI {
    */
   @Path("{petID}")
   @GET
-  public Pet getPetInfos(String petID, @HeaderParam("UserAuthToken") String userAuthToken){
+  public Pet getPetInfos(String petID, @HeaderParam("Authorization") String userAuthToken){ //all Infos
     //TODO
     return null;
   }
@@ -30,9 +31,8 @@ public class PetAPI {
    * @return petList (toBeDefined --> what is needed --> ID, Name, Type, Looks...)
    *
    */
-  @Path("all")
   @GET
-  public List<Pet> getPetIDs(@HeaderParam("UserAuthToken") String userAuthToken){
+  public List<Pet> getPetIDs(@HeaderParam("Authorization") String userAuthToken){ //Name + Type + (looks?)
     //TODO
     return null;
   }
@@ -40,12 +40,12 @@ public class PetAPI {
    *
    * @param userAuthToken the Authentification-Token of the User
    * @param petInfos Infos for the Pet --> to be Defined --> Name, type, look,....
-   * @return Pet --> the representation of the newly created pet
+   * @return Pet --> the representation of the newly created pet --> same as getPetInfos
    *
    */
-  @Path("create")
-  @PUT
-  public Pet createPet(@RestQuery List<String> petInfos, @HeaderParam("UserAuthToken") String userAuthToken){
+
+  @POST
+  public Pet createPet(@RestQuery List<String> petInfos, @HeaderParam("Authorization") String userAuthToken){
     //TODO
     return null;
   }
