@@ -43,7 +43,18 @@ SHOULD_RUN_KCONFIG ?=
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
-CXXEXFLAGS += -std=c++17 -Wall -Wextra
+# Set the C standard to C17 [C23 (even experimental) is not yet supported]
+# and enable all warnings
+CFLAGS += -std=c17 -Wall -Wextra
+
+# Set the C++ standard to C++20 [C++23 with all the cool stuff is not yet supported]
+# and enable all warnings
+CXXEXFLAGS += -std=c++20 -Wall -Wextra
+
+# Disable volatile warnings
+# C++20 introduced a deprecation for this, which was then
+# reverted in C++23 because it wasn't thought through
+CXXEXFLAGS += -Wno-volatile
 
 include $(RIOTBASE)/Makefile.include
 
