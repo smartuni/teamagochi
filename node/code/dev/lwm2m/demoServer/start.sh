@@ -7,4 +7,4 @@ BS_WEBPORT=8888
 java -jar ./leshan-bsserver-demo.jar --coap-port ${BS_COAPPORT} \
             --coaps-port ${BS_COAPSPORT} --web-port ${BS_WEBPORT} &
 
-java -jar ./leshan-server-demo.jar -lh 2001:db8:1::1 &
+java -jar ./leshan-server-demo.jar -m models -lh 2001:db8:1::1 &
