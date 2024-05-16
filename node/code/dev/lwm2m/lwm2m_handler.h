@@ -16,15 +16,6 @@
  * @}
  */
 
-#include "board.h"
-#include "xtimer.h"
-#include "lwm2m_client.h"
-#include "lwm2m_client_objects.h"
-#include "lwm2m_platform.h"
-#include "objects/common.h"
-#include "objects/device.h"
-#include "pet_model.h"
-
 # define OBJ_COUNT (4)
 
 void lwm2m_handler_init(void);

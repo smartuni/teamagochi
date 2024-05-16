@@ -17,6 +17,15 @@
  */
 
 #include "lwm2m_handler.h"
+#include "pet.h"
+#include "board.h"
+#include "xtimer.h"
+#include "lwm2m_client.h"
+#include "lwm2m_client_objects.h"
+#include "lwm2m_platform.h"
+#include "objects/common.h"
+#include "objects/device.h"
+
 uint8_t connected = 0;
 lwm2m_object_t *obj_list[OBJ_COUNT];
 lwm2m_client_data_t client_data;
@@ -30,10 +39,21 @@ void lwm2m_handler_init(void)
     obj_list[0] = lwm2m_client_get_security_object(&client_data);
     obj_list[1] = lwm2m_client_get_device_object(&client_data);
     obj_list[2] = lwm2m_client_get_server_object(&client_data);
-    obj_list[3] = lwm2m_client_get_pet_object(&client_data);
+    obj_list[3] = lwm2m_object_pet_init(&client_data);
 
+    lwm2m_obj_pet_args_t pet_args = {
+        .instance_id = 0,
+        .read_cb = NULL,
+        .read_cb_arg = NULL
+    };
+    puts("hier\n");
+    printf("%ld\n",pet_args.instance_id);
+    int res = lwm2m_object_pet_instance_create(&pet_args);
+    if (res<0) {
+        puts("Error instantiating pet");
+    }
 
-    if (!obj_list[0] || !obj_list[1]) {
+    if (!obj_list[0] || !obj_list[1] || !obj_list[2] || !obj_list[3]) {
         puts("Could not create mandatory objects");
     }
 }

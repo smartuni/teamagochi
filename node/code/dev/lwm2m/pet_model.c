@@ -23,171 +23,249 @@
 #include "pet_model.h"
 #include "lwm2m_client_config.h"
 
-#define ENABLE_DEBUG    0
+#define ENABLE_DEBUG    1
 #include "debug.h"
 
-// static bool hungry;
-// static bool ill;
-// static bool bored;
-// static bool dirty;
+#define _USED_INSTANCES(obj) (obj->object.instanceList)
+#define _FREE_INSTANCES(obj) (obj->free_instances)
+
+// /**
+//  * @brief 'Discover' callback for the Pet object.
+//  *
+//  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
+//  * @param[in, out] num_data     Number of resources requested. 0 means all.
+//  * @param[in, out] data_array   Initialized data array to determine if the resource exists,
+//  *                              when @p num_data != 0. Uninitialized otherwise.
+//  * @param[in] object            Device object pointer
+//  *
+//  * @return COAP_205_CONTENT                 on success
+//  * @return COAP_404_NOT_FOUND               when a resource is not supported
+//  * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
+//  */
+// static uint8_t _discover_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
+//                             lwm2m_object_t *object);
 
 /**
- * @brief 'Discover' callback for the Pet object.
+ * @brief 'Execute' callback for the Pet object.
  *
  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
- * @param[in, out] num_data     Number of resources requested. 0 means all.
- * @param[in, out] data_array   Initialized data array to determine if the resource exists,
- *                              when @p num_data != 0. Uninitialized otherwise.
+ * @param[in] resource_id       ID of the resource to execute.
+ * @param[in] buffer            Information needed for the execution.
+ * @param[in] length            Length of @p buffer.
  * @param[in] object            Device object pointer
  *
- * @return COAP_205_CONTENT                 on success
- * @return COAP_404_NOT_FOUND               when a resource is not supported
- * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
+ * @return COAP_204_CHANGED             on success
+ * @return COAP_404_NOT_FOUND           when wrong instance specified
+ * @return COAP_400_BAD_REQUEST         when wrong information has been sent
+ * @return COAP_405_METHOD_NOT_ALLOWED  when trying to execute a resource that is not supported
  */
-static uint8_t _discover_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
-                            lwm2m_object_t *object);
-
-
-
-/*Descriptor of a LwM2M pet object instance */
-typedef struct {
-    uint8_t *id;                 /**< types of power sources (0-7) */
-    uint16_t *power_voltage;     /**< voltage of power sources in mV */
-    uint16_t *power_current;     /**< current of power sources in mA */
-    uint8_t battery_status;      /**< battery status (0-6) */
-    uint32_t mem_total;          /**< amount of memory on the device in kB */
-    uint16_t(*ext_dev_info)[2];  /**< external devices information */
-    uint8_t ext_dev_info_len;    /**< amount of external devices information */
-    uint8_t error_code[7];       /**< error codes */
-    uint8_t error_code_used;     /**< amount of error codes used */
-} pet_data_t;
-
-typedef struct {
-    lwm2m_list_t list;              /**< Linked list handle */
-} lwm2m_obj_pet_inst_t;
-
-static const lwm2m_obj_pet_inst_t _instance;
-
+static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
+                           lwm2m_object_t *object);
 
 /**
- * @brief Implementation of the object interface for the Device Object.
+ * @brief Get a free instance from the list.
+ *
+ * @param[in] object        IPSO sensor base object
+ *
+ * @return Instance if available, NULL otherwise
  */
-static lwm2m_object_t _pet_object = {
-    .next           = NULL,
-    .objID          = 5,
-    .instanceList   = (lwm2m_list_t *)&_instance,
-    .readFunc       = NULL,
-    .executeFunc    = NULL,
-    .discoverFunc   = _discover_cb,
-    .writeFunc      = NULL,
-    .deleteFunc     = NULL,
-    .createFunc     = NULL,
-    .userData       = NULL
-};
+static lwm2m_obj_pet_inst_t *_get_instance_from_free_list(
+    lwm2m_obj_pet_t *object);
 
-static uint8_t _discover_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
-                            lwm2m_object_t *object)
+/**
+ * @brief Add an instance to the free instance list.
+ *
+ * @param[out] object   IPSO sensor base object
+ * @param[in] instance  Instance to add to the free list
+ */
+static void _put_instance_in_free_list(lwm2m_obj_pet_t *object,
+                                       lwm2m_obj_pet_inst_t *instance);
+
+static void _put_instance_in_free_list(lwm2m_obj_pet_t *object,
+                                       lwm2m_obj_pet_inst_t *instance)
 {
+    assert(object);
+    assert(instance);
+
+    instance->list.id = UINT16_MAX;
+    instance->list.next = NULL;
+
+    _FREE_INSTANCES(object) = (lwm2m_obj_pet_inst_t *)LWM2M_LIST_ADD(
+        _FREE_INSTANCES(object), instance
+        );
+}
+
+static lwm2m_obj_pet_inst_t *_get_instance_from_free_list(lwm2m_obj_pet_t *object)
+{
+    assert(object);
+    lwm2m_obj_pet_inst_t *instance = NULL;
+
+    /* try to allocate an instance, by popping a free node from the list */
+    _FREE_INSTANCES(object) = (lwm2m_obj_pet_inst_t *)lwm2m_list_remove(
+        (lwm2m_list_t *)_FREE_INSTANCES(object), UINT16_MAX, (lwm2m_list_t **)&instance
+        );
+
+    return instance;
+}
+
+int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
+                                  lwm2m_obj_pet_t *object,
+                                  uint16_t object_id,
+                                  lwm2m_obj_pet_inst_t *instances,
+                                  size_t instance_count)
+{
+    assert(object);
+    assert(instances);
+    memset(object, 0, sizeof(lwm2m_obj_pet_t));
+
+    /* initialize the wakaama LwM2M object */
+    object->object_id = object_id;
+    object->object.readFunc = NULL;
+    object->object.executeFunc = _exec_cb;
+    object->object.userData = client_data;
+
+    /* initialize the instances and add them to the free instance list */
+    for (unsigned i = 0; i < instance_count; i++) {
+        _put_instance_in_free_list(object, &instances[i]);
+    }
+    return 0;
+}
+
+static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
+                        lwm2m_object_t *object)
+{
+    (void)buffer;
+    (void)length;
+
+    lwm2m_obj_pet_inst_t *instance;
     uint8_t result;
-    int i;
 
-    (void)object;
-
-    if (instance_id != 0) {
-        return COAP_404_NOT_FOUND;
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m Pet:exec]: can't find instance %d\n", instance_id);
+        result = COAP_404_NOT_FOUND;
+        goto out;
     }
 
-    result = COAP_205_CONTENT;
-
-    if (*num_data == 0) {
-        /* This list must contain all available resources */
-        uint16_t res[] = {
-            LWM2M_RES_PET_ID, LWM2M_RES_PET_HUNGRY, LWM2M_RES_PET_ILL,
-            LWM2M_RES_PET_BORED, LWM2M_RES_PET_DIRTY, LWM2M_RES_PET_FED,
-            LWM2M_RES_PET_MEDICATED,LWM2M_RES_PET_PLAYED,LWM2M_RES_PET_CLEANED,
-        };
-        int len = ARRAY_SIZE(res);
-
-        *data_array = lwm2m_data_new(len);
-        *num_data = len;
-
-        if (*data_array == NULL) {
-            DEBUG("[lwm2m:pet:discover] could not allocate data array\n");
-            return COAP_500_INTERNAL_SERVER_ERROR;
-        }
-
-        for (i = 0; i < len; i++) {
-            (*data_array)[i].id = res[i];
-        }
-    }
-    else {
-        /* Check if each given resource is present */
-        for (i = 0; i < *num_data && result == COAP_205_CONTENT; i++) {
-            switch ((*data_array)[i].id) {
-                case LWM2M_RES_PET_ID:
-                case LWM2M_RES_PET_HUNGRY:
-                case LWM2M_RES_PET_ILL:
-                case LWM2M_RES_PET_BORED:
-                case LWM2M_RES_PET_DIRTY:
-                case LWM2M_RES_PET_FED:
-                case LWM2M_RES_PET_MEDICATED:
-                case LWM2M_RES_PET_PLAYED:
-                case LWM2M_RES_PET_CLEANED:
-                    break;
-                default:
-                    result = COAP_404_NOT_FOUND;
-            }
-        }
+    switch (resource_id) {
+    case LWM2M_PET_HUNGRY_ID:
+        instance->hungry = true;
+        result = COAP_204_CHANGED;
+        break;
+    case LwM2M_PET_ILL_ID:
+        instance->ill = true;
+        result = COAP_204_CHANGED;
+        break;
+    case LwM2M_PET_BORED_ID:
+        instance->bored = true;
+        result = COAP_204_CHANGED;
+        break;
+    case LwM2M_PET_DIRTY_ID:
+        instance->dirty = true;
+        result = COAP_204_CHANGED;
+        break;
+    default:
+        result = COAP_405_METHOD_NOT_ALLOWED;
+        break;
     }
 
+out:
     return result;
 }
 
-lwm2m_object_t *lwm2m_get_pet_device(void)
+int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
+                                                 const lwm2m_obj_pet_args_t *args)
 {
-    lwm2m_object_t *obj;
+    assert(object);
+    assert(args);
 
-    obj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
-
-    if (obj == NULL) {
-        goto err_out;
+    int32_t result = -ENOMEM;
+    lwm2m_obj_pet_inst_t *instance = NULL;
+    uint16_t _instance_id;
+    if (object->free_instances == NULL) {
+        DEBUG("[lwm2m:Pet]: object not initialized\n");
+        result = -EINVAL;
+        goto out;
     }
 
-    memset(obj, 0, sizeof(lwm2m_object_t));
-    obj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
+    mutex_lock(&object->mutex);
 
-    if (obj->instanceList == NULL) {
-        goto free_obj;
+    /* determine ID for new instance */
+    if (args->instance_id < 0) {
+        _instance_id = lwm2m_list_newId((lwm2m_list_t *)_USED_INSTANCES(object));
+    }
+    else {
+        /* sanity check */
+        if (args->instance_id >= (UINT16_MAX - 1)) {
+            DEBUG("[lwm2m:Pet]: instance ID %" PRIi32 " is too big\n",
+                  args->instance_id);
+            result = -EINVAL;
+            goto free_out;
+        }
+
+        _instance_id = (uint16_t)args->instance_id;
+
+        /* check that the ID is free to use */
+        if (LWM2M_LIST_FIND(_USED_INSTANCES(object), _instance_id ) != NULL) {
+            DEBUG("[lwm2m:Pet]: instance ID %" PRIi32 " already in use\n",
+                  args->instance_id);
+            goto free_out;
+        }
     }
 
-    memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
+    /* get a free instance */
+    instance = _get_instance_from_free_list(object);
+    if (!instance) {
+        DEBUG("[lwm2m:Pet]: can't allocate new instance\n");
+        goto free_out;
+    }
 
-    obj->objID = LWM2M_DEVICE_OBJECT_ID;
+    memset(instance, 0, sizeof(lwm2m_obj_pet_inst_t));
 
-    obj->readFunc = prv_device_read;
-    obj->writeFunc = prv_device_write;
-    obj->executeFunc = prv_device_execute;
-    obj->discoverFunc = prv_device_discover;
+    instance->list.id = _instance_id;
+    instance->hungry = false;
+    instance->ill = false;
+    instance->bored = false;
+    instance->dirty = false;
+    instance->fed = false;
+    instance->medicated = false;
+    instance->played = false;
+    instance->cleaned = false;
+    instance->read_cb = args->read_cb;
+    instance->read_cb_arg = args->read_cb_arg;
 
-    return obj;
+    /* copy name locally */
+    memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
+    //strcpy(instance->name, "default");
+    DEBUG("[lwm2m:Pet]: new instance with ID %d\n", _instance_id);
 
-free_obj:
-    lwm2m_free(obj);
+    /* add the new instance to the list */
+    object->object.instanceList = LWM2M_LIST_ADD(object->object.instanceList, instance);
+    result = instance->list.id;
 
-err_out:
-    return NULL;
+free_out:
+    mutex_unlock(&object->mutex);
+out:
+    return result;
 }
 
-void lwm2m_free_object_device(lwm2m_object_t *obj)
+int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
+                        lwm2m_object_t *object)
 {
-    if (obj == NULL) {
-        return;
+    lwm2m_obj_pet_inst_t *instance;
+    int32_t result;
+
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m Pet:is_hungry]: can't find instance %d\n", instance_id);
+        result = -1;
+        goto out;
     }
-    if (obj->userData) {
-        lwm2m_free(obj->userData);
-    }
-    if (obj->instanceList) {
-        lwm2m_free(obj->instanceList);
-    }
-    lwm2m_free(obj);
+    result = instance->hungry;
+out:
+    return result;
 }

@@ -57,31 +57,104 @@ extern "C" {
 }
 #endif
 
-/**
- * @brief Resources of the LwM2M device object instance
- *
- * @see 32769.xml
- */
-enum lwm2m_pet_resources {
-    LWM2M_RES_PET_ID,             /**< Id of the pet on the device */
-    LWM2M_RES_PET_HUNGRY,         /**< Tell the device that the pet is hungry */
-    LWM2M_RES_PET_ILL,            /**< Tell the device that the pet is ill */
-    LWM2M_RES_PET_BORED,          /**< Tell the device that the pet is bored */
-    LWM2M_RES_PET_DIRTY,          /**< Tell the device that the pet is dirty */
-    LWM2M_RES_PET_FED,            /**< pet has been fed */
-    LWM2M_RES_PET_MEDICATED,      /**< pet has been medicated */
-    LWM2M_RES_PET_PLAYED,         /**< the pet has played */
-    LWM2M_RES_PET_CLEANED,        /**< the pet has been cleaned */
-};
+#ifndef CONFIG_LWM2M_PET_NAME_MAX_SIZE
+#define CONFIG_LWM2M_PET_NAME_MAX_SIZE 10
+#endif
+
+#define LWM2M_PET_HUNGRY_ID 1
+#define LwM2M_PET_ILL_ID 2
+#define LwM2M_PET_BORED_ID 3
+#define LwM2M_PET_DIRTY_ID 4
 
 /**
- * @brief Initialize the Pet object.
+ * @brief Callback for reading the sensor value.
  *
- * @param[in] client_data  LwM2M client data.
+ * @param[in]  read_cb_arg  Data passed for the read callback when the instance was created.
+ * @param[out] value       Pointer to the variable where the value will be stored.
  *
- * @return Pointer to the Pet object on success
+ * @return 0 on success
+ * @return <0 otherwise
  */
-lwm2m_object_t *lwm2m_object_pet_init(lwm2m_client_data_t *client_data);
+typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
+
+/**
+ * @brief Arguments for the creation of a pet object.
+ */
+typedef struct lwm2m_obj_pet_args {
+    int32_t instance_id;                            /**< ID for the new instance. It must be between 0 and (UINT16_MAX - 1),
+                                                         if -1 the next available ID will be used. */
+    void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. */
+    lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. */
+} lwm2m_obj_pet_args_t;
+
+
+/*Descriptor of a LwM2M pet object instance */
+typedef struct lwm2m_obj_pet_inst {
+    lwm2m_list_t list;                           /**< list handle */
+    uint8_t id;                                  /**< id of pet */                
+    char name[CONFIG_LWM2M_PET_NAME_MAX_SIZE];   /**< name of pet */
+    bool hungry;                                 /**< pet hungry */
+    bool ill;                                    /**< pet ill */
+    bool bored;                                  /**< pet bored */
+    bool dirty;                                  /**< pet dirty */
+    bool fed;                                    /**< pet fed */
+    bool medicated;                              /**< pet medicated */
+    bool played;                                 /**< pet played */
+    bool cleaned;                                /**< pet cleaned */
+    void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. */
+    lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. */
+} lwm2m_obj_pet_inst_t;
+
+/**
+ * @brief LwM2M Pet object
+ */
+typedef struct lwm2m_obj_pet {
+    lwm2m_object_t object;                 /**< LwM2M object base */
+    lwm2m_obj_pet_inst_t *free_instances;  /**< List of instances */
+    uint16_t object_id;                    /**< Object ID*/   
+    mutex_t mutex;                         /**< Mutex for the object */
+} lwm2m_obj_pet_t;
+
+/**
+ * @brief   Create a new object instance based on the IPSO Sensor Base and add it to the
+ *          @p object list.
+ *
+ * @param[in, out] object           Pointer to the LwM2M IPSO object.
+ * @param[in]      args             Initialize structure with the parameter for the instance. May
+ *                                  not be NULL.
+ *
+ * @retval instance ID (>0) on success
+ * @retval <0 otherwise
+ */
+int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
+                                                 const lwm2m_obj_pet_args_t *args);
+
+/**
+ * @brief   Initialize the a LwM2M Pet object.
+ *
+ * @param[in, out] client_data      Pointer to the LwM2M client.
+ * @param[in, out] object           Pointer to the LwM2M Pet object.
+ * @param[in]      instances        List of allocated instances.
+ * @param[in]      instance_count   Number of allocated instances.
+ *
+ * @retval 0 on success
+ * @retval <0 otherwise
+ */
+int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
+                                  lwm2m_obj_pet_t *object,
+                                  uint16_t object_id,
+                                  lwm2m_obj_pet_inst_t *instances,
+                                  size_t instance_count);
+
+/**
+ * @brief Determines if the pet is hungry
+ *
+ * @return 1 pet is hungry
+ * @return 0 pet isn't hungry
+ * @return -1 instance not found
+ */
+int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
+                        lwm2m_object_t *object);
 
 /**
  * @brief 'Execute' callback for the Pet object.
@@ -116,22 +189,6 @@ lwm2m_object_t *lwm2m_object_pet_init(lwm2m_client_data_t *client_data);
 //  */
 // static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
 //                         lwm2m_object_t *object);
-
-// /**
-//  * @brief 'Discover' callback for the Pet object.
-//  *
-//  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
-//  * @param[in, out] num_data     Number of resources requested. 0 means all.
-//  * @param[in, out] data_array   Initialized data array to determine if the resource exists,
-//  *                              when @p num_data != 0. Uninitialized otherwise.
-//  * @param[in] object            Device object pointer
-//  *
-//  * @return COAP_205_CONTENT                 on success
-//  * @return COAP_404_NOT_FOUND               when a resource is not supported
-//  * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
-//  */
-// static uint8_t _discover_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
-//                             lwm2m_object_t *object);
 
 // /**
 //  * @brief 'Write' callback for the Pet object.
