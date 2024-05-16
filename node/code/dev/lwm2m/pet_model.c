@@ -18,32 +18,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "kernel_defines.h"
 #include "liblwm2m.h"
+#include "lwm2m_client.h"
 #include "pet_model.h"
-#include "lwm2m_client_config.h"
 
 #define ENABLE_DEBUG    1
 #include "debug.h"
 
 #define _USED_INSTANCES(obj) (obj->object.instanceList)
 #define _FREE_INSTANCES(obj) (obj->free_instances)
-
-// /**
-//  * @brief 'Discover' callback for the Pet object.
-//  *
-//  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
-//  * @param[in, out] num_data     Number of resources requested. 0 means all.
-//  * @param[in, out] data_array   Initialized data array to determine if the resource exists,
-//  *                              when @p num_data != 0. Uninitialized otherwise.
-//  * @param[in] object            Device object pointer
-//  *
-//  * @return COAP_205_CONTENT                 on success
-//  * @return COAP_404_NOT_FOUND               when a resource is not supported
-//  * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
-//  */
-// static uint8_t _discover_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
-//                             lwm2m_object_t *object);
 
 /**
  * @brief 'Execute' callback for the Pet object.
@@ -75,7 +58,7 @@ static lwm2m_obj_pet_inst_t *_get_instance_from_free_list(
 /**
  * @brief Add an instance to the free instance list.
  *
- * @param[out] object   IPSO sensor base object
+ * @param[out] object   Pet object
  * @param[in] instance  Instance to add to the free list
  */
 static void _put_instance_in_free_list(lwm2m_obj_pet_t *object,
@@ -119,7 +102,7 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
     memset(object, 0, sizeof(lwm2m_obj_pet_t));
 
     /* initialize the wakaama LwM2M object */
-    object->object_id = object_id;
+    object->object.objID = object_id;
     object->object.readFunc = NULL;
     object->object.executeFunc = _exec_cb;
     object->object.userData = client_data;
@@ -233,11 +216,11 @@ int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
     instance->medicated = false;
     instance->played = false;
     instance->cleaned = false;
-    instance->read_cb = args->read_cb;
-    instance->read_cb_arg = args->read_cb_arg;
+    //instance->read_cb = args->read_cb;
+    //instance->read_cb_arg = args->read_cb_arg;
 
     /* copy name locally */
-    memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
+    //memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
     //strcpy(instance->name, "default");
     DEBUG("[lwm2m:Pet]: new instance with ID %d\n", _instance_id);
 

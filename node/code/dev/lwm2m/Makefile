@@ -2,7 +2,7 @@
 APPLICATION = wakaama
 
 INCLUDES += -I$(CURDIR)
-BOARD = feather-nrf52840-sense
+BOARD? = feather-nrf52840-sense
 #Bootstrap
 #CFLAGS += -DCONFIG_LWM2M_BOOTSTRAP=1
 

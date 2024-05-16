@@ -48,10 +48,9 @@ extern "C" {
 #include <string.h>
 #include <assert.h>
 
+#include "mutex.h"
 #include "liblwm2m.h"
-#include "net/credman.h"
 #include "lwm2m_client.h"
-#include "lwm2m_client_config.h"
 
 #ifdef __cplusplus
 }
@@ -83,8 +82,8 @@ typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
 typedef struct lwm2m_obj_pet_args {
     int32_t instance_id;                            /**< ID for the new instance. It must be between 0 and (UINT16_MAX - 1),
                                                          if -1 the next available ID will be used. */
-    void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. */
-    lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. */
+    //void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. */
+    //lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. */
 } lwm2m_obj_pet_args_t;
 
 
@@ -101,8 +100,8 @@ typedef struct lwm2m_obj_pet_inst {
     bool medicated;                              /**< pet medicated */
     bool played;                                 /**< pet played */
     bool cleaned;                                /**< pet cleaned */
-    void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. */
-    lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. */
+    //void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. */
+    //lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. */
 } lwm2m_obj_pet_inst_t;
 
 /**
@@ -116,10 +115,10 @@ typedef struct lwm2m_obj_pet {
 } lwm2m_obj_pet_t;
 
 /**
- * @brief   Create a new object instance based on the IPSO Sensor Base and add it to the
+ * @brief   Create a new object instance based on the Pet and add it to the
  *          @p object list.
  *
- * @param[in, out] object           Pointer to the LwM2M IPSO object.
+ * @param[in, out] object           Pointer to the LwM2M Pet object.
  * @param[in]      args             Initialize structure with the parameter for the instance. May
  *                                  not be NULL.
  *

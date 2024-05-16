@@ -18,6 +18,7 @@
 
 #include "lwm2m_handler.h"
 #include "pet.h"
+#include "pet_model.h"
 #include "board.h"
 #include "xtimer.h"
 #include "lwm2m_client.h"
@@ -42,12 +43,8 @@ void lwm2m_handler_init(void)
     obj_list[3] = lwm2m_object_pet_init(&client_data);
 
     lwm2m_obj_pet_args_t pet_args = {
-        .instance_id = 0,
-        .read_cb = NULL,
-        .read_cb_arg = NULL
+        .instance_id = 0
     };
-    puts("hier\n");
-    printf("%ld\n",pet_args.instance_id);
     int res = lwm2m_object_pet_instance_create(&pet_args);
     if (res<0) {
         puts("Error instantiating pet");
@@ -83,6 +80,7 @@ void *handle_thread(void *arg)
 {
     (void) arg;
     while(1){
+        printf("%ld\n",lwm2m_pet_is_hungry(0,obj_list[3]));
         xtimer_sleep(5);
     }
     
