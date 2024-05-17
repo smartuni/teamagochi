@@ -3,6 +3,7 @@
 
 Dispatcher::Dispatcher() {
     this->subscriptions = list<Subscription>();
+    this->setRespectTerminate(false); // We need to send the other classes a terminate event
 }
 
 void Dispatcher::subscribe(list<EVENTS> events, kernel_pid_t pid) {
@@ -16,7 +17,7 @@ void Dispatcher::subscribe(list<EVENTS> events, kernel_pid_t pid) {
 void Dispatcher::handleEvent(msg_t *event) {
     for (Subscription sub : this->subscriptions) {
         for (EVENTS e : sub.event) {
-            if (e == event->type) {
+            if (e == event->type || e == EVENTS::WILDCARD || event->type == EVENTS::TERMINATE) {
                 cout << "👀 PID: " << sub.pid << " was interested in event " << event->type << " notifying them" << endl;
 
                 msg_t msg;
