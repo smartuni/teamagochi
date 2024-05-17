@@ -2,7 +2,7 @@
 APPLICATION = wakaama
 
 INCLUDES += -I$(CURDIR)
-BOARD? = feather-nrf52840-sense
+BOARD = feather-nrf52840-sense
 #Bootstrap
 #CFLAGS += -DCONFIG_LWM2M_BOOTSTRAP=1
 
@@ -31,8 +31,19 @@ USEMODULE += ps
 # development process:
 DEVELHELP ?= 1
 
+# add DTLS support
+#USEMODULE += wakaama_client_dtls
+
+# Specify sock DTLS implementation
+#USEPKG += tinydtls
+# tinydtls needs crypto secure PRNG
+#USEMODULE += prng_sha1prng
+
 # Specific the server URI  address (NOTE: Domain names not supported yet)
-SERVER_URI ?= '"coap://[fd00:dead:beef::1]"'
+#SERVER_URI = "coap://2001:db8:1::1"
+LWM2M_SERVER_SHORT_ID ?= 1
+
+CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
 
 # NOTE: Add the package for wakaama
 USEPKG += wakaama
@@ -40,6 +51,7 @@ USEPKG += wakaama
 # NOTE: Add the package for the timer
 USEMODULE += xtimer
 
+#DTLS_MAX_BUF=1024
 
 include $(RIOTBASE)/Makefile.include
 

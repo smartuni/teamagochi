@@ -1,4 +1,5 @@
 /* Generated file do not edit */
+#define EVENT_THREAD_MEDIUM_STACKSIZE (3*1024)
 #define DEVELHELP 1
 #define CPU_FAM_NRF52 1
 #define CPU_MODEL_NRF52840XXAA 1

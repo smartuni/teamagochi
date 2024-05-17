@@ -34,6 +34,7 @@
 #include "lwm2m_platform.h"
 #include "objects/common.h"
 #include "lwm2m_handler.h"
+#include "xtimer.h"
 
 #include "msg.h"
 #include "shell.h"
@@ -51,11 +52,12 @@ char handler_thread_stack[THREAD_STACKSIZE_MAIN];
 
 int main(void)
 {
+    xtimer_sleep(5);
     lwm2m_handler_init();
     lwm2m_handler_start();
     thread_create(handler_thread_stack, sizeof(handler_thread_stack),
-                THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
-                handle_thread, NULL, "handle_thread");
+               THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
+               handle_thread, NULL, "handle_thread");
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);

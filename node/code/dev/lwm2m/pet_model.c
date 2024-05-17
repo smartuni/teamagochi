@@ -42,8 +42,62 @@
  * @return COAP_400_BAD_REQUEST         when wrong information has been sent
  * @return COAP_405_METHOD_NOT_ALLOWED  when trying to execute a resource that is not supported
  */
-static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
-                           lwm2m_object_t *object);
+// static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
+//                         lwm2m_object_t *object);
+
+/**
+ * @brief Gets the current value of a given @p instance.
+ *
+ * @param[in, out] data     Initialized data structure.
+ * @param[in] instance      Pointer to the instance to get the value from.
+ *
+ * @return COAP_205_CONTENT on success
+ * @return COAP_404_NOT_FOUND if the value is not found
+ */
+static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance);
+
+// /**
+//  * @brief 'Read' callback for the Pet object.
+//  *
+//  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
+//  * @param[in, out] num_data     Number of resources requested. 0 means all.
+//  * @param[in, out] data_array   Initialized data array to output the values,
+//  *                              when @p num_data != 0. Uninitialized otherwise.
+//  * @param[in] object            Device object pointer
+//  *
+//  * @return COAP_205_CONTENT                 on success
+//  * @return COAP_404_NOT_FOUND               when resource can't be found
+//  * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
+//  */
+static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
+                        lwm2m_object_t *object);
+
+/**
+ * @brief Sets the current value of a given @p instance.
+ *
+ * @param[in, out] data     Initialized data structure.
+ * @param[in] instance      Pointer to the instance to set the value.
+ *
+ * @return COAP_205_CONTENT on success
+ * @return COAP_404_NOT_FOUND if the value is not found
+ */
+static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance);
+
+/**
+ * @brief 'Write' callback for the LwM2M Pet object implementation.
+ *
+ * @param[in] instance_id       ID of the instance to write resource to.
+ * @param[in] num_data          Number of elements in @p data_array.
+ * @param[in] data_array        IDs of resources to write and values.
+ * @param[in] object            Light Control object handle
+ *
+ * @return COAP_204_CHANGED on success
+ * @return COAP_404_NOT_FOUND if the instance was not found
+ * @return COAP_400_BAD_REQUEST if a value is not encoded correctly
+ * @return COAP_500_INTERNAL_SERVER_ERROR otherwise
+ */
+static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data_array,
+                         lwm2m_object_t * object);
 
 /**
  * @brief Get a free instance from the list.
@@ -103,8 +157,9 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
 
     /* initialize the wakaama LwM2M object */
     object->object.objID = object_id;
-    object->object.readFunc = NULL;
-    object->object.executeFunc = _exec_cb;
+    object->object.readFunc = _read_cb;
+    object->object.writeFunc = _write_cb;
+    //object->object.executeFunc = _exec_cb;
     object->object.userData = client_data;
 
     /* initialize the instances and add them to the free instance list */
@@ -114,12 +169,192 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
     return 0;
 }
 
-static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
+// static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
+//                         lwm2m_object_t *object)
+// {
+//     (void)buffer;
+//     (void)length;
+
+//     lwm2m_obj_pet_inst_t *instance;
+//     uint8_t result;
+
+//     /* try to get the requested instance from the object list */
+//     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+//                                                                     instance_id);
+//     if (!instance) {
+//         DEBUG("[lwm2m Pet:exec]: can't find instance %d\n", instance_id);
+//         result = COAP_404_NOT_FOUND;
+//         goto out;
+//     }
+
+//     switch (resource_id) {
+//     case LWM2M_PET_HUNGRY_ID:
+//         instance->hungry = true;
+//         result = COAP_204_CHANGED;
+//         break;
+//     case LwM2M_PET_ILL_ID:
+//         instance->ill = true;
+//         result = COAP_204_CHANGED;
+//         break;
+//     case LwM2M_PET_BORED_ID:
+//         instance->bored = true;
+//         result = COAP_204_CHANGED;
+//         break;
+//     case LwM2M_PET_DIRTY_ID:
+//         instance->dirty = true;
+//         result = COAP_204_CHANGED;
+//         break;
+//     default:
+//         result = COAP_405_METHOD_NOT_ALLOWED;
+//         break;
+//     }
+
+// out:
+//     return result;
+// }
+
+
+static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance)
+{
+    assert(data);
+    assert(instance);
+
+    switch (data->id) {
+    case LWM2M_PET_ID:
+        lwm2m_data_encode_int(instance->id, data);
+        break;
+    case LWM2M_PET_HUNGRY_ID:
+        lwm2m_data_encode_bool(instance->hungry, data);
+        break;
+    case LwM2M_PET_ILL_ID:
+        lwm2m_data_encode_bool(instance->ill, data);
+        break;
+    case LwM2M_PET_BORED_ID:
+        lwm2m_data_encode_bool(instance->bored, data);
+        break;
+
+    case LwM2M_PET_DIRTY_ID:
+        lwm2m_data_encode_bool(instance->dirty, data);
+        break;
+    case LWM2M_PET_FED_ID:
+        lwm2m_data_encode_bool(instance->fed, data);
+        break;
+    case LWM2M_PET_MEDICATED_ID:
+        lwm2m_data_encode_bool(instance->medicated, data);
+        break;
+    case LWM2M_PET_PLAYED_ID:
+        lwm2m_data_encode_bool(instance->played, data);
+        break;
+    case LWM2M_PET_CLEANED_ID:
+        lwm2m_data_encode_bool(instance->cleaned, data);
+        break;
+    default:
+        return COAP_404_NOT_FOUND;
+    }
+    return COAP_205_CONTENT;
+}
+
+static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
                         lwm2m_object_t *object)
 {
-    (void)buffer;
-    (void)length;
+    puts("hier");
+    lwm2m_obj_pet_inst_t *instance;
+    uint8_t result;
+    int i = 0;
+    
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m pet:read]: can't find instance %d\n", instance_id);
+        result = COAP_404_NOT_FOUND;
+        goto out;
+    }
 
+    /* if the number of resources is not specified, we need to read all resources */
+    if (!*num_data) {
+        DEBUG("[lwm2m pet:read]: reading all resources\n");
+
+        uint16_t res_list[] = {
+            LWM2M_PET_ID,
+            LWM2M_PET_HUNGRY_ID,
+            LwM2M_PET_ILL_ID,
+            LwM2M_PET_BORED_ID,
+            LwM2M_PET_DIRTY_ID,
+            LWM2M_PET_FED_ID,
+            LWM2M_PET_MEDICATED_ID,
+            LWM2M_PET_PLAYED_ID,
+            LWM2M_PET_CLEANED_ID
+        };
+
+        /* allocate structures to return resources */
+        int res_num = ARRAY_SIZE(res_list);
+        *data_array = lwm2m_data_new(res_num);
+
+        if (NULL == *data_array) {
+            result = COAP_500_INTERNAL_SERVER_ERROR;
+            goto out;
+        }
+
+        /* return the number of resources being read */
+        *num_data = res_num;
+
+        /* set the IDs of the resources in the data structures */
+        for (i = 0; i < res_num; i++) {
+            (*data_array)[i].id = res_list[i];
+        }
+    }
+
+    /* now get the values */
+    i = 0;
+    do {
+        DEBUG("[lwm2m pet:read]: reading resource %d\n", (*data_array)[i].id);
+        result = _get_value(&(*data_array)[i], instance);
+        i++;
+    } while (i < *num_data && COAP_205_CONTENT == result);
+
+out:
+    return result;
+}
+
+static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
+    assert(data);
+    assert(instance);
+
+    switch (data->id) {
+    case LWM2M_PET_FED_ID:
+        instance->fed = data;
+        break;
+    case LWM2M_PET_HUNGRY_ID:
+        instance->hungry = data;
+        break;
+    case LwM2M_PET_ILL_ID:
+        instance->ill = data;
+        break;
+    case LwM2M_PET_BORED_ID:
+        instance->bored = data;
+        break;
+    case LwM2M_PET_DIRTY_ID:
+        instance->dirty = data;
+        break;
+    case LWM2M_PET_MEDICATED_ID:
+        instance->medicated = data;
+        break;
+    case LWM2M_PET_PLAYED_ID:
+        instance->played = data;
+        break;
+    case LWM2M_PET_CLEANED_ID:
+        instance->cleaned = data;
+        break;
+    default:
+        return COAP_404_NOT_FOUND;
+    }
+    return COAP_205_CONTENT;
+}
+
+static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data_array,
+                         lwm2m_object_t * object)
+{
     lwm2m_obj_pet_inst_t *instance;
     uint8_t result;
 
@@ -127,33 +362,19 @@ static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buf
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
                                                                     instance_id);
     if (!instance) {
-        DEBUG("[lwm2m Pet:exec]: can't find instance %d\n", instance_id);
+        DEBUG("[lwm2m pet:write]: can't find instance %d\n", instance_id);
         result = COAP_404_NOT_FOUND;
         goto out;
     }
 
-    switch (resource_id) {
-    case LWM2M_PET_HUNGRY_ID:
-        instance->hungry = true;
-        result = COAP_204_CHANGED;
-        break;
-    case LwM2M_PET_ILL_ID:
-        instance->ill = true;
-        result = COAP_204_CHANGED;
-        break;
-    case LwM2M_PET_BORED_ID:
-        instance->bored = true;
-        result = COAP_204_CHANGED;
-        break;
-    case LwM2M_PET_DIRTY_ID:
-        instance->dirty = true;
-        result = COAP_204_CHANGED;
-        break;
-    default:
-        result = COAP_405_METHOD_NOT_ALLOWED;
-        break;
-    }
+    mutex_lock(&instance->mutex);
 
+    for (int i = 0; i < num_data && result == COAP_204_CHANGED; i++) {
+        DEBUG("[lwm2m pet:write]: write resource %d\n", (num_data));
+        result = _set_value(&(data_array)[i], instance);
+    }
+    
+    mutex_unlock(&instance->mutex);
 out:
     return result;
 }

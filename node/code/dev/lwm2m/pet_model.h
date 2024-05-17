@@ -52,29 +52,30 @@ extern "C" {
 #include "liblwm2m.h"
 #include "lwm2m_client.h"
 
-#ifdef __cplusplus
-}
-#endif
-
 #ifndef CONFIG_LWM2M_PET_NAME_MAX_SIZE
 #define CONFIG_LWM2M_PET_NAME_MAX_SIZE 10
 #endif
 
+#define LWM2M_PET_ID 0
 #define LWM2M_PET_HUNGRY_ID 1
 #define LwM2M_PET_ILL_ID 2
 #define LwM2M_PET_BORED_ID 3
 #define LwM2M_PET_DIRTY_ID 4
+#define LWM2M_PET_FED_ID 5
+#define LWM2M_PET_MEDICATED_ID 6
+#define LWM2M_PET_PLAYED_ID 7
+#define LWM2M_PET_CLEANED_ID 8
 
-/**
- * @brief Callback for reading the sensor value.
- *
- * @param[in]  read_cb_arg  Data passed for the read callback when the instance was created.
- * @param[out] value       Pointer to the variable where the value will be stored.
- *
- * @return 0 on success
- * @return <0 otherwise
- */
-typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
+// /**
+//  * @brief Callback for reading the sensor value.
+//  *
+//  * @param[in]  read_cb_arg  Data passed for the read callback when the instance was created.
+//  * @param[out] value       Pointer to the variable where the value will be stored.
+//  *
+//  * @return 0 on success
+//  * @return <0 otherwise
+//  */
+// typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
 
 /**
  * @brief Arguments for the creation of a pet object.
@@ -82,8 +83,8 @@ typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
 typedef struct lwm2m_obj_pet_args {
     int32_t instance_id;                            /**< ID for the new instance. It must be between 0 and (UINT16_MAX - 1),
                                                          if -1 the next available ID will be used. */
-    //void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. */
-    //lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. */
+    //void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. need that when we want sensor values*/
+    //lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. need that when we want sensor values*/
 } lwm2m_obj_pet_args_t;
 
 
@@ -100,8 +101,9 @@ typedef struct lwm2m_obj_pet_inst {
     bool medicated;                              /**< pet medicated */
     bool played;                                 /**< pet played */
     bool cleaned;                                /**< pet cleaned */
-    //void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. */
-    //lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. */
+    //void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. need that when we want sensor values*/ 
+    //lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. need that when we want sensor values*/
+    mutex_t mutex;                               /**< Mutex for writing the values*/
 } lwm2m_obj_pet_inst_t;
 
 /**
@@ -110,7 +112,6 @@ typedef struct lwm2m_obj_pet_inst {
 typedef struct lwm2m_obj_pet {
     lwm2m_object_t object;                 /**< LwM2M object base */
     lwm2m_obj_pet_inst_t *free_instances;  /**< List of instances */
-    uint16_t object_id;                    /**< Object ID*/   
     mutex_t mutex;                         /**< Mutex for the object */
 } lwm2m_obj_pet_t;
 
@@ -155,40 +156,6 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
 int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
                         lwm2m_object_t *object);
 
-/**
- * @brief 'Execute' callback for the Pet object.
- *
- * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
- * @param[in] resource_id       ID of the resource to execute.
- * @param[in] buffer            Information needed for the execution.
- * @param[in] length            Length of @p buffer.
- * @param[in] object            Device object pointer
- *
- * @return COAP_204_CHANGED             on success
- * @return COAP_404_NOT_FOUND           when wrong instance specified
- * @return COAP_400_BAD_REQUEST         when wrong information has been sent
- * @return COAP_405_METHOD_NOT_ALLOWED  when trying to execute a resource that is not supported
- */
-// static uint8_t _execute_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
-//                            lwm2m_object_t *object);
-
-
-// /**
-//  * @brief 'Read' callback for the Pet object.
-//  *
-//  * @param[in] instance_id       Instance ID. Should be 0 as a single instance exists.
-//  * @param[in, out] num_data     Number of resources requested. 0 means all.
-//  * @param[in, out] data_array   Initialized data array to output the values,
-//  *                              when @p num_data != 0. Uninitialized otherwise.
-//  * @param[in] object            Device object pointer
-//  *
-//  * @return COAP_205_CONTENT                 on success
-//  * @return COAP_404_NOT_FOUND               when resource can't be found
-//  * @return COAP_500_INTERNAL_SERVER_ERROR   otherwise
-//  */
-// static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
-//                         lwm2m_object_t *object);
-
 // /**
 //  * @brief 'Write' callback for the Pet object.
 //  *
@@ -204,6 +171,9 @@ int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
 //                          lwm2m_object_t *object);
 
                         
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* OBJECTS_TEAMAGOTCHI_PET_H */
 /** @} */

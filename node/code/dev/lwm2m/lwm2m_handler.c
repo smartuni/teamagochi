@@ -41,7 +41,6 @@ void lwm2m_handler_init(void)
     obj_list[1] = lwm2m_client_get_device_object(&client_data);
     obj_list[2] = lwm2m_client_get_server_object(&client_data);
     obj_list[3] = lwm2m_object_pet_init(&client_data);
-
     lwm2m_obj_pet_args_t pet_args = {
         .instance_id = 0
     };

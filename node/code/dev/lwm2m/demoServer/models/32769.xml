@@ -21,40 +21,40 @@
       </Item>
       <Item ID="1">
         <Name>Hungry</Name>
-        <Operations>E</Operations>
+        <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type></Type>
+        <Type>Boolean</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>Tell the device that the pet is hungry</Description>
       </Item>
       <Item ID="2">
         <Name>Ill</Name>
-        <Operations>E</Operations>
+        <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type></Type>
+        <Type>Boolean</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>Tell the device that the pet is ill</Description>
       </Item>
       <Item ID="3">
         <Name>Bored</Name>
-        <Operations>E</Operations>
+        <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type></Type>
+        <Type>Boolean</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>Tell the device that the pet is bored</Description>
       </Item>
       <Item ID="4">
         <Name>Dirty</Name>
-        <Operations>E</Operations>
+        <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type></Type>
+        <Type>Boolean</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>Tell the device that the pet is dirty</Description>
