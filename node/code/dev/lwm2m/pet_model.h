@@ -154,8 +154,8 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,
-                          const lwm2m_obj_ipso_sensor_base_t *object);
+void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+                          const lwm2m_object_t *object);
 
 /**
  * @brief Sets that the ped has been fed and trigger a notification
@@ -165,8 +165,8 @@ void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,
-                                const lwm2m_obj_pet_base_t *object);
+void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+                                const lwm2m_obj_pet_t *object);
 
 /**
  * @brief Sets that the ped has been fed and trigger a notification
@@ -176,8 +176,8 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
- void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,
-                             const lwm2m_obj_pet_base_t *object);
+ void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+                             const lwm2m_obj_pet_t *object);
 
 /**
  * @brief Sets that the ped has been fed and trigger a notification
@@ -187,9 +187,9 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,
-                              const lwm2m_obj_pet_base_t *object);
-                              
+void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+                              const lwm2m_obj_pet_t *object);
+
 /**
  * @brief Determines if the pet is hungry
  *

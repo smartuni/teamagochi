@@ -69,7 +69,7 @@ int lwm2m_handler_cli(int argc, char **argv){
     }
 
     if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "feed")) {
-        printf("%d\n",lwm2m_object_pet_fed());
+        lwm2m_object_pet_fed(&client_data,0,obj_list[3]);
         return 0;
     }
 
