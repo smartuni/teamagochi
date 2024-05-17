@@ -69,8 +69,7 @@
         "ili9341.h": "c",
         "ili9341_params.h": "c",
         "lvgl_riot.h": "c",
-        "lwm2m_client.h": "c",
-        "liblwm2m.h": "c"
+        "shell.h": "c"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,
