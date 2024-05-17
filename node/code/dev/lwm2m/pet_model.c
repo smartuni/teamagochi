@@ -257,7 +257,6 @@ static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance)
 static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
                         lwm2m_object_t *object)
 {
-    puts("hier");
     lwm2m_obj_pet_inst_t *instance;
     uint8_t result;
     int i = 0;
@@ -349,7 +348,7 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     default:
         return COAP_404_NOT_FOUND;
     }
-    return COAP_205_CONTENT;
+    return COAP_204_CHANGED;
 }
 
 static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data_array,
@@ -357,22 +356,25 @@ static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data
 {
     lwm2m_obj_pet_inst_t *instance;
     uint8_t result;
-
+    int i = 0;
     /* try to get the requested instance from the object list */
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
-                                                                    instance_id);
+                                                       instance_id);
+    
     if (!instance) {
+        
         DEBUG("[lwm2m pet:write]: can't find instance %d\n", instance_id);
         result = COAP_404_NOT_FOUND;
         goto out;
     }
-
     mutex_lock(&instance->mutex);
 
-    for (int i = 0; i < num_data && result == COAP_204_CHANGED; i++) {
+    i = 0;
+    do {
         DEBUG("[lwm2m pet:write]: write resource %d\n", (num_data));
         result = _set_value(&(data_array)[i], instance);
-    }
+        i++;
+    } while (i < num_data && COAP_204_CHANGED == result);
     
     mutex_unlock(&instance->mutex);
 out:
