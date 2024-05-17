@@ -68,9 +68,14 @@ int lwm2m_handler_cli(int argc, char **argv){
         return 0;
     }
 
+    if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "feed")) {
+        printf("%d\n",lwm2m_object_pet_fed());
+        return 0;
+    }
+
     help_error:
     if (IS_ACTIVE(DEVELHELP)) {
-        printf("usage: %s <get_reboot>\n", argv[0]);
+        printf("usage: %s <get_reboot|feed>\n", argv[0]);
     }
     return 1;
 }
@@ -79,8 +84,8 @@ void *handle_thread(void *arg)
 {
     (void) arg;
     while(1){
-        printf("%ld\n",lwm2m_pet_is_hungry(0,obj_list[3]));
-        xtimer_sleep(5);
+        //printf("%ld\n",lwm2m_pet_is_hungry(0,obj_list[3]));
+        //xtimer_sleep(5);
     }
     
     return NULL;
