@@ -100,6 +100,16 @@ static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data
                          lwm2m_object_t * object);
 
 /**
+ * @brief Mark a resource as changed.
+ *
+ * @param[in] object         Object to mark the resource from.
+ * @param[in] instance_id    ID of the instance to mark the resource from.
+ * @param[in] resource_id    ID of the resource to mark.
+ */
+static void _mark_resource_as_changed(const lwm2m_object_t *object, uint16_t instance_id,
+                                      uint16_t resource_id);
+
+/**
  * @brief Get a free instance from the list.
  *
  * @param[in] object        IPSO sensor base object
@@ -321,20 +331,35 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(instance);
 
     switch (data->id) {
-    case LWM2M_PET_FED_ID:
-        instance->fed = data;
+    case LWM2M_PET_ID:
+        instance->id = data;
         break;
     case LWM2M_PET_HUNGRY_ID:
+        if (data){
+            instance->fed = false;
+        }
         instance->hungry = data;
         break;
     case LwM2M_PET_ILL_ID:
+        if (data){
+            instance->medicated = false;
+        }
         instance->ill = data;
         break;
     case LwM2M_PET_BORED_ID:
+        if (data){
+            instance->played = false;
+        }
         instance->bored = data;
         break;
     case LwM2M_PET_DIRTY_ID:
+        if (data){
+            instance->cleaned = false;
+        }
         instance->dirty = data;
+        break;
+    case LWM2M_PET_FED_ID:
+        instance->fed = data;
         break;
     case LWM2M_PET_MEDICATED_ID:
         instance->medicated = data;
@@ -457,8 +482,106 @@ out:
     return result;
 }
 
-int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
-                        lwm2m_object_t *object)
+static void _mark_resource_as_changed(const lwm2m_object_t *object, uint16_t instance_id,
+                                      uint16_t resource_id)
+{
+    lwm2m_uri_t uri;
+
+    uri.objectId = object->objID;
+    uri.instanceId = instance_id;
+    uri.resourceId = resource_id;
+
+    uri.flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID;
+
+    lwm2m_resource_value_changed(lwm2m_client_get_ctx(object->userData), &uri);
+}
+
+void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,
+                          const lwm2m_obj_pet_base_t *object)
+{
+    (void)client_data;
+    lwm2m_obj_pet_inst_t *instance;
+
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        return;
+    }
+    mutex_lock(&instance->mutex);
+
+    instance->fed = true;
+    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_FED_ID);
+
+    mutex_unlock(&object->mutex);
+}
+
+void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,
+                                const lwm2m_obj_pet_base_t *object)
+{
+    (void)client_data;
+    lwm2m_obj_pet_inst_t *instance;
+
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        return;
+    }
+    mutex_lock(&instance->mutex);
+
+    instance->medicated = true;
+    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_MEDICATED_ID);
+
+    mutex_unlock(&object->mutex);
+}
+
+void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,
+                             const lwm2m_obj_pet_base_t *object)
+{
+    (void)client_data;
+    lwm2m_obj_pet_inst_t *instance;
+
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        return;
+    }
+    mutex_lock(&instance->mutex);
+
+    instance->played = true;
+    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_PLAYED_ID);
+
+    mutex_unlock(&object->mutex);
+}
+
+void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,
+                              const lwm2m_obj_pet_base_t *object)
+{
+    (void)client_data;
+    lwm2m_obj_pet_inst_t *instance;
+
+    /* try to get the requested instance from the object list */
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
+                                                                    instance_id);
+    if (!instance) {
+        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        return;
+    }
+    mutex_lock(&instance->mutex);
+
+    instance->cleaned = true;
+    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_CLEANED_ID);
+
+    mutex_unlock(&object->mutex);
+}
+
+int32_t lwm2m_is_pet_cleaned(uint16_t instance_id,
+                             lwm2m_object_t *object)
 {
     lwm2m_obj_pet_inst_t *instance;
     int32_t result;
