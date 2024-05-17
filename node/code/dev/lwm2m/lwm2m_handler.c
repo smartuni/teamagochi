@@ -84,8 +84,8 @@ void *handle_thread(void *arg)
 {
     (void) arg;
     while(1){
-        //printf("%ld\n",lwm2m_pet_is_hungry(0,obj_list[3]));
-        //xtimer_sleep(5);
+        printf("%ld\n",lwm2m_pet_is_hungry(0,obj_list[3]));
+        xtimer_sleep(5);
     }
     
     return NULL;

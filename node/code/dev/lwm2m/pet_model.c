@@ -577,7 +577,7 @@ void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t in
     mutex_unlock(&instance->mutex);
 }
 
-int32_t lwm2m_is_pet_cleaned(uint16_t instance_id,
+int32_t lwm2m_pet_is_hungry(uint16_t instance_id,
                              lwm2m_object_t *object)
 {
     lwm2m_obj_pet_inst_t *instance;
