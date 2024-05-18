@@ -18,8 +18,8 @@ FEATURES_REQUIRED += libstdcpp
 
 # Internal Modules
 EXTERNAL_MODULE_DIRS += $(CURDIR)/modules
-USEMODULE += external_module
-USEMODULE += lwm2m_handler
+#USEMODULE += external_module
+
 #USEMODULE += display
 
 # External modules
@@ -29,6 +29,9 @@ USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
 USEMODULE += xtimer
+
+
+USEMODULE += lwm2m_handler
 
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
@@ -65,6 +68,33 @@ else ifneq (,$(filter esp%,$(CPU_FAM)))
 else
   CFLAGS += -DTHREAD_STACKSIZE_MAIN=2*1024
 endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Note that this will probably only work for me <3
 windows: all

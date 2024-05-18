@@ -69,7 +69,8 @@
         "ili9341.h": "c",
         "ili9341_params.h": "c",
         "lvgl_riot.h": "c",
-        "shell.h": "c"
+        "shell.h": "c",
+        "msg.h": "c"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,

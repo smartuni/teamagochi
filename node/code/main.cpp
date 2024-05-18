@@ -18,14 +18,13 @@
 #include "shell_commands.hpp"
 
 // Example Module Import
-#include "external_module.h"
+//#include "external_module.h"
 //LWM2M Handler Import
 #include "lwm2m_handler.hpp"
 
 //#include "test_folder/test_hello.h"
 
 using namespace std;
-using namespace riot;
 
 kernel_pid_t DISPATCHER_PID;
 
@@ -36,33 +35,33 @@ int main() {
 
   puts("{\"result\": \"PASS\"}");
 
-  // Show the example module function
-  cout << "Example Module Init: " << external_module_initialized << endl;
+//   // Show the example module function
+//   cout << "Example Module Init: " << external_module_initialized << endl;
 
-  //hello();
+//   //hello();
 
-  cout << "Sleeping for 5 seconds...\n" << endl;
-  riot::this_thread::sleep_for(chrono::seconds(5));
-  cout << "Done sleeping.\n" << endl;
+//   cout << "Sleeping for 5 seconds...\n" << endl;
+//   riot::this_thread::sleep_for(chrono::seconds(5));
+//   cout << "Done sleeping.\n" << endl;
 
-  // Create the dispatcher
-  Dispatcher *dispatcher = new Dispatcher();
-  dispatcher->startInternalThread();
+//   // Create the dispatcher
+//   Dispatcher *dispatcher = new Dispatcher();
+//   dispatcher->startInternalThread();
 
-  DISPATCHER_PID = dispatcher->getPID();
-  DISPATCHER_THREAD_ID = DISPATCHER_PID;
+//   DISPATCHER_PID = dispatcher->getPID();
+//   DISPATCHER_THREAD_ID = DISPATCHER_PID;
 
-//   // Create the ping class
-   Ping *ping = new Ping();
-   ping->startInternalThread();
+// //   // Create the ping class
+//    Ping *ping = new Ping();
+//    ping->startInternalThread();
 
-//   // Create the pong class
-   Pong *pong = new Pong();
-   pong->startInternalThread();
+// //   // Create the pong class
+//    Pong *pong = new Pong();
+//    pong->startInternalThread();
 
-//   // Subscribe the ping and pong classes to each other
-   dispatcher->subscribe({EVENTS::PING}, ping->getPID());
-   dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
+// //   // Subscribe the ping and pong classes to each other
+//    dispatcher->subscribe({EVENTS::PING}, ping->getPID());
+//    dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
     
     Lwm2mHandler *lwm2mHandler = new Lwm2mHandler();
     lwm2mHandler->lwm2m_handler_init();
@@ -78,10 +77,7 @@ int main() {
     // message.type = EVENTS::PING;
 
     // msg_try_send(&message, dispatcher->getPID());
-    while(0){
-
-    }
-  //shell_loop();
+    shell_loop();
 
   return 0;
 }
