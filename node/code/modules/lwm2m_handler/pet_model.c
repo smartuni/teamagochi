@@ -163,6 +163,7 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
 {
     assert(object);
     assert(instances);
+
     memset(object, 0, sizeof(lwm2m_obj_pet_t));
 
     /* initialize the wakaama LwM2M object */
@@ -370,6 +371,10 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     default:
         return COAP_404_NOT_FOUND;
     }
+    /* send id to the write callback*/
+    if (!data){
+            instance->write_cb(data->id);
+    }
     return COAP_204_CHANGED;
 }
 
@@ -408,7 +413,6 @@ int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
 {
     assert(object);
     assert(args);
-
     int32_t result = -ENOMEM;
     lwm2m_obj_pet_inst_t *instance = NULL;
     uint16_t _instance_id;
@@ -461,8 +465,7 @@ int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
     instance->medicated = false;
     instance->played = false;
     instance->cleaned = false;
-    //instance->read_cb = args->read_cb;
-    //instance->read_cb_arg = args->read_cb_arg;
+    instance->write_cb = args->write_cb;
 
     /* copy name locally */
     //memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
@@ -515,64 +518,64 @@ void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instan
 }
 
 void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                                const lwm2m_obj_pet_t *object)
+                                const lwm2m_object_t *object)
 {
     (void)client_data;
     lwm2m_obj_pet_inst_t *instance;
 
     /* try to get the requested instance from the object list */
-    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
-                                                                    instance_id);
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                       instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:medicated]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->medicated = true;
-    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_MEDICATED_ID);
+    instance->fed = true;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_MEDICATED_ID);
 
     mutex_unlock(&instance->mutex);
 }
 
 void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                             const lwm2m_obj_pet_t *object)
+                             const lwm2m_object_t *object)
 {
     (void)client_data;
     lwm2m_obj_pet_inst_t *instance;
 
     /* try to get the requested instance from the object list */
-    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
-                                                                    instance_id);
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                       instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:played]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->played = true;
-    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_PLAYED_ID);
+    instance->fed = true;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_PLAYED_ID);
 
     mutex_unlock(&instance->mutex);
 }
 
 void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                              const lwm2m_obj_pet_t *object)
+                              const lwm2m_object_t *object)
 {
     (void)client_data;
     lwm2m_obj_pet_inst_t *instance;
 
     /* try to get the requested instance from the object list */
-    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->object.instanceList,
-                                                                    instance_id);
+    instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
+                                                       instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:cleaned]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->cleaned = true;
-    _mark_resource_as_changed(&object->object, instance_id, LWM2M_PET_CLEANED_ID);
+    instance->fed = true;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_CLEANED_ID);
 
     mutex_unlock(&instance->mutex);
 }

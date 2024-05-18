@@ -67,15 +67,14 @@ extern "C" {
 #define LWM2M_PET_CLEANED_ID 8
 
 // /**
-//  * @brief Callback for reading the sensor value.
+//  * @brief Callback for writing the sensor value.
 //  *
-//  * @param[in]  read_cb_arg  Data passed for the read callback when the instance was created.
-//  * @param[out] value       Pointer to the variable where the value will be stored.
+//  * @param[in]  EVENT_ID  ID of LWM2M Item
 //  *
 //  * @return 0 on success
 //  * @return <0 otherwise
 //  */
-// typedef int lwm2m_obj_pet_read_cb_t(void *read_cb_arg, int16_t *value);
+typedef void lwm2m_obj_pet_write_cb_t(uint16_t EVENT_ID);
 
 /**
  * @brief Arguments for the creation of a pet object.
@@ -83,8 +82,7 @@ extern "C" {
 typedef struct lwm2m_obj_pet_args {
     int32_t instance_id;                            /**< ID for the new instance. It must be between 0 and (UINT16_MAX - 1),
                                                          if -1 the next available ID will be used. */
-    //void *read_cb_arg;                              /**< Data to pass to the read callback. May be NULL. need that when we want sensor values*/
-    //lwm2m_obj_pet_read_cb_t *read_cb;               /**< Callback to read the pet values. May be NULL. need that when we want sensor values*/
+    lwm2m_obj_pet_write_cb_t *write_cb;               /**< Callback to write the pet values. May be NULL. need that for the lwm2m handler*/
 } lwm2m_obj_pet_args_t;
 
 
@@ -101,8 +99,7 @@ typedef struct lwm2m_obj_pet_inst {
     bool medicated;                              /**< pet medicated */
     bool played;                                 /**< pet played */
     bool cleaned;                                /**< pet cleaned */
-    //void *read_cb_arg;                           /**< Data to pass to the read callback. May be NULL. need that when we want sensor values*/ 
-    //lwm2m_obj_pet_read_cb_t *read_cb;            /**< Callback to read the pet values. May be NULL. need that when we want sensor values*/
+    lwm2m_obj_pet_write_cb_t *write_cb;          /**< Callback to write the pet values. May be NULL. need that for the lwm2m handler*/
     mutex_t mutex;                               /**< Mutex for writing the values*/
 } lwm2m_obj_pet_inst_t;
 
@@ -166,7 +163,7 @@ void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instan
  * @param[in] instance_id   ID of the instance to update.
  */
 void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                                const lwm2m_obj_pet_t *object);
+                                const lwm2m_object_t *object);
 
 /**
  * @brief Sets that the ped has been fed and trigger a notification
@@ -177,7 +174,7 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t 
  * @param[in] instance_id   ID of the instance to update.
  */
  void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                             const lwm2m_obj_pet_t *object);
+                             const lwm2m_object_t *object);
 
 /**
  * @brief Sets that the ped has been fed and trigger a notification
@@ -188,7 +185,7 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t 
  * @param[in] instance_id   ID of the instance to update.
  */
 void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t instance_id,
-                              const lwm2m_obj_pet_t *object);
+                              const lwm2m_object_t *object);
 
 /**
  * @brief Determines if the pet is hungry

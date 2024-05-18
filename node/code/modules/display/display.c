@@ -9,6 +9,7 @@
 #include "riot_logo.h"
 #include "timex.h"
 #include "ztimer.h"
+#include "init_lvgl.h"
 
 int init_display(void) {
   lcd_t dev;

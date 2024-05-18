@@ -3,6 +3,7 @@ BOARD = feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
+TEAMAGOTCHI_NODES_BASE = $(CURDIR)
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
@@ -16,8 +17,10 @@ FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
 # Internal Modules
-EXTERNAL_MODULE_DIRS += modules
+EXTERNAL_MODULE_DIRS += $(CURDIR)/modules
 USEMODULE += external_module
+USEMODULE += lwm2m_handler
+#USEMODULE += display
 
 # External modules
 USEMODULE += cpp11-compat
@@ -25,16 +28,7 @@ USEMODULE += ili9341
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
-
-# Lvgl Related Modules
-DISABLE_MODULE += test_utils_interactive_sync
-USEPKG += lvgl
-USEMODULE += lvgl_contrib
-USEMODULE += lvgl_extra_widget_chart
-USEMODULE += lvgl_extra_widget_win
-USEMODULE += lvgl_extra_layout_flex
-USEMODULE += lvgl_extra_theme_default
-USEMODULE += lvgl_extra_theme_default_dark
+USEMODULE += xtimer
 
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
@@ -56,6 +50,7 @@ CXXEXFLAGS += -std=c++20 -Wall -Wextra
 # reverted in C++23 because it wasn't thought through
 CXXEXFLAGS += -Wno-volatile
 
+#include $(CURDIR)/modules/lwm2m/Makefile.include
 include $(RIOTBASE)/Makefile.include
 
 

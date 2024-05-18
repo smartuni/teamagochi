@@ -7,4 +7,9 @@ extern "C" enum EVENTS: uint16_t {
     WILDCARD, // Subscribe to all events [Special case]
     PING,
     PONG,
+    PET_HUNGRY,
+    PET_FEED,
+    PET_MEDICATE,
+    PET_PLAY,
+    PET_CLEAN,
 };
