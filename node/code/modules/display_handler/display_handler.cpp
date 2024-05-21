@@ -17,11 +17,16 @@
  */
 
 
+#include "thread.h"
 #include "display_handler.hpp"
 #include "init_lvgl.h"
+#include "lvgl_riot.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
+
+DisplayHandler::DisplayHandler(){
+}
 
 void DisplayHandler::handleEvent(msg_t *event){
     DEBUG("[DisplayHandler:handleEvent]\n");
@@ -32,4 +37,19 @@ void DisplayHandler::handleEvent(msg_t *event){
         break;
      }
 
+}
+
+void DisplayHandler::display_run(){
+    DEBUG("[DisplayHandler:init]: initialising\n");
+    lvgl_run();
+}
+
+void DisplayHandler::startDisplayThread() {
+    cout << "Starting display thread" << endl;
+    this->display_thread_pid = thread_create(display_thread_stack, sizeof(display_thread_stack),
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_WOUT_YIELD, DisplayHandler::displayInitThread, this, "DisplayHandler for Class");
+}
+
+void DisplayHandler::display_init(){
+    init_lvgl();
 }

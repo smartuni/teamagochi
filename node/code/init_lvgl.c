@@ -132,8 +132,8 @@ void lv_btn_1(void)
 int init_lvgl(void)
 {
     /* Enable backlight */
-    gpio_init(GPIO_PIN(0,30), GPIO_OUT);//backlight controller
-    disp_dev_backlight_on();
+    //gpio_init(GPIO_PIN(0,30), GPIO_OUT);//backlight controller
+    //disp_dev_backlight_on();
     /* Create the system monitor widget */
     //   char str[100]="close world";
     lv_print_init();

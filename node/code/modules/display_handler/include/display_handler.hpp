@@ -24,7 +24,20 @@ class DisplayHandler : public DispatchHandler{
     public:
         DisplayHandler();
         void handleEvent(msg_t *event);
-}
+        void startDisplayThread();
+        void display_init();
+        
+    private:
+        void display_run();
+        kernel_pid_t display_thread_pid;
+        char display_thread_stack [DISPLAY_STACKSIZE];
+        static void *displayInitThread(void *This){
+            puts("Display thread");
+            ((DisplayHandler *)This)->display_run();
+            return NULL;
+        }  
+
+};
 
 
 #endif /* DISPLAY_HANDLER_T */
