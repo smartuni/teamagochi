@@ -5,35 +5,37 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Objects;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-// TODO: which repo methods need?
-// TODO: red im pom.xml? Did I cause that?
-// TODO: what happens if constraints violated?
-// TODO: better mocks for testing.
-
 @Getter
 @Setter
 @RequiredArgsConstructor
 @Entity
+
 public class PetEntity extends PanacheEntity {
 
   public PetEntity() {}
-  
+
+
   @NonNull
   @Size(max = 255)
   private String name;
 
+
+  /*
   @NonNull
-  @Size(max = 255)
-  private String color; // TODO: setter should check if is hex-code
+  @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$") // source: https://www.geeksforgeeks.org/how-to-validate-hexadecimal-color-code-using-regular-expression/
+  private String color;
+  */
 
   private int happiness = 0;
   private int wellbeing = 0;
@@ -42,22 +44,22 @@ public class PetEntity extends PanacheEntity {
   private int cleanliness = 0;
   private int fun = 0;
 
-  @NonNull
   @PositiveOrZero
   private int xp = 0;
 
   @Nullable
+  @Past
   private Date lastTimeOnDevice;
 
 
   @ManyToOne
   @NonNull
-  private PetTypeEntity petType;
+  @Setter private PetTypeEntity petType;
 
 
   @OneToOne
   @Nullable
-  private DeviceEntity device;
+  @Setter private DeviceEntity device;
 
 
   @Override
@@ -79,5 +81,5 @@ public class PetEntity extends PanacheEntity {
 
 
 
-
 }
+

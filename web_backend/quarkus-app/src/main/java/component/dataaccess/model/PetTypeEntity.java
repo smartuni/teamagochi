@@ -1,9 +1,7 @@
 package component.dataaccess.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

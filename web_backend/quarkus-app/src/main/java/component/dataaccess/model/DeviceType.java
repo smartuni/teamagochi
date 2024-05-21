@@ -4,5 +4,8 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public enum DeviceType {
-  FROG
+  FROG;
+
+  DeviceType() {
+  }
 }

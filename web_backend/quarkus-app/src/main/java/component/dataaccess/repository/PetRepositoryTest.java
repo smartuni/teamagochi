@@ -1,5 +1,6 @@
 package component.dataaccess.repository;
 
+import component.dataaccess.model.MockEntity;
 import component.dataaccess.model.PetEntity;
 import component.dataaccess.model.PetTypeEntity;
 import io.quarkus.test.junit.QuarkusTest;
@@ -14,33 +15,55 @@ import org.junit.jupiter.api.TestInstance;
 @QuarkusTest
 public class PetRepositoryTest {
 
-  @Inject
-  PetRepository petRepository;
-
-  @Inject
-  PetTypeRepository petTypeRepository;
 
   private static PetEntity defaultPet;
   private static PetTypeEntity defaultPetType;
 
   @BeforeAll
-  public static void setUp() {
+  public static void beforeAll() {
     defaultPetType = new PetTypeEntity();
     defaultPet = new PetEntity(
         "petname",
-        "fakecolor",
+        //"fakecolor",
         defaultPetType
     );
   }
 
+
+  @BeforeEach
+  @Transactional
+  public void beforeEach() {
+
+    // Deletion order important?
+    PetEntity.deleteAll();
+    PetTypeEntity.deleteAll();
+
+
+  }
+
+
+  /*
+  @Test
+  public void testColorRegex() {
+    Assertions.assertThrows(Exception.class, ()-> defaultPet.setColor("wrong_color_syntax"));
+  }
+   */
+
+
   @Test
   @Transactional
-  public void testRepositoryAccess() {
-    petRepository.persist(defaultPet);
-    petTypeRepository.persist(defaultPetType);
+  public void testHibernatePersistence() {
 
-    PetEntity newPet = petRepository.findByName(defaultPet.getName());
-    Assertions.assertEquals(defaultPet, newPet);
+    defaultPetType.persist();
+    defaultPet.persist();
+
+    String oldName = defaultPet.getName();
+    String newName = "new pet name";
+
+    defaultPet.setName(newName);
+    PetEntity persistedPet = PetEntity.findById(defaultPet.id);
+
+    Assertions.assertEquals(newName, persistedPet.getName());
   }
 
 }
