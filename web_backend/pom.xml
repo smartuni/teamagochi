@@ -6,6 +6,8 @@
   <artifactId>backend</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
+    <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
+    <checkstyle.version>10.13.0</checkstyle.version>
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,9 +16,8 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.9.4</quarkus.platform.version>
     <skipITs>true</skipITs>
-    <checkstyle.version>10.13.0</checkstyle.version>
-    <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
+    <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -36,6 +37,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -43,6 +48,11 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>jakarta.ws.rs</groupId>
+        <artifactId>jakarta.ws.rs-api</artifactId>
+        <version>${jakarta.ws.rs.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -66,6 +76,9 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
         <configuration>
+          <source>21</source>
+          <target>21</target>
+          <release>21</release>
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
@@ -77,7 +90,6 @@
         <configuration>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <!--suppress UnresolvedMavenProperty - warning is a false positive -->
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
         </configuration>
@@ -97,21 +109,13 @@
           <systemPropertyVariables>
             <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <!--suppress UnresolvedMavenProperty - warning is a false positive -->
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle-plugin.version}</version>
-        <configuration>
-          <configLocation>src/main/resources/google_checks.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <failsOnError>true</failsOnError>
-          <linkXRef>false</linkXRef>
-        </configuration>
         <dependencies>
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
@@ -119,6 +123,12 @@
             <version>${checkstyle.version}</version>
           </dependency>
         </dependencies>
+        <configuration>
+          <configLocation>src/main/resources/google_checks.xml</configLocation>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>true</failsOnError>
+          <linkXRef>false</linkXRef>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -134,6 +144,36 @@
         <skipITs>false</skipITs>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
+    </profile>
+    <profile>
+      <id>schema-generator</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jsonschema2pojo</groupId>
+            <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+            <version>1.2.1</version>
+            <configuration>
+              <sourceDirectory>src/main/resources/jsonschema/events</sourceDirectory>
+              <targetPackage>haw.teamagochi.backend.leshanclient.sse</targetPackage>
+              <annotationStyle>jackson</annotationStyle>
+              <serializable>true</serializable>
+              <classNameSuffix>Dto</classNameSuffix>
+              <includeToString>false</includeToString>
+              <includeSetters>false</includeSetters>
+              <includeGetters>false</includeGetters>
+              <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
