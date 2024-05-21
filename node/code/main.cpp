@@ -10,18 +10,15 @@
 #include "dispatch_handler.hpp"
 #include "dispatcher.hpp"
 #include "shell.h"
-#include "init_lvgl.h"
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
 #include "shell_commands.hpp"
-#include "init_lvgl.h"
-
 // Example Module Import
 //#include "external_module.h"
 //LWM2M Handler Import
 //#include "lwm2m_handler.hpp"
-//#include "display_handler.hpp"
+#include "display_handler.hpp"
 //#include "test_folder/test_hello.h"
 
 using namespace std;
@@ -80,14 +77,18 @@ int main() {
     // message.type = EVENTS::PING;
 
     // msg_try_send(&message, dispatcher->getPID());
-    init_lvgl();
+    //init_lvgl();
+    
+    //init_display();
 
     
-    // DisplayHandler *displayHandler = new DisplayHandler();
-    // //displayHandler->display_init();
-    // displayHandler->startDisplayThread();
-    // displayHandler->startInternalThread();
-    
+    DisplayHandler *displayHandler = new DisplayHandler();
+    displayHandler->display_init();
+    displayHandler->startDisplayThread();
+    displayHandler->startInternalThread();
+
+    dispatcher->subscribe({EVENTS::BUTTON_OK_PRESS}, displayHandler->getPID());
+
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 
     shell_loop();

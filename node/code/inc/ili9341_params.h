@@ -43,7 +43,7 @@ extern "C" {
 #endif
 #ifndef ILI9341_PARAM_DCX
 // PIN 10 on the feather
-#define ILI9341_PARAM_DCX GPIO_PIN(0, 26)
+#define ILI9341_PARAM_DCX GPIO_PIN(0, 6)
 #endif
 #ifndef ILI9341_PARAM_RST
 #define ILI9341_PARAM_RST GPIO_UNDEF
@@ -65,7 +65,7 @@ extern "C" {
   240U /**< Number of RGB channels (e.g. columns) */
 #endif
 #ifndef ILI9341_PARAM_ROTATION
-#define ILI9341_PARAM_ROTATION ILI9341_ROTATION_HORZ_FLIP
+#define ILI9341_PARAM_ROTATION ILI9341_ROTATION_HORZ
 #endif
 #ifndef ILI9341_PARAM_OFFSET_X
 #define ILI9341_PARAM_OFFSET_X 0 /**< Horizontal offset */

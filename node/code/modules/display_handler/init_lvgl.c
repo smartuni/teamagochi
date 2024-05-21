@@ -24,6 +24,9 @@
 #include "lvgl_riot.h"
 #include "disp_dev.h"
 #include "init_lvgl.h"
+#include "ili9341.h"
+#include "ili9341_params.h"
+#include "lcd.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -131,6 +134,27 @@ void lv_btn_1(void)
 
 int init_lvgl(void)
 {
+    lcd_t dev;
+    dev.driver = &lcd_ili9341_driver;
+
+    printf("%d",ILI9341_PARAM_CS);
+
+    puts("lcd TFT display test application");
+
+    /* initialize the sensor */
+    printf("Initializing display...");
+
+    /* Enable backlight if macro is defined */
+#ifdef BACKLIGHT_ON
+  BACKLIGHT_ON;
+#endif
+
+  if (lcd_init(&dev, &ili9341_params[0]) == 0) {
+    puts("[OK]");
+  } else {
+    puts("[Failed]");
+    return 1;
+  }
     /* Enable backlight */
     //gpio_init(GPIO_PIN(0,30), GPIO_OUT);//backlight controller
     //disp_dev_backlight_on();
@@ -140,7 +164,7 @@ int init_lvgl(void)
     lv_puts("close world");
     lv_btn_1();
     //scanf_check();
-    lvgl_run();
+    //lvgl_run();
 
     return 0;
 }

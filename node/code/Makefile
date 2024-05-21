@@ -28,7 +28,7 @@ USEMODULE += xtimer
 USEMODULE += ili9341
 
 #USEMODULE += lwm2m_handler
-#USEMODULE += display_handler
+USEMODULE += display_handler
 
 # Lvgl Related Modules
 DISABLE_MODULE += test_utils_interactive_sync
