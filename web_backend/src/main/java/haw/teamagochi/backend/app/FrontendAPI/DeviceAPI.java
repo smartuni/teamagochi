@@ -1,6 +1,5 @@
 package haw.teamagochi.backend.app.FrontendAPI;
 import haw.teamagochi.backend.app.Mapper.DeviceDTO;
-import haw.teamagochi.backend.app.Mapper.DeviceInfoDTO;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
@@ -20,7 +19,7 @@ public class DeviceAPI {
    * @return List of Devices from the given user --> toBeDefined --> what info is needed: Name,ID....
    */
   @GET
-  public List<DeviceInfoDTO> getDevices(@HeaderParam("Authorization") String userAuthToken){ //ID + Name
+  public List<DeviceDTO> getDevices(@HeaderParam("Authorization") String userAuthToken){ //ID + Name
     //TODO
     return null;
   }
@@ -47,7 +46,7 @@ public class DeviceAPI {
   @Path("register/{registerCode}")
   @POST
   public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //ID
-    //TODO
+    //TODO -->
     return null;
   }
 }
