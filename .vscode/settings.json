@@ -68,7 +68,12 @@
         "lcd.h": "c",
         "ili9341.h": "c",
         "ili9341_params.h": "c",
-        "lvgl_riot.h": "c"
+        "lvgl_riot.h": "c",
+        "lvgl.h": "c",
+        "fstream": "cpp",
+        "mutex": "cpp",
+        "sstream": "cpp",
+        "stop_token": "cpp"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,

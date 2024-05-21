@@ -11,6 +11,8 @@
 
 #include "mbox.h"
 #include "dispatch_handler.hpp"
+#include "init_lvgl.h"
+
 
 /**
  * @brief Ping is a simple class to showcase the DispatchHandler.
@@ -21,6 +23,7 @@ class Pong : public DispatchHandler {
         cout << "⬅️ Pong - Sending Ping @ Event: " << event->type << endl;
 
         riot::this_thread::sleep_for(chrono::seconds(1));
+        //button_aus();
 
         msg_t message;
         message.type = EVENTS::PING;

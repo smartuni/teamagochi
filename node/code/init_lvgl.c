@@ -47,8 +47,36 @@
 //static lv_obj_t *label;
 
 lv_obj_t * label ;
+lv_obj_t * btn2;
 
+void change_button(void)
+{
+    if(lv_obj_has_state(btn2, LV_EVENT_CLICKED)) {
+        lv_obj_clear_state(btn2, LV_EVENT_CLICKED);
+        // lv_obj_add_flag(btn2,LV_OBJ_FLAG_HIDDEN);
+        printf("aus\n");
+    }
+    else{
+        // lv_obj_clear_flag(btn2,LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_state(btn2, LV_EVENT_CLICKED);
+        printf("ein\n");
+    }
+    lvgl_wakeup();
+}
 
+void button_ein(void)
+{
+        lv_obj_add_state(btn2, LV_EVENT_PRESSED);
+                printf("ein\n");
+lvgl_wakeup();
+}
+
+void button_aus(void)
+{
+        lv_obj_clear_state(btn2, LV_EVENT_PRESSED);
+                printf("aus\n");
+lvgl_wakeup();
+}
 
 void lv_print_init(void)
 {
@@ -69,7 +97,6 @@ void lv_puts(char *c)
     lv_obj_set_style_text_color(lv_scr_act(), lv_color_hex(0xffffff), LV_PART_MAIN);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 }
-lv_obj_t * btn2;
 
 static void event_handler(lv_event_t * e)
 {
@@ -97,8 +124,7 @@ void lv_btn_1(void)
     lv_obj_center(label1);
 
     //to push it virtually
-    lv_obj_add_state(btn2, LV_EVENT_PRESSED);
-    lv_obj_clear_state(btn2, LV_EVENT_PRESSED);
+    //lv_obj_add_state(btn2, LV_EVENT_CLICKED);
 
 
 }
