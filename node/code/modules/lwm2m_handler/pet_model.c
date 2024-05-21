@@ -170,7 +170,6 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
     object->object.objID = object_id;
     object->object.readFunc = _read_cb;
     object->object.writeFunc = _write_cb;
-    //object->object.executeFunc = _exec_cb;
     object->object.userData = client_data;
 
     /* initialize the instances and add them to the free instance list */
@@ -179,51 +178,6 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
     }
     return 0;
 }
-
-// static uint8_t _exec_cb(uint16_t instance_id, uint16_t resource_id, uint8_t *buffer, int length,
-//                         lwm2m_object_t *object)
-// {
-//     (void)buffer;
-//     (void)length;
-
-//     lwm2m_obj_pet_inst_t *instance;
-//     uint8_t result;
-
-//     /* try to get the requested instance from the object list */
-//     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
-//                                                                     instance_id);
-//     if (!instance) {
-//         DEBUG("[lwm2m Pet:exec]: can't find instance %d\n", instance_id);
-//         result = COAP_404_NOT_FOUND;
-//         goto out;
-//     }
-
-//     switch (resource_id) {
-//     case LWM2M_PET_HUNGRY_ID:
-//         instance->hungry = true;
-//         result = COAP_204_CHANGED;
-//         break;
-//     case LwM2M_PET_ILL_ID:
-//         instance->ill = true;
-//         result = COAP_204_CHANGED;
-//         break;
-//     case LwM2M_PET_BORED_ID:
-//         instance->bored = true;
-//         result = COAP_204_CHANGED;
-//         break;
-//     case LwM2M_PET_DIRTY_ID:
-//         instance->dirty = true;
-//         result = COAP_204_CHANGED;
-//         break;
-//     default:
-//         result = COAP_405_METHOD_NOT_ALLOWED;
-//         break;
-//     }
-
-// out:
-//     return result;
-// }
-
 
 static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance)
 {
@@ -330,50 +284,51 @@ out:
 static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(data);
     assert(instance);
-
+    bool value;
+    lwm2m_data_decode_bool(data->id,&value);
     switch (data->id) {
     case LWM2M_PET_HUNGRY_ID:
-        if (data){
+        if (value){
             instance->fed = false;
         }
-        instance->hungry = data;
+        instance->hungry = value;
         break;
     case LwM2M_PET_ILL_ID:
-        if (data){
+        if (value){
             instance->medicated = false;
         }
-        instance->ill = data;
+        instance->ill = value;
         break;
     case LwM2M_PET_BORED_ID:
-        if (data){
+        if (value){
             instance->played = false;
         }
-        instance->bored = data;
+        instance->bored = value;
         break;
     case LwM2M_PET_DIRTY_ID:
-        if (data){
+        if (value){
             instance->cleaned = false;
         }
-        instance->dirty = data;
+        instance->dirty = value;
         break;
     case LWM2M_PET_FED_ID:
-        instance->fed = data;
+        instance->fed = value;
         break;
     case LWM2M_PET_MEDICATED_ID:
-        instance->medicated = data;
+        instance->medicated = value;
         break;
     case LWM2M_PET_PLAYED_ID:
-        instance->played = data;
+        instance->played = value;
         break;
     case LWM2M_PET_CLEANED_ID:
-        instance->cleaned = data;
+        instance->cleaned = value;
         break;
     default:
         return COAP_404_NOT_FOUND;
     }
     /* send id to the write callback*/
-    if (!data){
-            instance->write_cb(data->id);
+    if (!value){
+            instance->write_cb(value);
     }
     return COAP_204_CHANGED;
 }

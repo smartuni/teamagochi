@@ -26,6 +26,9 @@
 
 using namespace std;
 
+#define SHELL_QUEUE_SIZE (8)
+static msg_t _shell_queue[SHELL_QUEUE_SIZE];
+
 kernel_pid_t DISPATCHER_PID;
 
 /* main */
@@ -35,21 +38,21 @@ int main() {
 
   puts("{\"result\": \"PASS\"}");
 
-//   // Show the example module function
-//   cout << "Example Module Init: " << external_module_initialized << endl;
+    //   // Show the example module function
+    //   cout << "Example Module Init: " << external_module_initialized << endl;
 
-//   //hello();
+    //   //hello();
 
-//   cout << "Sleeping for 5 seconds...\n" << endl;
-//   riot::this_thread::sleep_for(chrono::seconds(5));
+    //   cout << "Sleeping for 5 seconds...\n" << endl;
+    //   riot::this_thread::sleep_for(chrono::seconds(5));
 //   cout << "Done sleeping.\n" << endl;
 
-//   // Create the dispatcher
-//   Dispatcher *dispatcher = new Dispatcher();
-//   dispatcher->startInternalThread();
+    // Create the dispatcher
+    Dispatcher *dispatcher = new Dispatcher();
+    dispatcher->startInternalThread();
 
-//   DISPATCHER_PID = dispatcher->getPID();
-//   DISPATCHER_THREAD_ID = DISPATCHER_PID;
+    DISPATCHER_PID = dispatcher->getPID();
+    DISPATCHER_THREAD_ID = DISPATCHER_PID;
 
 // //   // Create the ping class
 //    Ping *ping = new Ping();
@@ -66,9 +69,9 @@ int main() {
     Lwm2mHandler *lwm2mHandler = new Lwm2mHandler();
     lwm2mHandler->lwm2m_handler_init();
     lwm2mHandler->lwm2m_handler_start();
-    //lwm2mHandler->startInternalThread();
+    lwm2mHandler->startInternalThread();
 
-    //dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
+    dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
 
     
 
@@ -77,6 +80,9 @@ int main() {
     // message.type = EVENTS::PING;
 
     // msg_try_send(&message, dispatcher->getPID());
+
+    msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
+
     shell_loop();
 
   return 0;
