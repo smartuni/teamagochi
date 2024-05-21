@@ -7,4 +7,5 @@ enum EVENTS: uint16_t {
     WILDCARD, // Subscribe to all events [Special case]
     PING,
     PONG,
+    BUTTON_OK_PRESS,
 };
