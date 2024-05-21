@@ -73,7 +73,8 @@
         "fstream": "cpp",
         "mutex": "cpp",
         "sstream": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "shell.h": "c"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,
