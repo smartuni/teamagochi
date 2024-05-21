@@ -38,11 +38,11 @@ extern "C" {
 #define ILI9341_PARAM_SPI_CLK SPI_CLK_10MHZ
 #endif
 #ifndef ILI9341_PARAM_CS
-// PIN 9 on the feather
+// PIN 10 on the feather
 #define ILI9341_PARAM_CS GPIO_PIN(0, 27)
 #endif
 #ifndef ILI9341_PARAM_DCX
-// PIN 10 on the feather
+// PIN 11 on the feather
 #define ILI9341_PARAM_DCX GPIO_PIN(0, 6)
 #endif
 #ifndef ILI9341_PARAM_RST
