@@ -59,7 +59,7 @@
         <Units></Units>
         <Description>How well the pet is</Description>
       </Item>
-       <Item ID="5">
+      <Item ID="5">
         <Name>Health</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -99,48 +99,17 @@
         <Units></Units>
         <Description>How clean the pet is.</Description>
       </Item>
-      </Item>
-       <Item ID="9">
-        <Name>fed</Name>
+      <Item ID="9">
+        <Name>Fun</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
+        <Type>Integer</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
-        <Description>pet has been fed</Description>
+        <Description>How much fun the pet has.</Description>
       </Item>
-      <Item ID="10">
-        <Name>medicated</Name>
-        <Operations>RW</Operations>
-        <MultipleInstances>Single</MultipleInstances>
-        <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
-        <RangeEnumeration></RangeEnumeration>
-        <Units></Units>
-        <Description>pet has been medicated</Description>
-      </Item>
-      <Item ID="11">
-        <Name>played</Name>
-        <Operations>RW</Operations>
-        <MultipleInstances>Single</MultipleInstances>
-        <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
-        <RangeEnumeration></RangeEnumeration>
-        <Units></Units>
-        <Description>the pet has played</Description>
-      </Item>
-      <Item ID="12">
-        <Name>cleaned</Name>
-        <Operations>RW</Operations>
-        <MultipleInstances>Single</MultipleInstances>
-        <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
-        <RangeEnumeration></RangeEnumeration>
-        <Units></Units>
-        <Description>the pet has been cleaned</Description>
-      </Item>
-      <Item ID="13">
+      <Item ID="20">
         <Name>Hungry</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -150,7 +119,7 @@
         <Units></Units>
         <Description>Tell the device that the pet is hungry</Description>
       </Item>
-      <Item ID="14">
+      <Item ID="21">
         <Name>Ill</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -160,7 +129,7 @@
         <Units></Units>
         <Description>Tell the device that the pet is ill</Description>
       </Item>
-      <Item ID="15">
+      <Item ID="22">
         <Name>Bored</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -170,7 +139,7 @@
         <Units></Units>
         <Description>Tell the device that the pet is bored</Description>
       </Item>
-      <Item ID="16">
+      <Item ID="23">
         <Name>Dirty</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -179,6 +148,46 @@
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>Tell the device that the pet is dirty</Description>
+      </Item>
+      <Item ID="40">
+        <Name>feed</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>pet has been fed</Description>
+      </Item>
+      <Item ID="41">
+        <Name>medicate</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>pet has been medicated</Description>
+      </Item>
+      <Item ID="42">
+        <Name>play</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>the pet has played</Description>
+      </Item>
+      <Item ID="43">
+        <Name>clean</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>the pet has been cleaned</Description>
       </Item>
     </Resources>
     <Description2 />

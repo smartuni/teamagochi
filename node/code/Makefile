@@ -59,16 +59,27 @@ include $(RIOTBASE)/Makefile.include
 
 BOARD_BLACKLIST += native64
 
-
+## DEBUG
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
-
-SERVER_URI = '"coap://[2001:db8:1::1]"'
-# Configure server via CFLAGS only if not done via Kconfig
+##### LWM2M #####
+#SERVER_URI = '"coap://[2001:db8:1::1]:5684"'
+LWM2M_SERVER_SHORT_ID ?= 1 
+CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
+# Uncomment to enable Wakaama debug log
+#CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
+# Specific the server URI  address (NOTE: Domain names not supported yet)
+LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
+# Configure via CFLAGS only if not done via Kconfig
 ifndef CONFIG_LWM2M_SERVER_URI
-  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(SERVER_URI)
+  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(LWM2M_SERVER_URI)
+  CFLAGS += -DCONFIG_LWM2M_SERVER_SHORT_ID=$(LWM2M_SERVER_SHORT_ID)
+  CFLAGS += -DCONFIG_DTLS_PEER_MAX=2
+  CFLAGS += -DCONFIG_MAX_BUF=1024
+  # Uncomment to enable Wakaama debug log
+  CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
 endif
-
+##### /LWM2M #####
 
 
 # SDL requires more stack

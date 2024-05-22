@@ -18,6 +18,10 @@
 #ifndef LWM2M_TEAMAGOTCHI_HANDLER_T
 #define LWM2M_TEAMAGOTCHI_HANDLER_T
 
+#ifndef LWM2M_SERVER_ID
+#define LWM2M_SERVER_ID 0
+#endif
+
 # define OBJ_COUNT (4)
 
 #include "dispatch_handler.hpp"

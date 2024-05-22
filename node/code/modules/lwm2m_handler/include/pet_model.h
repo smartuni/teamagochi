@@ -75,14 +75,15 @@ extern "C" {
 #define LWM2M_PET_HUNGER_ID 7
 #define LWM2M_PET_CLEANLINESS_ID 8
 #define LWM2M_PET_FUN_ID 9
-#define LWM2M_PET_FED_ID 10
-#define LWM2M_PET_MEDICATED_ID 11
-#define LWM2M_PET_PLAYED_ID 12
-#define LWM2M_PET_CLEANED_ID 13
-#define LWM2M_PET_HUNGRY_ID 14
-#define LwM2M_PET_ILL_ID 15
-#define LwM2M_PET_BORED_ID 16
-#define LwM2M_PET_DIRTY_ID 17
+#define LWM2M_PET_HUNGRY_ID 20
+#define LwM2M_PET_ILL_ID 21
+#define LwM2M_PET_BORED_ID 22
+#define LwM2M_PET_DIRTY_ID 23
+#define LWM2M_PET_FEED_ID 40
+#define LWM2M_PET_MEDICATE_ID 41
+#define LWM2M_PET_PLAY_ID 42
+#define LWM2M_PET_CLEAN_ID 43
+
 
 
 // /**
@@ -108,20 +109,20 @@ typedef struct lwm2m_obj_pet_args {
 /*Descriptor of a LwM2M pet object instance */
 typedef struct lwm2m_obj_pet_inst {
     lwm2m_list_t list;                           /**< list handle */
-    uint8_t id;                                  /**< id of pet */                
+    int32_t id;                                  /**< id of pet */                
     char name[CONFIG_LWM2M_PET_NAME_MAX_SIZE];   /**< name of pet */
-    int color;                                   /**< color of the pet */
-    int happiness;                               /**< happiness of the pet*/
-    int wellbeing;                               /**< wellbeing of the pet*/
-    int health;                                  /**< health of the pet*/
-    int xp;                                      /**< XP of the pet*/
-    int hunger;                                  /**< Hunger of the pet*/
-    int cleanliness;                             /**< Cleanliness of the pet*/
-    int fun;                                     /**< Fun of the pet*/
-    bool fed;                                    /**< pet fed */
-    bool medicated;                              /**< pet medicated */
-    bool played;                                 /**< pet played */
-    bool cleaned;                                /**< pet cleaned */
+    int32_t color;                               /**< color of the pet */
+    int32_t happiness;                           /**< happiness of the pet*/
+    int32_t wellbeing;                           /**< wellbeing of the pet*/
+    int32_t health;                              /**< health of the pet*/
+    int32_t xp;                                  /**< XP of the pet*/
+    int32_t hunger;                              /**< Hunger of the pet*/
+    int32_t cleanliness;                         /**< Cleanliness of the pet*/
+    int32_t fun;                                 /**< Fun of the pet*/
+    int32_t feed;                                   /**< pet fed */
+    int32_t medicate;                               /**< pet medicated */
+    int32_t play;                                   /**< pet played */
+    int32_t clean;                                  /**< pet cleaned */
     bool hungry;                                 /**< pet hungry */
     bool ill;                                    /**< pet ill */
     bool bored;                                  /**< pet bored */
@@ -179,7 +180,7 @@ int lwm2m_object_pet_init_derived(lwm2m_client_data_t *client_data,
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_feed(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                           const lwm2m_object_t *object);
 
 /**
@@ -190,7 +191,7 @@ void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instan
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_medicate(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                                 const lwm2m_object_t *object);
 
 /**
@@ -201,7 +202,7 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t 
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
- void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+ void lwm2m_object_pet_play(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                              const lwm2m_object_t *object);
 
 /**
@@ -212,7 +213,7 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t 
  * @param[in] object        Pointer to the LwM2M IPSO object.
  * @param[in] instance_id   ID of the instance to update.
  */
-void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_clean(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                               const lwm2m_object_t *object);
 
 /**

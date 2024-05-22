@@ -71,7 +71,7 @@ int main() {
     lwm2mHandler->lwm2m_handler_start();
     lwm2mHandler->startInternalThread();
 
-    dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
+    dispatcher->subscribe({EVENTS::PET_FEED}, lwm2mHandler->getPID());
 
     
 

@@ -215,17 +215,17 @@ static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance)
     case LWM2M_PET_FUN_ID:
         lwm2m_data_encode_int(instance->fun, data);
         break; 
-    case LWM2M_PET_FED_ID:
-        lwm2m_data_encode_int(instance->fed, data);
+    case LWM2M_PET_FEED_ID:
+        lwm2m_data_encode_int(instance->feed, data);
         break;
-    case LWM2M_PET_MEDICATED_ID:
-        lwm2m_data_encode_int(instance->medicated, data);
+    case LWM2M_PET_MEDICATE_ID:
+        lwm2m_data_encode_int(instance->medicate, data);
         break;
-    case LWM2M_PET_PLAYED_ID:
-        lwm2m_data_encode_int(instance->played, data);
+    case LWM2M_PET_PLAY_ID:
+        lwm2m_data_encode_int(instance->play, data);
         break;
-    case LWM2M_PET_CLEANED_ID:
-        lwm2m_data_encode_int(instance->cleaned, data);
+    case LWM2M_PET_CLEAN_ID:
+        lwm2m_data_encode_int(instance->clean, data);
         break;
     case LWM2M_PET_HUNGRY_ID:
         lwm2m_data_encode_bool(instance->hungry, data);
@@ -276,10 +276,10 @@ static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data
             LWM2M_PET_HUNGER_ID,
             LWM2M_PET_CLEANLINESS_ID,
             LWM2M_PET_FUN_ID,
-            LWM2M_PET_FED_ID,
-            LWM2M_PET_MEDICATED_ID,
-            LWM2M_PET_PLAYED_ID,
-            LWM2M_PET_CLEANED_ID,
+            LWM2M_PET_FEED_ID,
+            LWM2M_PET_MEDICATE_ID,
+            LWM2M_PET_PLAY_ID,
+            LWM2M_PET_CLEAN_ID,
             LWM2M_PET_HUNGRY_ID,
             LwM2M_PET_ILL_ID,
             LwM2M_PET_BORED_ID,
@@ -319,49 +319,62 @@ out:
 static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(data);
     assert(instance);
-
+    int64_t value = 0;
     switch (data->id) {
         case LWM2M_PET_ID:
-        lwm2m_data_decode_int(data, &instance->id);
+        lwm2m_data_decode_int(data, &value);
+        instance->id = instance->id;
         break;
-    case LWM2M_PET_NAME_ID:
-        lwm2m_data_decode_string(data, &instance->name);
-        break;
+    // case LWM2M_PET_NAME_ID:
+    //     lwm2m_data_(data, &instance->name);
+    //     break;
     case LWM2M_PET_COLOR_ID:
-        lwm2m_data_decode_int(data, &instance->color);
+        lwm2m_data_decode_int(data,&value);
+        instance->color = (int32_t) value;
         break;
     case LWM2M_PET_HAPPINESS_ID:
-        lwm2m_data_decode_int(data, &instance->happiness);
+        lwm2m_data_decode_int(data, &value);
+        instance->happiness = (int32_t) value;
         break;
     case LWM2M_PET_WELLBEING_ID:
-        lwm2m_data_decode_int(data, &instance->wellbeing);
+        lwm2m_data_decode_int(data, &value);
+        instance->wellbeing = (int32_t) value;
         break;
     case LWM2M_PET_HEALTH_ID:
-        lwm2m_data_decode_int(data, &instance->health);
+        lwm2m_data_decode_int(data, &value);
+        instance->health = (int32_t) value;
         break;
     case LWM2M_PET_XP_ID:
-        lwm2m_data_decode_int(data, &instance->xp);
+        lwm2m_data_decode_int(data, &value);
+        instance->xp = (int32_t) value;
         break;
     case LWM2M_PET_HUNGER_ID:
-        lwm2m_data_decode_int(data, &instance->hunger);
+        lwm2m_data_decode_int(data, &value);
+        instance->hunger = (int32_t) value;
         break;
     case LWM2M_PET_CLEANLINESS_ID:
-        lwm2m_data_decode_int(data, &instance->cleanliness);
+        lwm2m_data_decode_int(data, &value);
+        instance->cleanliness = (int32_t) value;
         break;
     case LWM2M_PET_FUN_ID:
-        lwm2m_data_decode_int(data, &instance->fun);
+        lwm2m_data_decode_int(data, &value);
+        instance->fun = (int32_t) value;
         break; 
-    case LWM2M_PET_FED_ID:
-        lwm2m_data_decode_int(data, &instance->fed);
+    case LWM2M_PET_FEED_ID:
+        lwm2m_data_decode_int(data, &value);
+        instance->feed = (int32_t) value;
         break;
-    case LWM2M_PET_MEDICATED_ID:
-        lwm2m_data_decode_int(data, &instance->medicated);
+    case LWM2M_PET_MEDICATE_ID:
+        lwm2m_data_decode_int(data, &value);
+        instance->medicate = (int32_t) value;
         break;
-    case LWM2M_PET_PLAYED_ID:
-        lwm2m_data_decode_int(data, &instance->played);
+    case LWM2M_PET_PLAY_ID:
+        lwm2m_data_decode_int(data, &value);
+        instance->play = (int32_t) value;
         break;
-    case LWM2M_PET_CLEANED_ID:
-        lwm2m_data_decode_int(data, &instance->cleaned);
+    case LWM2M_PET_CLEAN_ID:
+        lwm2m_data_decode_int(data, &value);
+        instance->clean = (int32_t) value;
         break;
     case LWM2M_PET_HUNGRY_ID:
         lwm2m_data_decode_bool(data, &instance->hungry);
@@ -378,7 +391,7 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     default:
         return COAP_404_NOT_FOUND;
     }
-    instance->write_cb(value);
+    instance->write_cb(data->id);
     return COAP_204_CHANGED;
 }
 
@@ -470,10 +483,10 @@ int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
     instance->hunger = 100;
     instance->cleanliness = 100;
     instance->fun = 100;
-    instance->fed = false;
-    instance->medicated = false;
-    instance->played = false;
-    instance->cleaned = false;
+    instance->feed = 0;
+    instance->medicate = 0;
+    instance->play = 0;
+    instance->clean = 0;
     instance->hungry = false;
     instance->ill = false;
     instance->bored = false;
@@ -510,7 +523,7 @@ static void _mark_resource_as_changed(const lwm2m_object_t *object, uint16_t ins
     lwm2m_resource_value_changed(lwm2m_client_get_ctx(object->userData), &uri);
 }
 
-void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_feed(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                           const lwm2m_object_t *object)
 {
     (void)client_data;
@@ -520,18 +533,18 @@ void lwm2m_object_pet_fed(const lwm2m_client_data_t *client_data,uint16_t instan
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
                                                        instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:fed]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:feed]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
-
-    instance->fed = true;
-    _mark_resource_as_changed(object, instance_id, LWM2M_PET_FED_ID);
+    
+    instance->feed += 1;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_FEED_ID);
 
     mutex_unlock(&instance->mutex);
 }
 
-void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_medicate(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                                 const lwm2m_object_t *object)
 {
     (void)client_data;
@@ -541,18 +554,18 @@ void lwm2m_object_pet_medicated(const lwm2m_client_data_t *client_data,uint16_t 
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
                                                        instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:medicated]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:medicate]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->fed = true;
-    _mark_resource_as_changed(object, instance_id, LWM2M_PET_MEDICATED_ID);
+    instance->medicate += 1;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_MEDICATE_ID);
 
     mutex_unlock(&instance->mutex);
 }
 
-void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_play(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                              const lwm2m_object_t *object)
 {
     (void)client_data;
@@ -562,18 +575,18 @@ void lwm2m_object_pet_played(const lwm2m_client_data_t *client_data,uint16_t ins
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
                                                        instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:played]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:play]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->fed = true;
-    _mark_resource_as_changed(object, instance_id, LWM2M_PET_PLAYED_ID);
+    instance->play += 1;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_PLAY_ID);
 
     mutex_unlock(&instance->mutex);
 }
 
-void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t instance_id,
+void lwm2m_object_pet_clean(const lwm2m_client_data_t *client_data,uint16_t instance_id,
                               const lwm2m_object_t *object)
 {
     (void)client_data;
@@ -583,13 +596,13 @@ void lwm2m_object_pet_cleaned(const lwm2m_client_data_t *client_data,uint16_t in
     instance = (lwm2m_obj_pet_inst_t *)lwm2m_list_find(object->instanceList,
                                                        instance_id);
     if (!instance) {
-        DEBUG("[lwm2m: pet:cleaned]: can't find instance %" PRIiSIZE "\n", instance_id);
+        DEBUG("[lwm2m: pet:clean]: can't find instance %" PRIiSIZE "\n", instance_id);
         return;
     }
     mutex_lock(&instance->mutex);
 
-    instance->fed = true;
-    _mark_resource_as_changed(object, instance_id, LWM2M_PET_CLEANED_ID);
+    instance->clean += 1;
+    _mark_resource_as_changed(object, instance_id, LWM2M_PET_CLEAN_ID);
 
     mutex_unlock(&instance->mutex);
 }
