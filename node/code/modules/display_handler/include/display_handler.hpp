@@ -36,7 +36,6 @@ class DisplayHandler : public DispatchHandler{
             ((DisplayHandler *)This)->display_run();
             return NULL;
         }  
-
 };
 
 

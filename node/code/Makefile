@@ -25,21 +25,9 @@ USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
 USEMODULE += xtimer
-USEMODULE += ili9341
 
 #USEMODULE += lwm2m_handler
 USEMODULE += display_handler
-
-# Lvgl Related Modules
-DISABLE_MODULE += test_utils_interactive_sync
-USEPKG += lvgl
-USEMODULE += lvgl_contrib
-USEMODULE += lvgl_extra_widget_chart
-USEMODULE += lvgl_extra_widget_win
-USEMODULE += lvgl_extra_layout_flex
-USEMODULE += lvgl_extra_theme_default
-USEMODULE += lvgl_extra_theme_default_dark
-
 
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
@@ -77,7 +65,7 @@ ifndef CONFIG_LWM2M_SERVER_URI
   CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(SERVER_URI)
 endif
 
-CFLAGS += -DDISPLAY_STACKSIZE=64*1024
+CFLAGS += -DDISPLAY_STACKSIZE=2*1024
 
 # SDL requires more stack
 ifneq (,$(filter native native64,$(BOARD)))
