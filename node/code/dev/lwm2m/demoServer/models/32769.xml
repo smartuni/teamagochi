@@ -20,46 +20,87 @@
         <Description>Id of the pet on the device</Description>
       </Item>
       <Item ID="1">
-        <Name>Hungry</Name>
+        <Name>Name</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
+        <Type>String</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
-        <Description>Tell the device that the pet is hungry</Description>
+        <Description>The name of the pet</Description>
       </Item>
       <Item ID="2">
-        <Name>Ill</Name>
+        <Name>Color</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
+        <Type>Integer</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
-        <Description>Tell the device that the pet is ill</Description>
+        <Description>The Color of the Pet</Description>
       </Item>
       <Item ID="3">
-        <Name>Bored</Name>
+        <Name>Happiness</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
+        <Type>Integer</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
-        <Description>Tell the device that the pet is bored</Description>
+        <Description>How happy the pet is</Description>
       </Item>
       <Item ID="4">
-        <Name>Dirty</Name>
+        <Name>Wellbeing</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
         <Mandatory>Mandatory</Mandatory>
-        <Type>Boolean</Type>
+        <Type>Integer</Type>
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
-        <Description>Tell the device that the pet is dirty</Description>
+        <Description>How well the pet is</Description>
       </Item>
        <Item ID="5">
+        <Name>Health</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>How healthy the pet is.</Description>
+      </Item>
+      <Item ID="6">
+        <Name>XP</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>the XP of the pet</Description>
+      </Item>
+      <Item ID="7">
+        <Name>Hunger</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>How hungry the pet is.</Description>
+      </Item>
+      <Item ID="8">
+        <Name>Cleanliness</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>How clean the pet is.</Description>
+      </Item>
+      </Item>
+       <Item ID="9">
         <Name>fed</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -69,7 +110,7 @@
         <Units></Units>
         <Description>pet has been fed</Description>
       </Item>
-      <Item ID="6">
+      <Item ID="10">
         <Name>medicated</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -79,7 +120,7 @@
         <Units></Units>
         <Description>pet has been medicated</Description>
       </Item>
-      <Item ID="7">
+      <Item ID="11">
         <Name>played</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -89,7 +130,7 @@
         <Units></Units>
         <Description>the pet has played</Description>
       </Item>
-      <Item ID="8">
+      <Item ID="12">
         <Name>cleaned</Name>
         <Operations>RW</Operations>
         <MultipleInstances>Single</MultipleInstances>
@@ -98,6 +139,46 @@
         <RangeEnumeration></RangeEnumeration>
         <Units></Units>
         <Description>the pet has been cleaned</Description>
+      </Item>
+      <Item ID="13">
+        <Name>Hungry</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>Tell the device that the pet is hungry</Description>
+      </Item>
+      <Item ID="14">
+        <Name>Ill</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>Tell the device that the pet is ill</Description>
+      </Item>
+      <Item ID="15">
+        <Name>Bored</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>Tell the device that the pet is bored</Description>
+      </Item>
+      <Item ID="16">
+        <Name>Dirty</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units></Units>
+        <Description>Tell the device that the pet is dirty</Description>
       </Item>
     </Resources>
     <Description2 />

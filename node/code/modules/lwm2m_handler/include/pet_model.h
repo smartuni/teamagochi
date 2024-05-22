@@ -18,19 +18,28 @@
   *
   * ## Resources
   * 
-|         Name            | ID | Mandatory |  Type   |  Range | Units |
-| ----------------------- | -- | --------- | ------- | ------ | ----- | 
-| Id                      |  0 |    Yes    | Integer |        |       |
-|Name                     |  1 |    Yes    | String  |        |       |   
-| Hungry                  |  2 |    Yes    |         |        |       |  
-| Ill                     |  3 |    Yes    |         |        |       |   
-| Bored                   |  4 |    Yes    |         |        |       |   
-| Dirty                   |  5 |    Yes    |         |        |       |
-| fed                     |  6 |    Yes    | Boolean |        |       |    
-| medicated               |  7 |    Yes    | Boolean |        |       |
-| played                  |  8 |    Yes    | Boolean |        |       |
-| cleaned                 |  9 |    Yes    | Boolean |        |       |
+    |         Name            | ID | Mandatory |  Type   |  Range | Units |
+    | ----------------------- | -- | --------- | ------- | ------ | ----- | 
+    | Id                      |  0 |    Yes    | Integer |        |       |
+    | Name                    |  1 |    Yes    | String  |        |       |   
+    | Color                   |  2 |    Yes    | Integer |        |       |
+    | Happiness               |  3 |    Yes    | Integer |        |       |
+    | Wellbeing               |  4 |    Yes    | Integer |        |       |
+    | Health                  |  5 |    Yes    | Integer |        |       |
+    | XP                      |  6 |    Yes    | Integer |        |       |
+    | Hunger                  |  7 |    Yes    | Integer |        |       |
+    | Cleanliness             |  8 |    Yes    | Integer |        |       |
+    | Fun                     |  9 |    Yes    | Integer |        |       |
+    | fed                     | 10 |    Yes    | Integer |        |       |    
+    | medicated               | 11 |    Yes    | Integer |        |       |
+    | played                  | 12 |    Yes    | Integer |        |       |
+    | cleaned                 | 13 |    Yes    | Integer |        |       |
+    | Hungry                  | 14 |    Yes    | Boolean |        |       |  
+    | Ill                     | 15 |    Yes    | Boolean |        |       |   
+    | Bored                   | 16 |    Yes    | Boolean |        |       |   
+    | Dirty                   | 17 |    Yes    | Boolean |        |       |   
   * 
+
   * @author Moritz Holzer <moritz.holzer@haw-hamburg.de>
   * @}
   */
@@ -57,14 +66,24 @@ extern "C" {
 #endif
 
 #define LWM2M_PET_ID 0
-#define LWM2M_PET_HUNGRY_ID 1
-#define LwM2M_PET_ILL_ID 2
-#define LwM2M_PET_BORED_ID 3
-#define LwM2M_PET_DIRTY_ID 4
-#define LWM2M_PET_FED_ID 5
-#define LWM2M_PET_MEDICATED_ID 6
-#define LWM2M_PET_PLAYED_ID 7
-#define LWM2M_PET_CLEANED_ID 8
+#define LWM2M_PET_NAME_ID 1
+#define LWM2M_PET_COLOR_ID 2
+#define LWM2M_PET_HAPPINESS_ID 3
+#define LWM2M_PET_WELLBEING_ID 4
+#define LWM2M_PET_HEALTH_ID 5
+#define LWM2M_PET_XP_ID 6
+#define LWM2M_PET_HUNGER_ID 7
+#define LWM2M_PET_CLEANLINESS_ID 8
+#define LWM2M_PET_FUN_ID 9
+#define LWM2M_PET_FED_ID 10
+#define LWM2M_PET_MEDICATED_ID 11
+#define LWM2M_PET_PLAYED_ID 12
+#define LWM2M_PET_CLEANED_ID 13
+#define LWM2M_PET_HUNGRY_ID 14
+#define LwM2M_PET_ILL_ID 15
+#define LwM2M_PET_BORED_ID 16
+#define LwM2M_PET_DIRTY_ID 17
+
 
 // /**
 //  * @brief Callback for writing the sensor value.
@@ -91,14 +110,23 @@ typedef struct lwm2m_obj_pet_inst {
     lwm2m_list_t list;                           /**< list handle */
     uint8_t id;                                  /**< id of pet */                
     char name[CONFIG_LWM2M_PET_NAME_MAX_SIZE];   /**< name of pet */
-    bool hungry;                                 /**< pet hungry */
-    bool ill;                                    /**< pet ill */
-    bool bored;                                  /**< pet bored */
-    bool dirty;                                  /**< pet dirty */
+    int color;                                   /**< color of the pet */
+    int happiness;                               /**< happiness of the pet*/
+    int wellbeing;                               /**< wellbeing of the pet*/
+    int health;                                  /**< health of the pet*/
+    int xp;                                      /**< XP of the pet*/
+    int hunger;                                  /**< Hunger of the pet*/
+    int cleanliness;                             /**< Cleanliness of the pet*/
+    int fun;                                     /**< Fun of the pet*/
     bool fed;                                    /**< pet fed */
     bool medicated;                              /**< pet medicated */
     bool played;                                 /**< pet played */
     bool cleaned;                                /**< pet cleaned */
+    bool hungry;                                 /**< pet hungry */
+    bool ill;                                    /**< pet ill */
+    bool bored;                                  /**< pet bored */
+    bool dirty;                                  /**< pet dirty */
+    
     lwm2m_obj_pet_write_cb_t *write_cb;          /**< Callback to write the pet values. May be NULL. need that for the lwm2m handler*/
     mutex_t mutex;                               /**< Mutex for writing the values*/
 } lwm2m_obj_pet_inst_t;
