@@ -130,6 +130,29 @@
           <linkXRef>false</linkXRef>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.jsonschema2pojo</groupId>
+        <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <configuration>
+          <sourceDirectory>src/main/resources/jsonschema/events</sourceDirectory>
+          <targetPackage>haw.teamagochi.backend.leshanclient.sse</targetPackage>
+          <annotationStyle>jackson</annotationStyle>
+          <serializable>true</serializable>
+          <classNameSuffix>Dto</classNameSuffix>
+          <includeToString>false</includeToString>
+          <includeSetters>false</includeSetters>
+          <includeGetters>false</includeGetters>
+          <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <profiles>
@@ -144,36 +167,6 @@
         <skipITs>false</skipITs>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
-    </profile>
-    <profile>
-      <id>schema-generator</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jsonschema2pojo</groupId>
-            <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-            <version>1.2.1</version>
-            <configuration>
-              <sourceDirectory>src/main/resources/jsonschema/events</sourceDirectory>
-              <targetPackage>haw.teamagochi.backend.leshanclient.sse</targetPackage>
-              <annotationStyle>jackson</annotationStyle>
-              <serializable>true</serializable>
-              <classNameSuffix>Dto</classNameSuffix>
-              <includeToString>false</includeToString>
-              <includeSetters>false</includeSetters>
-              <includeGetters>false</includeGetters>
-              <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>generate</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 </project>
