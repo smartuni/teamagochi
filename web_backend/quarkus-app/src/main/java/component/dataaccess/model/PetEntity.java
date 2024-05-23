@@ -3,6 +3,8 @@ package component.dataaccess.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Past;
@@ -20,8 +22,11 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @Entity
+public class PetEntity {
 
-public class PetEntity extends PanacheEntity {
+  @Id
+  @GeneratedValue
+  private long id;
 
   public PetEntity() {}
 
@@ -37,12 +42,12 @@ public class PetEntity extends PanacheEntity {
   private String color;
   */
 
-  private int happiness = 0;
-  private int wellbeing = 0;
-  private int health = 0;
-  private int hunger = 0;
-  private int cleanliness = 0;
-  private int fun = 0;
+  private int happiness;
+  private int wellbeing;
+  private int health;
+  private int hunger;
+  private int cleanliness;
+  private int fun;
 
   @PositiveOrZero
   private int xp = 0;
@@ -71,7 +76,7 @@ public class PetEntity extends PanacheEntity {
       return false;
     }
     PetEntity petEntity = (PetEntity) o;
-    return id.equals(petEntity.id);
+    return id == petEntity.id;
   }
 
   @Override

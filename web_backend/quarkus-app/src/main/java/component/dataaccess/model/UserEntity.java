@@ -2,6 +2,8 @@ package component.dataaccess.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
@@ -17,8 +19,11 @@ import org.gradle.internal.impldep.org.apache.commons.lang.NullArgumentException
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class UserEntity extends PanacheEntity  {
+public class UserEntity  {
 
+  @Id
+  @GeneratedValue
+  private long id;
 
   public UserEntity() {}
 

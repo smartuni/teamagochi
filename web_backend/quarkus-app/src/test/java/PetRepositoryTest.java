@@ -1,8 +1,9 @@
-package component.dataaccess.repository;
-
 import component.dataaccess.model.MockEntity;
 import component.dataaccess.model.PetEntity;
 import component.dataaccess.model.PetTypeEntity;
+import component.dataaccess.repository.PetRepository;
+import component.dataaccess.repository.PetTypeRepository;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -10,11 +11,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.TestInstance;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 
 @QuarkusTest
+@QuarkusTestResource(H2DatabaseTestResource.class)
 public class PetRepositoryTest {
 
+  @Inject
+  PetRepository petRepository;
+
+  @Inject
+  PetTypeRepository petTypeRepository;
 
   private static PetEntity defaultPet;
   private static PetTypeEntity defaultPetType;
@@ -35,8 +42,8 @@ public class PetRepositoryTest {
   public void beforeEach() {
 
     // Deletion order important?
-    PetEntity.deleteAll();
-    PetTypeEntity.deleteAll();
+    petRepository.deleteAll();
+    petTypeRepository.deleteAll();
 
 
   }
@@ -54,14 +61,14 @@ public class PetRepositoryTest {
   @Transactional
   public void testHibernatePersistence() {
 
-    defaultPetType.persist();
-    defaultPet.persist();
+    petTypeRepository.persist(defaultPetType);
+    petRepository.persist(defaultPet);
 
     String oldName = defaultPet.getName();
     String newName = "new pet name";
 
     defaultPet.setName(newName);
-    PetEntity persistedPet = PetEntity.findById(defaultPet.id);
+    PetEntity persistedPet = petRepository.findById(defaultPet.getId());
 
     Assertions.assertEquals(newName, persistedPet.getName());
   }
