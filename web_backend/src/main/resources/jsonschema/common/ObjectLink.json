@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "ObjectLink",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "rt": {
+    "url": {
       "type": "string"
     },
-    "ver": {
-      "type": "string"
-    },
-    "ct": {
-      "type": "string"
+    "attributes": {
+      "$ref": "Attributes.json"
     }
   },
-  "required": [],
-  "title": "Attributes"
+  "required": [
+    "attributes",
+    "url"
+  ]
 }

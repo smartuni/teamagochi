@@ -2,12 +2,12 @@ package haw.teamagochi.backend.leshanclient.eventlistener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
 import haw.teamagochi.backend.leshanclient.eventlistener.client.LeshanEventClient;
 import haw.teamagochi.backend.leshanclient.logic.UcHandleLeshanEvents;
-import haw.teamagochi.backend.leshanclient.sse.AwakeDto;
-import haw.teamagochi.backend.leshanclient.sse.CoaplogDto;
-import haw.teamagochi.backend.leshanclient.sse.RegistrationDto;
-import haw.teamagochi.backend.leshanclient.sse.UpdatedDto;
 import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;

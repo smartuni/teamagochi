@@ -1,9 +1,9 @@
 package haw.teamagochi.backend.leshanclient.logic;
 
-import haw.teamagochi.backend.leshanclient.sse.AwakeDto;
-import haw.teamagochi.backend.leshanclient.sse.CoaplogDto;
-import haw.teamagochi.backend.leshanclient.sse.RegistrationDto;
-import haw.teamagochi.backend.leshanclient.sse.UpdatedDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
 import jakarta.enterprise.context.ApplicationScoped;
 
 /**

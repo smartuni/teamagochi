@@ -3,10 +3,10 @@ package haw.teamagochi.backend.leshanclient.eventlistener;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import haw.teamagochi.backend.leshanclient.sse.AwakeDto;
-import haw.teamagochi.backend.leshanclient.sse.CoaplogDto;
-import haw.teamagochi.backend.leshanclient.sse.RegistrationDto;
-import haw.teamagochi.backend.leshanclient.sse.UpdatedDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
 import java.io.File;
 import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;

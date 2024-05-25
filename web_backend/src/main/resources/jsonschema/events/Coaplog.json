@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Coaplog",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -40,6 +41,5 @@
     "timestamp",
     "token",
     "type"
-  ],
-  "title": "Coaplog"
+  ]
 }
