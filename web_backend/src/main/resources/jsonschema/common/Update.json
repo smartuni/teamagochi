@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Update",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "registrationId": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "secure": {
+      "type": "boolean"
+    },
+    "additionalAttributes": {
+      "$ref": "AdditionalAttributes.json"
+    }
+  }
+}

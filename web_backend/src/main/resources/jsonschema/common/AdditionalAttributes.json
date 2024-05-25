@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "AdditionalAttributes",
   "type": "object",
-  "additionalProperties": true,
-  "title": "AdditionalAttributes"
+  "additionalProperties": true
 }

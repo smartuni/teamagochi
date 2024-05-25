@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Awake",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -9,6 +10,5 @@
   },
   "required": [
     "ep"
-  ],
-  "title": "Awake"
+  ]
 }
