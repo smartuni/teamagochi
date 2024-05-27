@@ -8,4 +8,9 @@ USEMODULE += lvgl_extra_widget_win
 USEMODULE += lvgl_extra_layout_flex
 USEMODULE += lvgl_extra_theme_default
 USEMODULE += lvgl_extra_theme_default_dark
+<<<<<<< Updated upstream
 
+=======
+USEMODULE += lvgl_widget_roller
+USEMODULE += lvgl_widget_label
+>>>>>>> Stashed changes

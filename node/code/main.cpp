@@ -88,6 +88,9 @@ int main() {
     displayHandler->startInternalThread();
 
     dispatcher->subscribe({EVENTS::BUTTON_OK_PRESS}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::PIC_SWITCH}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::DOWN_CLICK}, displayHandler->getPID());
+
 
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 

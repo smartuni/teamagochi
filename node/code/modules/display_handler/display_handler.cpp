@@ -33,7 +33,15 @@ void DisplayHandler::handleEvent(msg_t *event){
 
      switch(event->type){
         case EVENTS::BUTTON_OK_PRESS:
-           change_button(); 
+            puts("starts");
+           change_button();
+           puts("ends"); 
+        break;
+        case EVENTS::PIC_SWITCH:
+           image_switch();
+        break;
+        case EVENTS::DOWN_CLICK:
+            down_click();
         break;
      }
 

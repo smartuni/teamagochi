@@ -8,4 +8,6 @@ extern "C" enum EVENTS: uint16_t {
     PING,
     PONG,
     BUTTON_OK_PRESS,
+    PIC_SWITCH,
+    DOWN_CLICK,
 };
