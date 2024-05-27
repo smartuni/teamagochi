@@ -6,4 +6,6 @@ import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 public interface DeviceService {
 
   DeviceEntity createDevice();
+
+  boolean deviceExists(long id);
 }

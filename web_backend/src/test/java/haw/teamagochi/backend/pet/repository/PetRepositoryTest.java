@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.pet;
+package haw.teamagochi.backend.pet.repository;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
