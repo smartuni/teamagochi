@@ -13,7 +13,16 @@ from testrunner import run
 
 def testfunc(child: pexpect.spawn):
     child.expect("PASS")
-
+    
+    # Test if the module is initialized correctly
+    child.expect("Example Module Init: 1")
+    
+    # Test if the module is started correctly
+    child.expect("Starting shell loop")
+    
+    # Test if shell commands work correctly
+    child.sendline("send_event 0")
+    child.expect("💣 Received TERMINATE event, exiting...")
 
 if __name__ == "__main__":
     sys.exit(run(testfunc))

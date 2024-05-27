@@ -9,17 +9,25 @@ RIOTBASE ?= $(CURDIR)/RIOT
 # development process:
 DEVELHELP ?= 1
 
+# Include test_folder example to showcase directories being included
+DIR += test_folder
+
 FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
-#Hardware specific configs
+# Internal Modules
+EXTERNAL_MODULE_DIRS += modules
+USEMODULE += external_module
+
+# External modules
 USEMODULE += cpp11-compat
 USEMODULE += ili9341
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
+USEMODULE += shell
 
+# Lvgl Related Modules
 DISABLE_MODULE += test_utils_interactive_sync
-
 USEPKG += lvgl
 USEMODULE += lvgl_contrib
 USEMODULE += lvgl_extra_widget_chart
@@ -35,7 +43,18 @@ SHOULD_RUN_KCONFIG ?=
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
 
-CXXEXFLAGS += 
+# Set the C standard to C17 [C23 (even experimental) is not yet supported]
+# and enable all warnings
+CFLAGS += -std=c17 -Wall -Wextra
+
+# Set the C++ standard to C++20 [C++23 with all the cool stuff is not yet supported]
+# and enable all warnings
+CXXEXFLAGS += -std=c++20 -Wall -Wextra
+
+# Disable volatile warnings
+# C++20 introduced a deprecation for this, which was then
+# reverted in C++23 because it wasn't thought through
+CXXEXFLAGS += -Wno-volatile
 
 include $(RIOTBASE)/Makefile.include
 
