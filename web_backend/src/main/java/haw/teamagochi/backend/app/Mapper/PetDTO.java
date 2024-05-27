@@ -2,18 +2,22 @@ package haw.teamagochi.backend.app.Mapper;
 
 public class PetDTO {
 
-  private long id;
-  private int level;
-  private int levelProgress;
-  private String name;
-  private int happiness;
-  private int wellbeing;
-  private int hunger;
-  private int cleanliness;
-  private int fun;
-  private int petTypeID; //ggf. int oder byte --> wie wollen wir das lösen (haben wir eine bitmap
+  long petID; //mapping done
+  int level; //mapping done
+  int xp; //mapping done
+  int levelProgress; //mapping done
+  String name; //mapping done
+  int happiness; //mapping done
+  int wellbeing; //mapping done
+  int hunger; //mapping done
+  int health; //mapping done
+  int cleanliness; //mapping done
+  int fun;
+  int petTypeID; //ggf. int oder byte --> wie wollen wir das lösen (haben wir eine bitmap
   // für die Grafik in der db oder wie?
-  private String petTypeName;
+  String petTypeName;
+
+  long deviceID;
 
 
 
@@ -22,7 +26,7 @@ public class PetDTO {
     this.level = 0; //compute level(xp);
     this.levelProgress = 0; //compute levelProg(xp)
     this.name = name;
-    this.id = id;
+    this.petID = id;
     this.happiness = happiness;
     this.wellbeing = wellbeing;
     this.hunger = hunger;

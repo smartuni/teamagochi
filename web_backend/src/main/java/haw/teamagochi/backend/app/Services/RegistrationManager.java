@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class DeviceRegistration {
+public class RegistrationManager {
 
   private HashMap<String, Long> devicesToBeRegistered;
 
-  DeviceRegistration(){
+  RegistrationManager(){
     devicesToBeRegistered = new HashMap<>();
   }
 

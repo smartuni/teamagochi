@@ -2,6 +2,7 @@ package haw.teamagochi.backend.app.FrontendAPI;
 
 import haw.teamagochi.backend.app.Mapper.PetDTO;
 import haw.teamagochi.backend.app.Mapper.PetInfoDTO;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -15,6 +16,9 @@ import org.jboss.resteasy.reactive.RestQuery;
 //@RegisterRestClient
 @Path("Pet")
 public class PetAPI {
+
+  @Inject
+
 
 
   /**
@@ -36,7 +40,7 @@ public class PetAPI {
    *
    */
   @GET
-  public List<PetInfoDTO> getPetIDs(@HeaderParam("Authorization") String userAuthToken){ //Name + Type + (looks?)
+  public List<PetInfoDTO> getPets(@HeaderParam("Authorization") String userAuthToken){ //Name + Type + (looks?)
     //TODO
     return null;
   }

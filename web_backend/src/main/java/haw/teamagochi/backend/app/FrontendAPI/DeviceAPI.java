@@ -1,21 +1,22 @@
 package haw.teamagochi.backend.app.FrontendAPI;
 import haw.teamagochi.backend.app.Mapper.DeviceDTO;
-import haw.teamagochi.backend.app.Services.DeviceRegistration;
+import haw.teamagochi.backend.app.Mapper.DeviceMapper;
+import haw.teamagochi.backend.app.Services.RegistrationManager;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import java.util.List;
-import org.jboss.resteasy.reactive.RestCookie;
-import org.jboss.resteasy.reactive.RestQuery;
 
 //@RegisterRestClient //needed for oidc??
 @Path("Device")
 public class DeviceAPI {
 //Map Struct --> Mapper --> entitys auf json
-  DeviceRegistration registrationManager;
-  DeviceAPI(DeviceRegistration registrationManager){
+  @Inject
+  DeviceMapper deviceMapper;
+  RegistrationManager registrationManager; //how does quarkus load the API --> how to pass the registrationManager instance
+  DeviceAPI(RegistrationManager registrationManager){
     this.registrationManager = registrationManager;
   }
 
@@ -50,9 +51,11 @@ public class DeviceAPI {
    */
   @Path("register/{registerCode}")
   @POST
-  public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //ID
+  public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //--> name missing
     long deviceID = registrationManager.getDevice(registerCode);
     //TODO --> check return (valid Key or not), put device into DB, create DeviceDTO, return DeviceDTO/error
-    return null;
+    return DeviceMapper.toResource(//TODO);
   }
+
+  //TODO --> Device give name;
 }
