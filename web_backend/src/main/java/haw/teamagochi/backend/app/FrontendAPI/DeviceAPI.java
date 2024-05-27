@@ -52,9 +52,7 @@ public class DeviceAPI {
   @Path("register/{registerCode}")
   @POST
   public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //--> name missing
-    long deviceID = registrationManager.getDevice(registerCode);
-    //TODO --> check return (valid Key or not), put device into DB, create DeviceDTO, return DeviceDTO/error
-    return DeviceMapper.toResource(//TODO);
+
   }
 
   //TODO --> Device give name;
