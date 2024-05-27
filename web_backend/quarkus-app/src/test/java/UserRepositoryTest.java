@@ -6,6 +6,8 @@ import component.dataaccess.repository.DeviceRepository;
 import component.dataaccess.repository.PetRepository;
 import component.dataaccess.repository.PetTypeRepository;
 import component.dataaccess.repository.UserRepository;
+import component.logic.DeviceServiceImpl;
+import component.logic.UserServiceImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,6 +22,12 @@ import org.junit.jupiter.api.Test;
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
 public class UserRepositoryTest {
+
+  @Inject
+  UserServiceImpl userService;
+
+  @Inject
+  DeviceServiceImpl deviceService;
 
   @Inject
   UserRepository userRepository;
@@ -46,6 +54,8 @@ public class UserRepositoryTest {
   @BeforeEach
   @Transactional
   public void beforeEach() {
+    userRepository.deleteAll();
+    deviceRepository.deleteAll();
     userRepository.deleteAll();
   }
 
@@ -74,4 +84,34 @@ public class UserRepositoryTest {
     });
 
   }
+
+  @Test
+  @Transactional
+  public void testHibernatePersistenceAcrossMethodCalls() {
+    UUID uuid1 = new UUID(1,1);
+    UUID uuid2 = new UUID(2,2);
+
+    UserEntity user = userService.createUser(uuid1);
+    user.setExternalID(uuid2);
+
+    UserEntity loadedUser = userRepository.findById(user.getId());
+
+    Assertions.assertEquals(user, loadedUser);
+  }
+
+  @Test
+  @Transactional
+  public void testListAttributePersistence() {
+    UUID uuid1 = new UUID(1,1);
+
+    UserEntity user = userService.createUser(uuid1);
+    DeviceEntity device = deviceService.createDevice();
+    user.addDevice(device);
+
+    UserEntity loadedUser = userRepository.findById(user.getId());
+
+
+    Assertions.assertEquals(user.getDevices(), loadedUser.getDevices());
+  }
+
 }

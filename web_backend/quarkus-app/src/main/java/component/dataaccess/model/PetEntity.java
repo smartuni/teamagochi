@@ -59,12 +59,12 @@ public class PetEntity {
 
   @ManyToOne
   @NonNull
-  @Setter private PetTypeEntity petType;
+  private PetTypeEntity petType;
 
 
   @OneToOne
   @Nullable
-  @Setter private DeviceEntity device;
+  private DeviceEntity device;
 
 
   @Override

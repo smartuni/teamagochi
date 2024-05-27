@@ -1,4 +1,3 @@
-import component.dataaccess.model.MockEntity;
 import component.dataaccess.model.PetEntity;
 import component.dataaccess.model.PetTypeEntity;
 import component.dataaccess.repository.PetRepository;
@@ -15,6 +14,7 @@ import io.quarkus.test.h2.H2DatabaseTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
+
 public class PetRepositoryTest {
 
   @Inject
@@ -72,5 +72,9 @@ public class PetRepositoryTest {
 
     Assertions.assertEquals(newName, persistedPet.getName());
   }
+
+
+
+
 
 }
