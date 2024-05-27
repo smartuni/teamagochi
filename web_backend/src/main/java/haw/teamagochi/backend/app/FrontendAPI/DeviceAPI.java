@@ -52,7 +52,7 @@ public class DeviceAPI {
   @Path("register/{registerCode}")
   @POST
   public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //--> name missing
-
+  return null;
   }
 
   //TODO --> Device give name;

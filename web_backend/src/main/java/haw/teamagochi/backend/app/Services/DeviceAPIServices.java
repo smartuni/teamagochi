@@ -5,6 +5,11 @@ import haw.teamagochi.backend.app.Mapper.DeviceMapper;
 import java.util.List;
 
 public class DeviceAPIServices implements DeviceAPIServiceInterface{
+
+  RegistrationManager registrationManager;
+  DeviceAPIServices(RegistrationManager registrationManager){
+    this.registrationManager = registrationManager;
+  }
   @Override
   public List<DeviceDTO> getUserDevices(long userID) {
     return null;
@@ -17,9 +22,10 @@ public class DeviceAPIServices implements DeviceAPIServiceInterface{
 
   @Override
   public DeviceDTO registerDevice(long userID, String registrationKey, String deviceName) {
-    long deviceID = registrationManager.getDevice(registerCode);
+    long deviceID = registrationManager.getDevice(registrationKey);
     //TODO --> check return (valid Key or not), put device into DB, create DeviceDTO, return DeviceDTO/error
-    return DeviceMapper.toResource(//TODO);
+    //return DeviceMapper.toResource(deviceServiceImpl.getDeviceEntity(deviceID));
+    return null;
   }
 
   @Override
