@@ -1,0 +1,73 @@
+{
+  "registration": {
+    "endpoint": "356585106244239;460085891605380",
+    "registrationId": "Tuc2Qoa9Fw",
+    "registrationDate": 1715607068883,
+    "lastUpdate": 1715613633663,
+    "address": "220.180.239.201:7353",
+    "lwM2mVersion": "1.1",
+    "lifetime": 40,
+    "bindingMode": "U",
+    "rootPath": "/",
+    "objectLinks": [
+      {
+        "url": "/",
+        "attributes": {
+          "rt": "\"oma.lwm2m\""
+        }
+      },
+      {
+        "url": "/1",
+        "attributes": {
+          "ver": "1.1"
+        }
+      },
+      {
+        "url": "/1/0",
+        "attributes": {}
+      },
+      {
+        "url": "/2/0",
+        "attributes": {}
+      },
+      {
+        "url": "/3/0",
+        "attributes": {}
+      },
+      {
+        "url": "/4/0",
+        "attributes": {}
+      },
+      {
+        "url": "/5/0",
+        "attributes": {}
+      }
+    ],
+    "secure": false,
+    "additionalRegistrationAttributes": {},
+    "queuemode": false,
+    "availableInstances": {
+      "1": [
+        0
+      ],
+      "2": [
+        0
+      ],
+      "3": [
+        0
+      ],
+      "4": [
+        0
+      ],
+      "5": [
+        0
+      ]
+    }
+  },
+  "update": {
+    "registrationId": "Tuc2Qoa9Fw",
+    "address": "220.180.239.201:7353",
+    "secure": false,
+    "additionalAttributes": {}
+  }
+}
