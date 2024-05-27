@@ -7,4 +7,6 @@ public interface UserService {
 
   UserEntity createUser(UUID uuid);
 
+  void deleteAll();
+
 }
