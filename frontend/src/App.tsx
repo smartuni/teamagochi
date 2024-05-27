@@ -1,10 +1,9 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import LinkDevice from './Components/LinkDevice'
+import Footer from './Components/Footer';
 function App() {
   const auth = useAuth();
   const [count, setCount] = useState(0)
