@@ -17,7 +17,8 @@ FEATURES_REQUIRED += libstdcpp
 
 # Internal Modules
 EXTERNAL_MODULE_DIRS += modules
-USEMODULE += external_module
+#USEMODULE += external_module
+USEMODULE += io_handler
 
 # External modules
 USEMODULE += cpp11-compat
@@ -61,6 +62,7 @@ include $(RIOTBASE)/Makefile.include
 
 BOARD_BLACKLIST += native64
 
+CFLAGS += -DIO_HANDLER_STACKSIZE=2*1024
 
 # SDL requires more stack
 ifneq (,$(filter native native64,$(BOARD)))

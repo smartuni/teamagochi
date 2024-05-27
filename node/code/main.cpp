@@ -18,7 +18,8 @@
 #include "shell_commands.hpp"
 
 // Example Module Import
-#include "external_module.h"
+//#include "external_module.h"
+#include "io_handler.hpp"
 
 #include "test_folder/test_hello.h"
 
@@ -35,7 +36,7 @@ int main() {
   puts("{\"result\": \"PASS\"}");
 
   // Show the example module function
-  cout << "Example Module Init: " << external_module_initialized << endl;
+  //cout << "Example Module Init: " << external_module_initialized << endl;
 
   hello();
 
@@ -50,23 +51,28 @@ int main() {
   DISPATCHER_PID = dispatcher->getPID();
   DISPATCHER_THREAD_ID = DISPATCHER_PID;
 
-  // Create the ping class
-  Ping *ping = new Ping();
-  ping->startInternalThread();
+//   // Create the ping class
+//   Ping *ping = new Ping();
+//   ping->startInternalThread();
 
-  // Create the pong class
-  Pong *pong = new Pong();
-  pong->startInternalThread();
+//   // Create the pong class
+//   Pong *pong = new Pong();
+//   pong->startInternalThread();
 
-  // Subscribe the ping and pong classes to each other
-  dispatcher->subscribe({EVENTS::PING}, ping->getPID());
-  dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
+//   // Subscribe the ping and pong classes to each other
+//   dispatcher->subscribe({EVENTS::PING}, ping->getPID());
+//   dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
 
   //   cout << "Sending initial ping event" << endl;
   //   msg_t message;
   //   message.type = EVENTS::PING;
 
   //   msg_try_send(&message, dispatcher->getPID());
+
+
+  IoHandler *ioHandler = new IoHandler();
+  ioHandler->init();
+  dispatcher->subscribe({EVENTS::BUTTON_UP_PRESSED}, ioHandler->getPID());
 
   shell_loop();
 
