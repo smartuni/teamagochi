@@ -4,6 +4,9 @@ import { useState } from 'react'
 import './App.css'
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+
 function App() {
   const auth = useAuth();
   const [count, setCount] = useState(0)
@@ -20,6 +23,7 @@ function App() {
   }
 
   if (auth.error) {
+    console.error(auth.error);
     return <div>Oops... {auth.error.message}</div>;
   }
 
