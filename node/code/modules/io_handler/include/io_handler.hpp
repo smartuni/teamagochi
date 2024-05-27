@@ -19,7 +19,6 @@
 #define IO_HANDLER_T
 
 #include "dispatch_handler.hpp"
-#include "EVENTS.hpp"
 
 class IoHandler : public DispatchHandler{
 

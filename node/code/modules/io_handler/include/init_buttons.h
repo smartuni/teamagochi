@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 
-#include "EVENTS.hpp"
 
 int init_buttons(void);
 
