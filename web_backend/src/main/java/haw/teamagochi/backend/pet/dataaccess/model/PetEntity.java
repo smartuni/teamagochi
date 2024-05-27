@@ -43,12 +43,12 @@ public class PetEntity {
   private String color;
   */
 
-  private int happiness;
-  private int wellbeing;
-  private int health;
-  private int hunger;
-  private int cleanliness;
-  private int fun;
+  private int happiness = 0;
+  private int wellbeing = 0;
+  private int health = 0;
+  private int hunger = 0;
+  private int cleanliness = 0;
+  private int fun = 0;
 
   @PositiveOrZero
   private int xp = 0;

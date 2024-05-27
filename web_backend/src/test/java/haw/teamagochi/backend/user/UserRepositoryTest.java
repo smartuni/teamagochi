@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.user;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.logic.DeviceService;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
@@ -109,7 +110,7 @@ public class UserRepositoryTest {
     UUID uuid1 = new UUID(1,1);
 
     UserEntity user = userService.createUser(uuid1);
-    DeviceEntity device = deviceService.createDevice();
+    DeviceEntity device = deviceService.createDevice("name", DeviceType.FROG);
     user.addDevice(device);
 
     UserEntity loadedUser = userRepository.findById(user.getId());
