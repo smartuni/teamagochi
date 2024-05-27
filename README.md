@@ -1,14 +1,32 @@
-# Teamagochi - ティーマゴチ
+![Teamagochi - てぃーまごっち](./.github/images/banner.png)
 
 ## Description
 
-Teamagochi is a virtual pet project by the RIOT Project SoSe24 team.
+Teamagochi is a synchronized always-online pet simulator with multiplayer functionality​ by the RIOT Project SoSe24 team. 
 
-### [Documentation Page](https://smartuni.github.io/teamagochi/)
+It consists of a [physical device (Node)](./node/), [web backend](./web_backend/) and [web/mobile frontend](./web_backend/).
+
+### [Frontend Page](https://smartuni.github.io/teamagochi) [W.I.P]
+
+### [Documentation Page](https://smartuni.github.io/teamagochi/docs)
 
 ### [Kanban Board](https://github.com/orgs/smartuni/projects/2)
 
 ## Contributing
+
+### Cloning
+
+Make sure to clone the repository with the `--recursive` flag to also clone the submodules.
+
+```bash
+git clone --recursive git@github.com:smartuni/teamagochi.git
+```
+
+or if you have already cloned the repository, you can run:
+
+```bash
+git submodule update --init --recursive
+```
 
 ### Workflow
 
