@@ -1,8 +1,8 @@
 package haw.teamagochi.backend.app.Mapper;
 public class DeviceDTO {
-  Long deviceID;
+  long deviceID;
   String deviceName;
-  int deviceType;
+  String deviceType;
 
   PetInfoDTO currentPet;
 

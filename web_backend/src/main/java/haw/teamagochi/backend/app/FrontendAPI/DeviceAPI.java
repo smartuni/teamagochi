@@ -1,5 +1,6 @@
 package haw.teamagochi.backend.app.FrontendAPI;
 import haw.teamagochi.backend.app.Mapper.DeviceDTO;
+import haw.teamagochi.backend.app.Services.DeviceRegistration;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
@@ -13,6 +14,10 @@ import org.jboss.resteasy.reactive.RestQuery;
 @Path("Device")
 public class DeviceAPI {
 //Map Struct --> Mapper --> entitys auf json
+  DeviceRegistration registrationManager;
+  DeviceAPI(DeviceRegistration registrationManager){
+    this.registrationManager = registrationManager;
+  }
 
   /**
    * @param userAuthToken --> the user to get the devices for
@@ -20,7 +25,7 @@ public class DeviceAPI {
    */
   @GET
   public List<DeviceDTO> getDevices(@HeaderParam("Authorization") String userAuthToken){ //ID + Name
-    //TODO
+    //TODO -->
     return null;
   }
 
@@ -33,7 +38,7 @@ public class DeviceAPI {
   @Path("{deviceID}")
   @GET
   public DeviceDTO getDevice(String deviceID, @HeaderParam("Authorization") String userAuthToken){ //ID + Name + Pet ....
-    //TODO
+    //TODO --> check if user is authorized, get Device from DB, create DeviceDTO
     return null;
   }
 
@@ -46,7 +51,8 @@ public class DeviceAPI {
   @Path("register/{registerCode}")
   @POST
   public DeviceDTO registerDevice(String registerCode, @HeaderParam("Authorization") String userAuthToken){ //ID
-    //TODO -->
+    long deviceID = registrationManager.getDevice(registerCode);
+    //TODO --> check return (valid Key or not), put device into DB, create DeviceDTO, return DeviceDTO/error
     return null;
   }
 }

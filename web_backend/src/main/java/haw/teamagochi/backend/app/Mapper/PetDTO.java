@@ -2,10 +2,10 @@ package haw.teamagochi.backend.app.Mapper;
 
 public class PetDTO {
 
+  private long id;
   private int level;
   private int levelProgress;
   private String name;
-  private Long id;
   private int happiness;
   private int wellbeing;
   private int hunger;

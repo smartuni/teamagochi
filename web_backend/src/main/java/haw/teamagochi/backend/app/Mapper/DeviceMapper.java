@@ -6,4 +6,5 @@ import org.mapstruct.Mapper;
 public interface DeviceMapper {
 
   DeviceDTO toResource(Device device);
+
 }
