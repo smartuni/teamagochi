@@ -4,6 +4,7 @@ import { useState } from 'react'
 import './App.css'
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
+import Navbar from './Components/Navbar/Navbar'
 
 function App() {
   const auth = useAuth();
@@ -49,7 +50,12 @@ function App() {
     );
   }
 
-  return <button onClick={() => void auth.signinRedirect()}>Log in</button>;
+  return (
+    <div>
+      <Navbar />
+      <button onClick={() => void auth.signinRedirect()}>Log in</button>  
+    </div>
+  ) 
 }
 
 export default App;
