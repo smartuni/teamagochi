@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.user;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.logic.DeviceService;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
@@ -9,6 +10,7 @@ import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetTypeRepository;
 import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
 import haw.teamagochi.backend.device.logic.DeviceServiceImpl;
+import haw.teamagochi.backend.user.logic.UserService;
 import haw.teamagochi.backend.user.logic.UserServiceImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
@@ -26,10 +28,10 @@ import org.junit.jupiter.api.Test;
 public class UserRepositoryTest {
 
   @Inject
-  UserServiceImpl userService;
+  UserService userService;
 
   @Inject
-  DeviceServiceImpl deviceService;
+  DeviceService deviceService;
 
   @Inject
   UserRepository userRepository;

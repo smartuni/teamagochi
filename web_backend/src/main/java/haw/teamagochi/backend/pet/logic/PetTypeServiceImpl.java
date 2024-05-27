@@ -6,13 +6,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class PetTypeServiceImpl {
+public class PetTypeServiceImpl implements PetTypeService {
 
   @Inject
   PetTypeRepository petTypeRepository;
 
-  public PetTypeEntity createPetType() {
-    PetTypeEntity petType = new PetTypeEntity();
+  public PetTypeEntity createPetType(String name) {
+    PetTypeEntity petType = new PetTypeEntity(name);
     petTypeRepository.persist(petType);
     return petType;
   }

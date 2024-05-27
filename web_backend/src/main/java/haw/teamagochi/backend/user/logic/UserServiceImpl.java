@@ -7,7 +7,7 @@ import jakarta.inject.Inject;
 import java.util.UUID;
 
 @ApplicationScoped
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService{
 
   @Inject
   UserRepository userRepository;

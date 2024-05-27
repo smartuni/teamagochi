@@ -7,7 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class PetServiceImpl {
+public class PetServiceImpl implements PetService {
 
   @Inject
   PetRepository petRepository;

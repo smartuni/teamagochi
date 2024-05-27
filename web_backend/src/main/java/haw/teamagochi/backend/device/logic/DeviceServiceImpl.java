@@ -6,7 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class DeviceServiceImpl {
+public class DeviceServiceImpl implements DeviceService {
+
   @Inject
   DeviceRepository deviceRepository;
 
