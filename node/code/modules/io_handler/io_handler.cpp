@@ -10,7 +10,7 @@
  * @{
  *
  * @file
- * @brief    IO Handler: Vibration module and buttons initialization   
+ * @brief    IO Handler: Vibration module and buttons init   
  *
  * @author   Eduard Lomtadze <eduard.lomtadze@haw-hamburg.de>   
  * @}
