@@ -35,6 +35,7 @@
 #include "ili9341_params.h"
 #include "lcd.h"
 #include "ztimer.h"
+#include "xtimer.h"
 #include "march1.h"
 #include "periph/gpio.h"
 #include "thread.h"
@@ -45,7 +46,6 @@
 
 /* Must be lower than LVGL_INACTIVITY_PERIOD_MS for autorefresh */
 #define REFR_TIME           200
-
 
 //static lv_timer_t *refr_task;
 
@@ -71,7 +71,7 @@ lv_obj_t * roller1;
 lv_obj_t * roller2;
 
 lv_group_t* group1;
-struct _lv_indev_drv_t *drv;
+struct _lv_indev_drv_t drv;
 lv_indev_t * indev;
 
 
@@ -82,8 +82,6 @@ typedef struct {
 
 button_t buttons[5];
 
-char lv_timer_thread_stack[THREAD_STACKSIZE_MAIN];
-
 //init value end
 
 //event here
@@ -92,25 +90,10 @@ char lv_timer_thread_stack[THREAD_STACKSIZE_MAIN];
 
 static uint32_t keypad_get_key(void);
 
-void *lv_timer_thread(void *arg)
-{
-    (void) arg;
- 
-    while (1) {
-        puts("thread \n");
-        //uint32_t time_till_next = lv_timer_handler();
-        ztimer_sleep(ZTIMER_MSEC, 30);
-    }
- 
-    return NULL;
-}
-
-
 static void event_handler(lv_event_t * e)
 {
     
     lv_event_code_t code = lv_event_get_code(e);
-    printf("%ld\n",lv_indev_get_key(lv_indev_get_act()));
     lv_obj_t * obj = lv_event_get_target(e);
     if(code == LV_EVENT_VALUE_CHANGED) {
         puts("value changed\n");
@@ -168,7 +151,7 @@ void lv_example_roller_1(void)
 
     lv_roller_set_visible_row_count(roller1, 4);
     lv_obj_align(roller1, LV_ALIGN_CENTER, 80, -20);
-    lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_KEY, NULL);
 }
 
 void lv_example_roller_2(void)
@@ -259,7 +242,6 @@ void down_click(void)
 /*Will be called by the library to read the keyboard*/
 void keypad_read(struct _lv_indev_drv_t *indev, lv_indev_data_t *data){
     (void) indev;
-    puts("timer keypad \n");
     static uint32_t last_key = 0;
     /*Get whether the a key is pressed and save the pressed key*/
     uint32_t act_key = keypad_get_key();
@@ -272,7 +254,6 @@ void keypad_read(struct _lv_indev_drv_t *indev, lv_indev_data_t *data){
     }
 
     data->key = last_key;
-    printf("pressed key: %ld\n",last_key);
 }
 
 /*Get the currently being pressed key.  0 if no key is pressed*/
@@ -328,11 +309,12 @@ void down_pressed(void){
 void down_released(void){
     buttons[2].state = false;
     puts("down released\n");
+    
 }
 
 
 int init_lvgl(void)
-{  
+{ 
     buttons[0].button = LV_KEY_ENTER;
     buttons[0].state  = false;
     buttons[1].button = LV_KEY_UP;
@@ -345,28 +327,22 @@ int init_lvgl(void)
     buttons[4].state  = false;
 
     group1 = lv_group_create();
-    lv_indev_drv_init(drv);
-    drv->type = LV_INDEV_TYPE_KEYPAD;
-    drv->read_cb = keypad_read;
-    if (NULL == (indev = lv_indev_drv_register(drv)) ){
-        puts("error register drv \n");
-    }
-    //printf("driver type: %ld\n",indev->driver->);
-    lv_indev_set_group(indev,group1);
-    //lv_print_init();
-    //lv_puts("close world");
-    //lv_example_roller_1();
+    lv_indev_drv_init(&drv);
+    drv.type = LV_INDEV_TYPE_KEYPAD;
+    
+    drv.read_cb = keypad_read;
+    indev = lv_indev_drv_register(&drv);
 
-    //lv_group_add_obj(group1,roller1);
-    //lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_ALL, NULL);
-    //lv_example_roller_2();
-    //lv_btn_2();
-    lv_example_image_1();
-    //lvgl_run();
-    ztimer_sleep(ZTIMER_MSEC,1000);
-    printf("anim running: %d\n",lv_anim_count_running());
-    thread_create(lv_timer_thread_stack, sizeof(lv_timer_thread_stack),
-                    THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
-                    lv_timer_thread, NULL, "lv_timer_thread");
+    lv_indev_set_group(indev,group1);
+    lv_print_init();
+    lv_puts("close world");
+    lv_example_roller_1();
+
+    lv_group_add_obj(group1,roller1);
+    // //lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_ALL, NULL);
+    // //lv_example_roller_2();
+    // //lv_btn_2();
+    // lv_example_image_1();
+    // printf("anim running: %d\n",lv_anim_count_running());
     return 0;
 }

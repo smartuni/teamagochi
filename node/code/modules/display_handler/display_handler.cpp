@@ -21,6 +21,7 @@
 #include "display_handler.hpp"
 #include "init_lvgl.h"
 #include "lvgl_riot.h"
+#include "lvgl/lvgl.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
@@ -30,7 +31,6 @@ DisplayHandler::DisplayHandler(){
 
 void DisplayHandler::handleEvent(msg_t *event){
     DEBUG("[DisplayHandler:handleEvent]\n");
-
      switch(event->type){
         case EVENTS::BUTTON_OK_PRESSED:
             enter_pressed();
@@ -57,6 +57,7 @@ void DisplayHandler::handleEvent(msg_t *event){
             down_click();
         break;
      }
+     lvgl_wakeup();
 
 }
 
