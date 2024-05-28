@@ -20,6 +20,9 @@
 //#include "lwm2m_handler.hpp"
 #include "display_handler.hpp"
 //#include "test_folder/test_hello.h"
+#include "io_handler.hpp"
+
+#include "test_folder/test_hello.h"
 
 using namespace std;
 
@@ -35,8 +38,8 @@ int main() {
 
   puts("{\"result\": \"PASS\"}");
 
-    //   // Show the example module function
-    //   cout << "Example Module Init: " << external_module_initialized << endl;
+  // Show the example module function
+  //cout << "Example Module Init: " << external_module_initialized << endl;
 
     //   //hello();
 
@@ -70,17 +73,9 @@ int main() {
 
     // dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
 
-    
 
-    // cout << "Sending initial ping event" << endl;
-    // msg_t message;
-    // message.type = EVENTS::PING;
-
-    // msg_try_send(&message, dispatcher->getPID());
-    //init_lvgl();
-    
-    //init_display();
-
+    IoHandler *ioHandler = new IoHandler();
+    ioHandler->init();
     
     DisplayHandler *displayHandler = new DisplayHandler();
     displayHandler->display_init();
@@ -93,9 +88,6 @@ int main() {
     dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::PIC_SWITCH}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::DOWN_CLICK}, displayHandler->getPID());
-
 
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 

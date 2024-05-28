@@ -11,17 +11,17 @@ The backend for the Teamgochi project, build with the [Quarkus](https://quarkus.
 ## Usage
 
 The development environment can be started by using the [Quarkus CLI](https://quarkus.io/guides/cli-tooling),
-the `mvnw.cmd` script (Windows) or the equivalent `./mvnw` (Linux).
+the `.\mvnw.cmd` script (Windows) or the equivalent `./mvnw` (Linux).
 
 ```shell
 quarkus dev
 
 # Maven
 ./mvnw compile quarkus:dev
-mvnw.cmd compile quarkus:dev
+.\mvnw.cmd compile quarkus:dev
 ```
 
-Run `quarkus --help`, `./mvnw quarkus --help` or `mvnw.cmd quarkus --help` to display help and all available commands.
+Run `quarkus --help`, `./mvnw quarkus --help` or `.\mvnw.cmd quarkus --help` to display help and all available commands.
 Read more about the [development mode](https://quarkus.io/guides/maven-tooling#dev-mode) or
 about the [command line interface](https://quarkus.io/guides/cli-tooling) in general.
 

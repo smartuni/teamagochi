@@ -18,6 +18,9 @@ FEATURES_REQUIRED += libstdcpp
 # Internal Modules
 EXTERNAL_MODULE_DIRS += $(CURDIR)/modules
 #USEMODULE += external_module
+#USEMODULE += lwm2m_handler
+USEMODULE += display_handler
+USEMODULE += io_handler
 
 # External modules
 USEMODULE += cpp11-compat
@@ -26,8 +29,6 @@ USEMODULE += ztimer_msec
 USEMODULE += shell
 USEMODULE += xtimer
 
-#USEMODULE += lwm2m_handler
-USEMODULE += display_handler
 
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
@@ -55,6 +56,7 @@ include $(RIOTBASE)/Makefile.include
 
 BOARD_BLACKLIST += native64
 
+CFLAGS += -DIO_HANDLER_STACKSIZE=2*1024
 
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 SERVER_URI = '"coap://[2001:db8:1::1]"'
