@@ -283,33 +283,26 @@ static uint32_t keypad_get_key(void)
 
 void enter_pressed(void){
     buttons[0].state = true;
-    puts("enter pressed\n");
 }
 
 void enter_released(void){
     buttons[0].state = false;
-    puts("enter released\n");
 }
 
 void up_pressed(void){
     buttons[1].state = true;
-    puts("up pressed\n");
 }
 
 void up_released(void){
     buttons[1].state = false;
-    puts("up released\n");
 }
 
 void down_pressed(void){
     buttons[2].state = true;
-    puts("down pressed\n");
 }
 
 void down_released(void){
-    buttons[2].state = false;
-    puts("down released\n");
-    
+    buttons[2].state = false;    
 }
 
 
