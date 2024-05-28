@@ -50,12 +50,6 @@ void DisplayHandler::handleEvent(msg_t *event){
         case EVENTS::BUTTON_DOWN_RELEASED:
             down_released();
         break;
-        case EVENTS::PIC_SWITCH:
-           image_switch();
-        break;
-        case EVENTS::DOWN_CLICK:
-            down_click();
-        break;
      }
      lvgl_wakeup();
 
