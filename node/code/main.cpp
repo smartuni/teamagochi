@@ -87,7 +87,12 @@ int main() {
     displayHandler->startDisplayThread();
     displayHandler->startInternalThread();
 
-    dispatcher->subscribe({EVENTS::BUTTON_OK_PRESS}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_OK_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_OK_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_UP_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::PIC_SWITCH}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::DOWN_CLICK}, displayHandler->getPID());
 

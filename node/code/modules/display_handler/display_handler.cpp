@@ -32,10 +32,23 @@ void DisplayHandler::handleEvent(msg_t *event){
     DEBUG("[DisplayHandler:handleEvent]\n");
 
      switch(event->type){
-        case EVENTS::BUTTON_OK_PRESS:
-            puts("starts");
-           change_button();
-           puts("ends"); 
+        case EVENTS::BUTTON_OK_PRESSED:
+            enter_pressed();
+        break;
+        case EVENTS::BUTTON_OK_RELEASED:
+            enter_released();
+        break;
+        case EVENTS::BUTTON_UP_PRESSED:
+            up_pressed();
+        break;
+        case EVENTS::BUTTON_UP_RELEASED:
+            up_released();
+        break;
+        case EVENTS::BUTTON_DOWN_PRESSED:
+            down_pressed();
+        break;
+        case EVENTS::BUTTON_DOWN_RELEASED:
+            down_released();
         break;
         case EVENTS::PIC_SWITCH:
            image_switch();
@@ -55,7 +68,7 @@ void DisplayHandler::display_run(){
 void DisplayHandler::startDisplayThread() {
     cout << "Starting display thread" << endl;
     this->display_thread_pid = thread_create(display_thread_stack, sizeof(display_thread_stack),
-                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_WOUT_YIELD, DisplayHandler::displayInitThread, this, "DisplayHandler for Class");
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_WOUT_YIELD, DisplayHandler::displayInitThread, this, "DisplayHandler for Class");             
 }
 
 void DisplayHandler::display_init(){

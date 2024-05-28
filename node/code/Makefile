@@ -57,8 +57,6 @@ BOARD_BLACKLIST += native64
 
 
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-
-
 SERVER_URI = '"coap://[2001:db8:1::1]"'
 # Configure server via CFLAGS only if not done via Kconfig
 ifndef CONFIG_LWM2M_SERVER_URI

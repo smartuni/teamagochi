@@ -34,8 +34,10 @@
 #include "ili9341.h"
 #include "ili9341_params.h"
 #include "lcd.h"
+#include "ztimer.h"
 #include "march1.h"
 #include "periph/gpio.h"
+#include "thread.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -43,8 +45,6 @@
 
 /* Must be lower than LVGL_INACTIVITY_PERIOD_MS for autorefresh */
 #define REFR_TIME           200
-
-#define GPIO_ENTER GPIO_PIN(1,8)
 
 
 //static lv_timer_t *refr_task;
@@ -63,6 +63,7 @@
 
 //init value here
 
+
 lv_obj_t * btn2;
 lv_obj_t * label ;
 lv_obj_t * img1 ;
@@ -70,11 +71,40 @@ lv_obj_t * roller1;
 lv_obj_t * roller2;
 
 lv_group_t* group1;
-struct _lv_indev_drv_t drv;
+struct _lv_indev_drv_t *drv;
+lv_indev_t * indev;
+
+
+typedef struct {
+    uint32_t button;
+    bool state;
+}button_t;
+
+button_t buttons[5];
+
+char lv_timer_thread_stack[THREAD_STACKSIZE_MAIN];
 
 //init value end
 
 //event here
+
+
+
+static uint32_t keypad_get_key(void);
+
+void *lv_timer_thread(void *arg)
+{
+    (void) arg;
+ 
+    while (1) {
+        puts("thread \n");
+        //uint32_t time_till_next = lv_timer_handler();
+        ztimer_sleep(ZTIMER_MSEC, 30);
+    }
+ 
+    return NULL;
+}
+
 
 static void event_handler(lv_event_t * e)
 {
@@ -138,7 +168,7 @@ void lv_example_roller_1(void)
 
     lv_roller_set_visible_row_count(roller1, 4);
     lv_obj_align(roller1, LV_ALIGN_CENTER, 80, -20);
-    lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_KEY, NULL);
+    lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_ALL, NULL);
 }
 
 void lv_example_roller_2(void)
@@ -155,7 +185,7 @@ void lv_example_roller_2(void)
 
     lv_roller_set_visible_row_count(roller2, 4);
     lv_obj_align(roller2, LV_ALIGN_CENTER, -80, -20);
-    lv_obj_add_event_cb(roller2, event_handler, LV_EVENT_VALUE_CHANGED, NULL);
+    lv_obj_add_event_cb(roller2, event_handler, LV_EVENT_ALL, NULL);
 }
 
 void lv_example_image_1(void)
@@ -223,55 +253,120 @@ void down_click(void)
 
 //main here
 
-void keyboard_read(struct _lv_indev_drv_t *indev, lv_indev_data_t *data){
+
+
+
+/*Will be called by the library to read the keyboard*/
+void keypad_read(struct _lv_indev_drv_t *indev, lv_indev_data_t *data){
     (void) indev;
-  data->key = LV_KEY_ENTER;            /*Get the last pressed or released key*/
-  if(!gpio_read(GPIO_ENTER)) data->state = LV_INDEV_STATE_PRESSED;
-  else data->state = LV_INDEV_STATE_RELEASED;
+    puts("timer keypad \n");
+    static uint32_t last_key = 0;
+    /*Get whether the a key is pressed and save the pressed key*/
+    uint32_t act_key = keypad_get_key();
+    if(act_key != 0) {
+        data->state = LV_INDEV_STATE_PRESSED;
+        last_key = act_key;
+    }
+    else {
+        data->state = LV_INDEV_STATE_RELEASED;
+    }
+
+    data->key = last_key;
+    printf("pressed key: %ld\n",last_key);
 }
 
-int init_lvgl(void)
+/*Get the currently being pressed key.  0 if no key is pressed*/
+static uint32_t keypad_get_key(void)
 {
-    lcd_t dev;
-    dev.driver = &lcd_ili9341_driver;
+    for (int i = 0; i <= 5; i++){
+        if (buttons[i].state){
+            switch (buttons[i].button)
+            {
+            case LV_KEY_ENTER:
+                return LV_KEY_ENTER;
+                break;
+            case LV_KEY_UP:
+                return LV_KEY_UP;
+                break;
+            case LV_KEY_DOWN:
+                return LV_KEY_DOWN;
+                break;
+            default:
+                return 0;
+                break;
+            }
+        }
+    }
+    return 0;
+}
 
-    printf("%d",ILI9341_PARAM_CS);
+void enter_pressed(void){
+    buttons[0].state = true;
+    puts("enter pressed\n");
+}
 
-    puts("lcd TFT display test application");
+void enter_released(void){
+    buttons[0].state = false;
+    puts("enter released\n");
+}
 
-    /* initialize the sensor */
-    printf("Initializing display...");
+void up_pressed(void){
+    buttons[1].state = true;
+    puts("up pressed\n");
+}
 
-    /* Enable backlight if macro is defined */
-#ifdef BACKLIGHT_ON
-  BACKLIGHT_ON;
-#endif
+void up_released(void){
+    buttons[1].state = false;
+    puts("up released\n");
+}
 
-  if (lcd_init(&dev, &ili9341_params[0]) == 0) {
-    puts("[OK]");
-  } else {
-    puts("[Failed]");
-    return 1;
-  }
-    
-    gpio_init(GPIO_ENTER,GPIO_IN);
-    lv_indev_drv_init(&drv);
-    drv.type = LV_INDEV_TYPE_KEYPAD;
-    drv.read_cb = keyboard_read;
-    lv_indev_t * indev = lv_indev_drv_register(&drv);
-    //lv_indev_drv_register(&drv);
-    lv_indev_set_group(indev,group1);
+void down_pressed(void){
+    buttons[2].state = true;
+    puts("down pressed\n");
+}
 
-    lv_print_init();
-    lv_puts("close world");
-    lv_example_roller_1();
+void down_released(void){
+    buttons[2].state = false;
+    puts("down released\n");
+}
+
+
+int init_lvgl(void)
+{  
+    buttons[0].button = LV_KEY_ENTER;
+    buttons[0].state  = false;
+    buttons[1].button = LV_KEY_UP;
+    buttons[1].state  = false;
+    buttons[2].button = LV_KEY_DOWN;
+    buttons[2].state  = false;
+    buttons[3].button = LV_KEY_LEFT;
+    buttons[3].state  = false;
+    buttons[4].button = LV_KEY_RIGHT;
+    buttons[4].state  = false;
 
     group1 = lv_group_create();
-    lv_group_add_obj(group1,roller1);
+    lv_indev_drv_init(drv);
+    drv->type = LV_INDEV_TYPE_KEYPAD;
+    drv->read_cb = keypad_read;
+    if (NULL == (indev = lv_indev_drv_register(drv)) ){
+        puts("error register drv \n");
+    }
+    //printf("driver type: %ld\n",indev->driver->);
+    lv_indev_set_group(indev,group1);
+    //lv_print_init();
+    //lv_puts("close world");
+    //lv_example_roller_1();
+
+    //lv_group_add_obj(group1,roller1);
     //lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_ALL, NULL);
     //lv_example_roller_2();
     //lv_btn_2();
     lv_example_image_1();
     //lvgl_run();
+    ztimer_sleep(ZTIMER_MSEC,1000);
+    printf("anim running: %d\n",lv_anim_count_running());
+    thread_create(lv_timer_thread_stack, sizeof(lv_timer_thread_stack),
+                    THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
+                    lv_timer_thread, NULL, "lv_timer_thread");
     return 0;
 }
