@@ -83,7 +83,12 @@
         "lv_example_widgets.h": "c",
         "lv_roller.h": "c",
         "gpio.h": "c",
-        "disp_dev.h": "c"
+        "disp_dev.h": "c",
+        "lv_hal_tick.h": "c",
+        "auto_init.h": "c",
+        "lv_event.h": "c",
+        "lv_group.h": "c",
+        "lv_hal_indev.h": "c"
     },
     "[shellscript][c][cpp]": {
         "editor.tabSize": 4,
