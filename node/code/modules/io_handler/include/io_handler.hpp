@@ -25,7 +25,6 @@ class IoHandler : public DispatchHandler{
     private:
     public:
         IoHandler();
-
         void init();
         void handleEvent(msg_t *event);
 
