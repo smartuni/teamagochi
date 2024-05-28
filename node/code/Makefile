@@ -69,7 +69,8 @@ CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
 # Uncomment to enable Wakaama debug log
 #CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
 # Specific the server URI  address (NOTE: Domain names not supported yet)
-LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
+#LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
+LWM2M_SERVER_URI ?= '"coap://[fd00:dead:beef::1]:5683"'
 # Configure via CFLAGS only if not done via Kconfig
 ifndef CONFIG_LWM2M_SERVER_URI
   CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(LWM2M_SERVER_URI)

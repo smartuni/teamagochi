@@ -17,10 +17,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "liblwm2m.h"
 #include "lwm2m_client.h"
 #include "pet_model.h"
+#include "byteorder.h"
 
 #define ENABLE_DEBUG    1
 #include "debug.h"
@@ -329,52 +331,54 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     //     lwm2m_data_(data, &instance->name);
     //     break;
     case LWM2M_PET_COLOR_ID:
+        puts("color\n");
         lwm2m_data_decode_int(data,&value);
-        instance->color = (int32_t) value;
+        instance->color = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        
         break;
     case LWM2M_PET_HAPPINESS_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->happiness = (int32_t) value;
+        instance->happiness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_WELLBEING_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->wellbeing = (int32_t) value;
+        instance->wellbeing = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_HEALTH_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->health = (int32_t) value;
+        instance->health = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_XP_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->xp = (int32_t) value;
+        instance->xp = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_HUNGER_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->hunger = (int32_t) value;
+        instance->hunger = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_CLEANLINESS_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->cleanliness = (int32_t) value;
+        instance->cleanliness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_FUN_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->fun = (int32_t) value;
+        instance->fun = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break; 
     case LWM2M_PET_FEED_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->feed = (int32_t) value;
+        instance->feed = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_MEDICATE_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->medicate = (int32_t) value;
+        instance->medicate = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_PLAY_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->play = (int32_t) value;
+        instance->play = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_CLEAN_ID:
         lwm2m_data_decode_int(data, &value);
-        instance->clean = (int32_t) value;
+        instance->clean = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
         break;
     case LWM2M_PET_HUNGRY_ID:
         lwm2m_data_decode_bool(data, &instance->hungry);
@@ -415,7 +419,7 @@ static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data
 
     i = 0;
     do {
-        DEBUG("[lwm2m pet:write]: write resource %d\n", (num_data));
+        DEBUG("[lwm2m pet:write]: write resource %d\n", (data_array)[i].id);
         result = _set_value(&(data_array)[i], instance);
         i++;
     } while (i < num_data && COAP_204_CHANGED == result);
