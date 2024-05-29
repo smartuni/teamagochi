@@ -31,6 +31,8 @@
 #include "lvgl/src/hal/lv_hal_indev.h"
 #include "disp_dev.h"
 #include "init_lvgl.h"
+#include "ili9341.h"
+#include "ili9341_params.h"
 #include "lcd.h"
 #include "ztimer.h"
 #include "xtimer.h"

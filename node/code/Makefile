@@ -21,7 +21,6 @@ FEATURES_REQUIRED += libstdcpp
 USEMODULE += io_handler
 USEMODULE += display_handler
 EXTERNAL_MODULE_DIRS += modules
-USEMODULE += auto_init
 
 # External modules
 USEMODULE += cpp11-compat
