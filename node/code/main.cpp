@@ -20,7 +20,7 @@
 //#include "lwm2m_handler.hpp"
 #include "display_handler.hpp"
 //#include "test_folder/test_hello.h"
-#include "io_handler.hpp"
+//#include "io_handler.hpp"
 
 #include "test_folder/test_hello.h"
 
@@ -74,20 +74,20 @@ int main() {
     // dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
 
 
-    IoHandler *ioHandler = new IoHandler();
-    ioHandler->init();
+    // IoHandler *ioHandler = new IoHandler();
+    // ioHandler->init();
     
-    DisplayHandler *displayHandler = new DisplayHandler();
-    displayHandler->display_init();
-    displayHandler->startDisplayThread();
-    displayHandler->startInternalThread();
+    // DisplayHandler *displayHandler = new DisplayHandler();
+    // displayHandler->display_init();
+    // displayHandler->startDisplayThread();
+    // displayHandler->startInternalThread();
 
-    dispatcher->subscribe({EVENTS::BUTTON_OK_PRESSED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::BUTTON_OK_RELEASED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::BUTTON_UP_PRESSED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_OK_PRESSED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_OK_RELEASED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_UP_PRESSED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
+    // dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
 
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 

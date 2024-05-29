@@ -16,8 +16,12 @@ FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
 # Internal Modules
-EXTERNAL_MODULE_DIRS += $(CURDIR)/modules
-#USEMODULE += external_module
+# Teamagotchi MODULES
+#USEMODULE += lwm2m_handler
+USEMODULE += io_handler
+USEMODULE += display_handler
+EXTERNAL_MODULE_DIRS += modules
+USEMODULE += auto_init
 
 # External modules
 USEMODULE += cpp11-compat
@@ -26,13 +30,9 @@ USEMODULE += ztimer_msec
 USEMODULE += shell
 USEMODULE += xtimer
 
-#USEMODULE += lwm2m_handler
-USEMODULE += display_handler
-USEMODULE += io_handler
-
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
-SHOULD_RUN_KCONFIG ?=
+#SHOULD_RUN_KCONFIG ?=
 
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
@@ -50,19 +50,20 @@ CXXEXFLAGS += -std=c++20 -Wall -Wextra
 # reverted in C++23 because it wasn't thought through
 CXXEXFLAGS += -Wno-volatile
 
-#include $(CURDIR)/modules/lwm2m/Makefile.include
-include $(RIOTBASE)/Makefile.include
-
 
 BOARD_BLACKLIST += native64
 
 
+include $(RIOTBASE)/Makefile.include
+
+
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-SERVER_URI = '"coap://[2001:db8:1::1]"'
 # Configure server via CFLAGS only if not done via Kconfig
 ifndef CONFIG_LWM2M_SERVER_URI
   CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(SERVER_URI)
 endif
+
+
 
 CFLAGS += -DDISPLAY_STACKSIZE=2*1024
 
@@ -74,3 +75,5 @@ else ifneq (,$(filter esp%,$(CPU_FAM)))
 else
   CFLAGS += -DTHREAD_STACKSIZE_MAIN=2*1024
 endif
+
+

@@ -7,6 +7,15 @@ extern "C" {
 #include "lvgl/lvgl.h"
 
 
+#ifndef ILI9341_PARAM_CS
+// PIN 10 on the feather
+#define ILI9341_PARAM_CS GPIO_PIN(0, 27)
+#endif
+#ifndef ILI9341_PARAM_DCX
+// PIN 11 on the feather
+#define ILI9341_PARAM_DCX GPIO_PIN(0, 6)
+#endif
+
 void *lv_timer_thread(void *arg);
 int init_lvgl(void);
 void lv_puts(char *c);
