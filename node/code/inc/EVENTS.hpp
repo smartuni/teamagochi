@@ -19,6 +19,10 @@ extern "C" enum EVENTS: uint16_t {
     BUTTON_RIGHT_RELEASED,
     PET_FEED,
     PET_PLAY,
-    PET_WASH,
+    PET_CLEAN,
     PET_MEDICATE,
+    PET_HUNGRY,
+    PET_ILL,
+    PET_BORED,
+    PET_DIRTY,
 };

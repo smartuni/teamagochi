@@ -3,6 +3,7 @@ BOARD = feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
+TEAMAGOTCHI_NODES_BASE = $(CURDIR)
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
@@ -19,8 +20,9 @@ FEATURES_REQUIRED += periph_gpio_irq
 # Internal Modules
 # Teamagotchi MODULES
 #USEMODULE += lwm2m_handler
-USEMODULE += io_handler
+#USEMODULE += io_handler
 USEMODULE += display_handler
+USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
 
 # External modules
@@ -50,18 +52,32 @@ CXXEXFLAGS += -std=c++20 -Wall -Wextra
 # reverted in C++23 because it wasn't thought through
 CXXEXFLAGS += -Wno-volatile
 
-
 BOARD_BLACKLIST += native64
 
-include $(RIOTBASE)/Makefile.include
-
-
+## DEBUG
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-# Configure server via CFLAGS only if not done via Kconfig
-ifndef CONFIG_LWM2M_SERVER_URI
-  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(SERVER_URI)
-endif
 
+##### LWM2M #####
+LWM2M_SERVER_SHORT_ID ?= 1 
+CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
+# Uncomment to enable Wakaama debug log
+#CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
+# Specific the server URI  address (NOTE: Domain names not supported yet)
+#LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
+LWM2M_SERVER_URI ?= '"coap://[fd00:dead:beef::1]:5683"'
+# Configure via CFLAGS only if not done via Kconfig
+ifndef CONFIG_LWM2M_SERVER_URI
+  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(LWM2M_SERVER_URI)
+  CFLAGS += -DCONFIG_LWM2M_SERVER_SHORT_ID=$(LWM2M_SERVER_SHORT_ID)
+  CFLAGS += -DCONFIG_DTLS_PEER_MAX=2
+  CFLAGS += -DCONFIG_MAX_BUF=1024
+  # Uncomment to enable Wakaama debug log
+  
+endif
+##### /LWM2M #####
+
+
+include $(RIOTBASE)/Makefile.include
 
 
 CFLAGS += -DDISPLAY_STACKSIZE=2*1024
@@ -75,4 +91,18 @@ else
   CFLAGS += -DTHREAD_STACKSIZE_MAIN=2*1024
 endif
 
+
+# Note that this will probably only work for me <3
+windows: all
+	@echo "Creating UF2"
+	@python RIOT/dist/tools/uf2/uf2conv.py -f 0xADA52840 bin/feather-nrf52840-sense/teamagotchi.hex --base 0x1000 -c
+	@echo "Flashing UF2 via Windows (Make sure your device is actually at D)"
+	@powershell.exe -command "cp ./flash.uf2 d:/flash.uf2"
+	@echo "Connecting COM via USBIPD (Make sure you have the USBIPD installed + your device bound to the WSL)"
+	@sleep 3
+	@usbipd.exe attach --wsl -i 1209:7d00 
+	@sleep 3
+	@echo "Connected :D"
+	@echo "Cleaning up uf2 flash file"
+	@rm flash.uf2
 

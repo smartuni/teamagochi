@@ -17,11 +17,10 @@
 // Example Module Import
 //#include "external_module.h"
 //LWM2M Handler Import
-//#include "lwm2m_handler.hpp"
 #include "display_handler.hpp"
-//#include "test_folder/test_hello.h"
+#include "lwm2m_handler.hpp"
 
-#include "test_folder/test_hello.h"
+//#include "test_folder/test_hello.h"
 
 using namespace std;
 
@@ -37,14 +36,14 @@ int main() {
 
   puts("{\"result\": \"PASS\"}");
 
-  // Show the example module function
-  //cout << "Example Module Init: " << external_module_initialized << endl;
+    //   // Show the example module function
+    //   cout << "Example Module Init: " << external_module_initialized << endl;
 
     //   //hello();
 
     //   cout << "Sleeping for 5 seconds...\n" << endl;
     //   riot::this_thread::sleep_for(chrono::seconds(5));
-//   cout << "Done sleeping.\n" << endl;
+    //   cout << "Done sleeping.\n" << endl;
 
     // Create the dispatcher
     Dispatcher *dispatcher = new Dispatcher();
@@ -65,12 +64,13 @@ int main() {
 //    dispatcher->subscribe({EVENTS::PING}, ping->getPID());
 //    dispatcher->subscribe({EVENTS::PONG}, pong->getPID());
     
-    // Lwm2mHandler *lwm2mHandler = new Lwm2mHandler();
-    // lwm2mHandler->lwm2m_handler_init();
-    // lwm2mHandler->lwm2m_handler_start();
-    // lwm2mHandler->startInternalThread();
+    Lwm2mHandler *lwm2mHandler = new Lwm2mHandler();
+    lwm2mHandler->lwm2m_handler_init();
+    lwm2mHandler->lwm2m_handler_start();
+    lwm2mHandler->startInternalThread();
 
-    // dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
+    dispatcher->subscribe({EVENTS::PET_FEED}, lwm2mHandler->getPID());
+
     
     DisplayHandler *displayHandler = new DisplayHandler();
     displayHandler->display_init();
@@ -87,10 +87,9 @@ int main() {
     dispatcher->subscribe({EVENTS::BUTTON_LEFT_RELEASED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_RIGHT_PRESSED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_RIGHT_RELEASED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::PET_FEED}, displayHandler->getPID());
-    dispatcher->subscribe({EVENTS::PET_PLAY}, displayHandler->getPID());
-    msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 
+
+    msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
     shell_loop();
     
   return 0;
