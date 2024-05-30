@@ -52,7 +52,6 @@ CXXEXFLAGS += -Wno-volatile
 
 BOARD_BLACKLIST += native64
 
-
 include $(RIOTBASE)/Makefile.include
 
 

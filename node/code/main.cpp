@@ -88,7 +88,12 @@ int main() {
     dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
     dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
-
+    dispatcher->subscribe({EVENTS::BUTTON_LEFT_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_LEFT_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_RIGHT_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_RIGHT_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::PET_FEED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::PET_PLAY}, displayHandler->getPID());
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
 
     shell_loop();

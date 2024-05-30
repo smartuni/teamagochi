@@ -1,5 +1,6 @@
 USEMODULE += auto_init
 USEMODULE += ili9341
+USEMODULE += lcd
 # Lvgl Related Modules
 DISABLE_MODULE += test_utils_interactive_sync
 USEPKG += lvgl
@@ -11,3 +12,8 @@ USEMODULE += lvgl_extra_theme_default
 USEMODULE += lvgl_extra_theme_default_dark
 USEMODULE += lvgl_widget_roller
 USEMODULE += lvgl_widget_label
+USEMODULE += lvgl_widget_bar
+USEMODULE += lvgl_extra_widget_spinner
+USEMODULE += lvgl_widget_arc
+USEMODULE += lvgl_extra_layout_flex
+USEMODULE += lvgl_extra_widget_tabview

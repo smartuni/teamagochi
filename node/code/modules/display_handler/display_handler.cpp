@@ -50,9 +50,21 @@ void DisplayHandler::handleEvent(msg_t *event){
         case EVENTS::BUTTON_DOWN_RELEASED:
             down_released();
         break;
+        case EVENTS::BUTTON_LEFT_PRESSED:
+            left_pressed();
+        break;
+        case EVENTS::BUTTON_LEFT_RELEASED:
+            left_released();
+        break;
+        case EVENTS::BUTTON_RIGHT_PRESSED:
+            right_pressed();
+        break;
+        case EVENTS::BUTTON_RIGHT_RELEASED:
+            right_released();
+        break;
      }
-     lvgl_wakeup();
-
+    lvgl_wakeup();
+    // lv_disp_trig_activity(NULL);
 }
 
 void DisplayHandler::display_run(){
@@ -67,5 +79,6 @@ void DisplayHandler::startDisplayThread() {
 }
 
 void DisplayHandler::display_init(){
+    dispatcher_pid_lvgl = DISPATCHER_PID;
     init_lvgl();
 }
