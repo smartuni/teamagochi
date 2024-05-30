@@ -23,11 +23,10 @@
 #include "io_handler.hpp"
 
 IoHandler::IoHandler(){
-
 }
 
 void IoHandler::init(){
-    dispatcher_pid = DispatchHandler::getPID();
+    dispatcher_pid = DISPATCHER_PID;
     init_buttons();
 }
 

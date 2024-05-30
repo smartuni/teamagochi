@@ -23,6 +23,9 @@
 #include "board.h"
 #include "periph/gpio.h"
 
+#define ENABLE_DEBUG  1
+#include "debug.h"
+
 //TODO Workaround
 kernel_pid_t dispatcher_pid;
 uint16_t BUTTON_OK_PRESSED = 4;
@@ -70,12 +73,12 @@ void button_up_callback (void *arg)
     (void) arg; /* the argument is not used */
     msg_t message;
     if (!gpio_read(button_up)) {
-        printf("Button up pressed!\n");
+        DEBUG("Button up pressed!\n");
         message.type = BUTTON_UP_PRESSED;
         msg_try_send(&message, dispatcher_pid);
     }
     else {
-        printf("Button up released!\n");
+        DEBUG("Button up released!\n");
         message.type = BUTTON_UP_RELEASED;
         msg_try_send(&message, dispatcher_pid);
     }
@@ -86,12 +89,12 @@ void button_left_callback (void *arg)
     (void) arg; /* the argument is not used */
     msg_t message;
     if (!gpio_read(button_left)) {
-        printf("Button left pressed!\n");
+        DEBUG("Button left pressed!\n");
         message.type = BUTTON_LEFT_PRESSED;
         msg_try_send(&message, dispatcher_pid);
     }
     else {
-        printf("Button left released!\n");
+        DEBUG("Button left released!\n");
         message.type = BUTTON_LEFT_RELEASED;
         msg_try_send(&message, dispatcher_pid);
     }
@@ -102,12 +105,12 @@ void button_down_callback (void *arg)
     (void) arg; /* the argument is not used */
     msg_t message;
     if (!gpio_read(button_down)) {
-        printf("Button down pressed!\n");
+        DEBUG("Button down pressed!\n");
         message.type = BUTTON_DOWN_PRESSED;
         msg_try_send(&message, dispatcher_pid);
     }
     else {
-        printf("Button down released!\n");
+        DEBUG("Button down released!\n");
         message.type = BUTTON_DOWN_RELEASED;
         msg_try_send(&message, dispatcher_pid);
     }
@@ -118,12 +121,12 @@ void button_right_callback (void *arg)
     (void) arg; /* the argument is not used */
     msg_t message;
     if (!gpio_read(button_right)) {
-        printf("Button right pressed!\n");
+        DEBUG("Button right pressed!\n");
         message.type = BUTTON_RIGHT_PRESSED;
         msg_try_send(&message, dispatcher_pid);
     }
     else {
-        printf("Button right released!\n");
+        DEBUG("Button right released!\n");
         message.type = BUTTON_RIGHT_RELEASED;
         msg_try_send(&message, dispatcher_pid);
     }
@@ -134,12 +137,12 @@ void button_ok_callback (void *arg)
     (void) arg; /* the argument is not used */
     msg_t message;
     if (!gpio_read(button_ok)) {
-        printf("Button ok pressed!\n");
+        DEBUG("Button ok pressed!\n");
         message.type = BUTTON_OK_PRESSED;
         msg_try_send(&message, dispatcher_pid);
     }
     else {
-        printf("Button ok released!\n");
+        DEBUG("Button ok released!\n");
         message.type = BUTTON_OK_RELEASED;
         msg_try_send(&message, dispatcher_pid);
     }
