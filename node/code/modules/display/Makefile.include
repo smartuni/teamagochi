@@ -1,1 +1,0 @@
-INCLUDES += -I$(TEAMAGOTCHI_NODES_BASE)/modules/display/include
