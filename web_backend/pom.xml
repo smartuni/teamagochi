@@ -9,6 +9,9 @@
     <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
     <checkstyle.version>10.13.0</checkstyle.version>
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
+    <jakarta.validation.version>3.0.2</jakarta.validation.version>
+    <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
+    <lombok.version>1.18.32</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -17,7 +20,6 @@
     <quarkus.platform.version>3.9.4</quarkus.platform.version>
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
-    <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -41,7 +43,24 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-h2</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -50,9 +69,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>jakarta.ws.rs</groupId>
-        <artifactId>jakarta.ws.rs-api</artifactId>
-        <version>${jakarta.ws.rs.version}</version>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>${jakarta.ws.rs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>${jakarta.validation.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -134,6 +163,13 @@
         <groupId>org.jsonschema2pojo</groupId>
         <artifactId>jsonschema2pojo-maven-plugin</artifactId>
         <version>1.2.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <sourceDirectory>src/main/resources/jsonschema/events</sourceDirectory>
           <targetPackage>haw.teamagochi.backend.leshanclient.sse</targetPackage>
@@ -145,13 +181,6 @@
           <includeGetters>false</includeGetters>
           <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
