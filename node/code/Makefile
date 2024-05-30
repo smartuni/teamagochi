@@ -14,6 +14,7 @@ DIR += test_folder
 
 FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
+FEATURES_REQUIRED += periph_gpio_irq
 
 # Internal Modules
 # Teamagotchi MODULES
