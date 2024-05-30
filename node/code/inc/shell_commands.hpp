@@ -51,5 +51,5 @@ void shell_loop(void) {
     cout << "Starting shell loop" << endl;
 
     /* run the shell, this will block the thread waiting for incoming commands */
-    shell_run_forever(SHELL_COMMANDS, line_buf, SHELL_DEFAULT_BUFSIZE);
+    shell_run(SHELL_COMMANDS, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
