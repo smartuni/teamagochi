@@ -17,6 +17,7 @@
 // Example Module Import
 //#include "external_module.h"
 //LWM2M Handler Import
+#include "display_handler.hpp"
 #include "lwm2m_handler.hpp"
 
 //#include "test_folder/test_hello.h"

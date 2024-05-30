@@ -19,7 +19,7 @@ FEATURES_REQUIRED += libstdcpp
 # Internal Modules
 # Teamagotchi MODULES
 #USEMODULE += lwm2m_handler
-USEMODULE += io_handler
+#USEMODULE += io_handler
 USEMODULE += display_handler
 USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
@@ -51,17 +51,12 @@ CXXEXFLAGS += -std=c++20 -Wall -Wextra
 # reverted in C++23 because it wasn't thought through
 CXXEXFLAGS += -Wno-volatile
 
-#include $(CURDIR)/modules/lwm2m/Makefile.include
-include $(RIOTBASE)/Makefile.include
-
-
 BOARD_BLACKLIST += native64
 
 ## DEBUG
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
 ##### LWM2M #####
-#SERVER_URI = '"coap://[2001:db8:1::1]:5684"'
 LWM2M_SERVER_SHORT_ID ?= 1 
 CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
 # Uncomment to enable Wakaama debug log
@@ -76,22 +71,12 @@ ifndef CONFIG_LWM2M_SERVER_URI
   CFLAGS += -DCONFIG_DTLS_PEER_MAX=2
   CFLAGS += -DCONFIG_MAX_BUF=1024
   # Uncomment to enable Wakaama debug log
-  CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
+  
 endif
 ##### /LWM2M #####
 
 
-BOARD_BLACKLIST += native64
-
 include $(RIOTBASE)/Makefile.include
-
-
-CFLAGS += -DDEBUG_ASSERT_VERBOSE
-# Configure server via CFLAGS only if not done via Kconfig
-ifndef CONFIG_LWM2M_SERVER_URI
-  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(SERVER_URI)
-endif
-
 
 
 CFLAGS += -DDISPLAY_STACKSIZE=2*1024

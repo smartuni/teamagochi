@@ -48,7 +48,7 @@
 kernel_pid_t dispatcher_pid_lvgl;
 uint16_t PET_FEED = 14;
 uint16_t PET_PLAY = 15;
-uint16_t PET_WASH = 16;
+uint16_t PET_CLEAN = 16;
 uint16_t PET_MEDICATE = 17;
 
 lv_obj_t * roller1;
@@ -128,7 +128,7 @@ static void menu_cb(lv_event_t * e){
         }else if (key == LV_KEY_ENTER && (img_index_pairs[current_img_index].event == PET_FEED || 
                                           img_index_pairs[current_img_index].event == PET_PLAY ||
                                           img_index_pairs[current_img_index].event == PET_MEDICATE ||
-                                          img_index_pairs[current_img_index].event == PET_WASH)){
+                                          img_index_pairs[current_img_index].event == PET_CLEAN)){
             msg_t message;
             message.type = img_index_pairs[current_img_index].event ;
             msg_try_send(&message, dispatcher_pid_lvgl);
@@ -423,7 +423,7 @@ void init_menu(void){
     img_index_pairs[1].event = PET_PLAY;
     img_index_pairs[2].img = wash_ico;
     img_index_pairs[2].index = 2;
-    img_index_pairs[2].event = PET_WASH;   
+    img_index_pairs[2].event = PET_CLEAN;   
     img_index_pairs[3].img = medicate_ico;
     img_index_pairs[3].index = 3; 
     img_index_pairs[3].event = PET_MEDICATE;  
