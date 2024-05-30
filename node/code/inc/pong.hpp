@@ -12,6 +12,7 @@
 #include "mbox.h"
 #include "dispatch_handler.hpp"
 
+
 /**
  * @brief Ping is a simple class to showcase the DispatchHandler.
  * @details This class will send a ping event every second.

@@ -10,13 +10,10 @@
 #include "dispatch_handler.hpp"
 #include "dispatcher.hpp"
 #include "shell.h"
-//#include "init_display.h"
-//#include "init_lvgl.h"
 #include "ping.hpp"
 #include "pong.hpp"
 #include "riot/thread.hpp"
 #include "shell_commands.hpp"
-
 // Example Module Import
 //#include "external_module.h"
 //LWM2M Handler Import
@@ -45,7 +42,7 @@ int main() {
 
     //   cout << "Sleeping for 5 seconds...\n" << endl;
     //   riot::this_thread::sleep_for(chrono::seconds(5));
-//   cout << "Done sleeping.\n" << endl;
+    //   cout << "Done sleeping.\n" << endl;
 
     // Create the dispatcher
     Dispatcher *dispatcher = new Dispatcher();
@@ -74,16 +71,25 @@ int main() {
     dispatcher->subscribe({EVENTS::PET_FEED}, lwm2mHandler->getPID());
 
     
+    DisplayHandler *displayHandler = new DisplayHandler();
+    displayHandler->display_init();
+    displayHandler->startDisplayThread();
+    displayHandler->startInternalThread();
 
-    // cout << "Sending initial ping event" << endl;
-    // msg_t message;
-    // message.type = EVENTS::PING;
+    dispatcher->subscribe({EVENTS::BUTTON_OK_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_OK_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_UP_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_UP_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_DOWN_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_DOWN_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_LEFT_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_LEFT_RELEASED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_RIGHT_PRESSED}, displayHandler->getPID());
+    dispatcher->subscribe({EVENTS::BUTTON_RIGHT_RELEASED}, displayHandler->getPID());
 
-    // msg_try_send(&message, dispatcher->getPID());
 
     msg_init_queue(_shell_queue, SHELL_QUEUE_SIZE);
-
     shell_loop();
-
+    
   return 0;
 }
