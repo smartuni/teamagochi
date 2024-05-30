@@ -20,7 +20,6 @@
 //#include "lwm2m_handler.hpp"
 #include "display_handler.hpp"
 //#include "test_folder/test_hello.h"
-#include "io_handler.hpp"
 
 #include "test_folder/test_hello.h"
 
@@ -72,10 +71,6 @@ int main() {
     // lwm2mHandler->startInternalThread();
 
     // dispatcher->subscribe({EVENTS::PET_HUNGRY}, lwm2mHandler->getPID());
-
-
-    IoHandler *ioHandler = new IoHandler();
-    ioHandler->init();
     
     DisplayHandler *displayHandler = new DisplayHandler();
     displayHandler->display_init();
