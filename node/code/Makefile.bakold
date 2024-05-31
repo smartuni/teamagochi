@@ -3,29 +3,24 @@ BOARD = feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
-TEAMAGOTCHI_NODES_BASE = $(CURDIR)
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
 DEVELHELP ?= 1
 
-# Include test_folder example to showcase directories being included
-# DIR += test_folder
-
-# FEATURES_REQUIRED += cpp
-# FEATURES_REQUIRED += libstdcpp
-FEATURES_REQUIRED += periph_gpio_irq
+FEATURES_REQUIRED += cpp
+FEATURES_REQUIRED += libstdcpp
 
 # Internal Modules
 # Teamagotchi MODULES
+#USEMODULE += lwm2m_handler
 USEMODULE += io_handler
 USEMODULE += display_handler
-USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
 
 # External modules
-# USEMODULE += cpp11-compat
+USEMODULE += cpp11-compat
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
@@ -44,12 +39,17 @@ CFLAGS += -std=c17 -Wall -Wextra
 
 # Set the C++ standard to C++20 [C++23 with all the cool stuff is not yet supported]
 # and enable all warnings
-# CXXEXFLAGS += -std=c++20 -Wall -Wextra
+CXXEXFLAGS += -std=c++20 -Wall -Wextra
 
 # Disable volatile warnings
 # C++20 introduced a deprecation for this, which was then
 # reverted in C++23 because it wasn't thought through
-# CXXEXFLAGS += -Wno-volatile
+CXXEXFLAGS += -Wno-volatile
+
+
+#include $(CURDIR)/modules/lwm2m/Makefile.include
+include $(RIOTBASE)/Makefile.include
+
 
 BOARD_BLACKLIST += native64
 
@@ -57,12 +57,12 @@ BOARD_BLACKLIST += native64
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
 ##### LWM2M #####
+#SERVER_URI = '"coap://[2001:db8:1::1]:5684"'
 LWM2M_SERVER_SHORT_ID ?= 1 
 CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
 # Uncomment to enable Wakaama debug log
 #CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
 # Specific the server URI  address (NOTE: Domain names not supported yet)
-#LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
 LWM2M_SERVER_URI ?= '"coap://[fd00:dead:beef::1]:5683"'
 # Configure via CFLAGS only if not done via Kconfig
 ifndef CONFIG_LWM2M_SERVER_URI
@@ -71,14 +71,10 @@ ifndef CONFIG_LWM2M_SERVER_URI
   CFLAGS += -DCONFIG_DTLS_PEER_MAX=2
   CFLAGS += -DCONFIG_MAX_BUF=1024
   # Uncomment to enable Wakaama debug log
-  
+  CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
 endif
 ##### /LWM2M #####
 
-
-include $(RIOTBASE)/Makefile.include
-
-CFLAGS += -DDISPLAY_STACKSIZE=2*1024
 
 # SDL requires more stack
 ifneq (,$(filter native native64,$(BOARD)))
@@ -103,4 +99,6 @@ windows: all
 	@echo "Connected :D"
 	@echo "Cleaning up uf2 flash file"
 	@rm flash.uf2
+
+
 

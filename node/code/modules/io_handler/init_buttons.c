@@ -22,24 +22,10 @@
 
 #include "board.h"
 #include "periph/gpio.h"
+#include "events.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
-
-//TODO Workaround
-kernel_pid_t dispatcher_pid;
-uint16_t BUTTON_OK_PRESSED = 4;
-uint16_t BUTTON_OK_RELEASED = 5;
-uint16_t BUTTON_UP_PRESSED = 6;
-uint16_t BUTTON_UP_RELEASED = 7;
-uint16_t BUTTON_LEFT_PRESSED = 8;
-uint16_t BUTTON_LEFT_RELEASED = 9;
-uint16_t BUTTON_DOWN_PRESSED = 10;
-uint16_t BUTTON_DOWN_RELEASED = 11;
-uint16_t BUTTON_RIGHT_PRESSED = 12;
-uint16_t BUTTON_RIGHT_RELEASED = 13;
-
-
 
 //TODO: change the actual pin layout according to PCB Design
 gpio_t button_ok = GPIO_PIN(0, 5); //PIN A1
@@ -71,80 +57,65 @@ int init_buttons(void)
 void button_up_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    msg_t message;
     if (!gpio_read(button_up)) {
         DEBUG("Button up pressed!\n");
-        message.type = BUTTON_UP_PRESSED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_UP_PRESSED);
     }
     else {
         DEBUG("Button up released!\n");
-        message.type = BUTTON_UP_RELEASED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_UP_RELEASED);
     }
 }
 
 void button_left_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    msg_t message;
     if (!gpio_read(button_left)) {
         DEBUG("Button left pressed!\n");
-        message.type = BUTTON_LEFT_PRESSED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_LEFT_PRESSED);
     }
     else {
         DEBUG("Button left released!\n");
-        message.type = BUTTON_LEFT_RELEASED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_LEFT_RELEASED);
     }
 }
 
 void button_down_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    msg_t message;
     if (!gpio_read(button_down)) {
         DEBUG("Button down pressed!\n");
-        message.type = BUTTON_DOWN_PRESSED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_DOWN_PRESSED);
     }
     else {
         DEBUG("Button down released!\n");
-        message.type = BUTTON_DOWN_RELEASED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_DOWN_RELEASED);
     }
 }
 
 void button_right_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    msg_t message;
-    if (!gpio_read(button_right)) {
-        DEBUG("Button right pressed!\n");
-        message.type = BUTTON_RIGHT_PRESSED;
-        msg_try_send(&message, dispatcher_pid);
-    }
-    else {
-        DEBUG("Button right released!\n");
-        message.type = BUTTON_RIGHT_RELEASED;
-        msg_try_send(&message, dispatcher_pid);
-    }
+    // if (!gpio_read(button_right)) {
+    //     DEBUG("Button right pressed!\n");
+    //     trigger_event_input(BUTTON_RIGHT_PRESSED);
+    // }
+    // else {
+    //     DEBUG("Button right released!\n");
+    //     trigger_event_input(BUTTON_RIGHT_RELEASED);
+    // }
 }
 
 void button_ok_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    msg_t message;
     if (!gpio_read(button_ok)) {
         DEBUG("Button ok pressed!\n");
-        message.type = BUTTON_OK_PRESSED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_OK_PRESSED);
     }
     else {
         DEBUG("Button ok released!\n");
-        message.type = BUTTON_OK_RELEASED;
-        msg_try_send(&message, dispatcher_pid);
+        trigger_event_input(BUTTON_OK_RELEASED);
     }
 }
 

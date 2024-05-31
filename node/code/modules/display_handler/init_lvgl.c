@@ -31,25 +31,11 @@
 #include "lvgl/src/hal/lv_hal_indev.h"
 #include "disp_dev.h"
 #include "init_lvgl.h"
-#include "ili9341.h"
-#include "ili9341_params.h"
-#include "lcd.h"
-#include "ztimer.h"
-#include "xtimer.h"
-#include "march1.h"
-#include "periph/gpio.h"
-#include "thread.h"
+#include "events.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
 #define CHART_POINT_NUM     100
-
-//TODO Workaround
-kernel_pid_t dispatcher_pid_lvgl;
-uint16_t PET_FEED = 14;
-uint16_t PET_PLAY = 15;
-uint16_t PET_CLEAN = 16;
-uint16_t PET_MEDICATE = 17;
 
 lv_obj_t * roller1;
 
@@ -81,7 +67,7 @@ lv_obj_t * wash_ico;
 lv_obj_t * medicate_ico;
 lv_obj_t * info_ico;
 typedef struct {
-    uint16_t event;
+    EVENT_T event;
     lv_obj_t * img;
     int8_t index;
 } img_index_pair_t;
@@ -129,9 +115,9 @@ static void menu_cb(lv_event_t * e){
                                           img_index_pairs[current_img_index].event == PET_PLAY ||
                                           img_index_pairs[current_img_index].event == PET_MEDICATE ||
                                           img_index_pairs[current_img_index].event == PET_CLEAN)){
-            msg_t message;
-            message.type = img_index_pairs[current_img_index].event ;
-            msg_try_send(&message, dispatcher_pid_lvgl);
+            // msg_t message;
+            // message.type = img_index_pairs[current_img_index].event ;
+            // msg_try_send(&message, dispatcher_pid_lvgl);
         }
     }
 }

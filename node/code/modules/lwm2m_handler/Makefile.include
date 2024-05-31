@@ -1,5 +1,6 @@
-#DIRS += $(TEAMAGOTCHI_NODES_BASE)/modules/lwm2m_handler/contrib
+# #DIRS += $(TEAMAGOTCHI_NODES_BASE)/modules/lwm2m_handler/contrib
 
-# Use an immediate variable to evaluate `MAKEFILE_LIST` now
-USEMODULE_INCLUDES_lwm2m := $(LAST_MAKEFILEDIR)/include
-USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_lwm2m)
+# # Use an immediate variable to evaluate `MAKEFILE_LIST` now
+# USEMODULE_INCLUDES_lwm2m := $(LAST_MAKEFILEDIR)/include
+# USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_lwm2m)
+INCLUDES += -I$(LAST_MAKEFILEDIR)/include

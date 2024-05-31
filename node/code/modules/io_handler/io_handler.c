@@ -20,23 +20,21 @@
 #include "debug.h"
 
 #include "init_buttons.h"
-#include "io_handler.hpp"
+#include "io_handler.h"
 
-IoHandler::IoHandler(){
-}
-
-void IoHandler::init(){
-    dispatcher_pid = DISPATCHER_PID;
+void io_init(void){
     init_buttons();
 }
 
-void IoHandler::handleEvent(msg_t *event){
+handler_result_t ioHandler_handleEvent(EVENT_T event){
     DEBUG("[IoHandler:handleEvent]\n");
-    (void) event;
-    // switch(event->type){
-    //     case EVENTS::VIBRATE :
-    //         DEBUG("[IoHandler:handleEvent]: vibrate\n");
-    //         vibrate();
-    //         break;
-    // }s
+    switch(event){
+        case VIBRATE:
+            DEBUG("[IoHandler:handleEvent]: vibrate\n");
+            // vibrate();
+        break;
+        default:
+        break;
+    }
+    return EVENT_HANDLED;
 }

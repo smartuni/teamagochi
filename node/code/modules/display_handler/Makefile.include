@@ -5,4 +5,3 @@
 
 
 INCLUDES += -I$(LAST_MAKEFILEDIR)/include
-INCLUDES += -I$(LAST_MAKEFILEDIR)/image
