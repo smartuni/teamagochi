@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.device.dataaccess.repository;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -8,7 +9,8 @@ import java.util.List;
 @ApplicationScoped
 public class DeviceRepository implements PanacheRepository<DeviceEntity> {
 
-  public List<DeviceEntity> findByOwner(long userID) {
-    return list("owner", userID);
+  // TODO: Was passiert wenn user == null?
+  public List<DeviceEntity> findByOwner(UserEntity user) {
+    return list("owner", user);
   }
 }

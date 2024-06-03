@@ -3,7 +3,7 @@ package haw.teamagochi.backend.user.logic;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import java.util.UUID;
 
-public interface UserService {
+public interface UserUseCase {
 
   /**
    * Creates a user and saves it persistently in the database.
@@ -12,5 +12,7 @@ public interface UserService {
    * @return persisted user object
    */
   UserEntity createUser(UUID uuid);
+
+  void deleteAll();
 
 }

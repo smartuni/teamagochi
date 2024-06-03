@@ -11,4 +11,6 @@ public interface PetTypeUseCase {
    * @return persisted pet type object
    */
   PetTypeEntity createPetType(String name);
+
+  void deleteAll();
 }

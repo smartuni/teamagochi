@@ -38,9 +38,11 @@ public class DeviceUseCaseImpl implements DeviceUseCase {
     return deviceRepository.findById(deviceID);
   }
 
-  // TODO: das hier unbedingt testen!
   public List<DeviceEntity> getDevices(long userID) {
-    return deviceRepository.findByOwner(userID);
+    UserEntity user = userRepository.findById(userID);
+    if (user == null) throw new NullPointerException("User not found in database.");
+
+    return deviceRepository.findByOwner(user);
   }
 
   @Override
