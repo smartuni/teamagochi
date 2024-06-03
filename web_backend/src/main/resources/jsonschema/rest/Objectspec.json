@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Objectspec",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "instancetype": {
+      "type": "string"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "urn": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "lwm2mversion": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "description2": {
+      "type": "string"
+    },
+    "resourcedefs": {
+      "type": "array",
+      "items": {
+        "$ref": "ObjectspecResourcedef.json"
+      }
+    }
+  },
+  "required": [
+    "description",
+    "description2",
+    "id",
+    "instancetype",
+    "lwm2mversion",
+    "mandatory",
+    "name",
+    "resourcedefs",
+    "urn",
+    "version"
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Updated",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -7,27 +8,11 @@
       "$ref": "Registration.json"
     },
     "update": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "registrationId": {
-          "type": "string"
-        },
-        "address": {
-          "type": "string"
-        },
-        "secure": {
-          "type": "boolean"
-        },
-        "additionalAttributes": {
-          "$ref": "AdditionalAttributes.json"
-        }
-      }
+      "$ref": "UpdatedUpdate.json"
     }
   },
   "required": [
     "registration",
     "update"
-  ],
-  "title": "Updated"
+  ]
 }

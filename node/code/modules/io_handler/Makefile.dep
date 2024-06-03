@@ -1,0 +1,5 @@
+ifneq (,$(filter io_handler,$(USEMODULE))) # if module in USEMODULE
+  USEMODULE += periph_gpio_irq
+endif
+
+
