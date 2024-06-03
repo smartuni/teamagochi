@@ -1,22 +1,23 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
-import { useState } from 'react'
-import './App.css'
-import LinkDevice from './Components/LinkDevice'
-import Footer from './Components/Footer';
-import Navbar from './Components/Navbar/Navbar'
+import { useState } from "react";
+import "./App.css";
+import LinkDevice from "./Components/LinkDevice";
+import Footer from "./Components/Footer";
+import Navbar from "./Components/Navbar/Navbar";
+import Pet from "./Components/Pet/Pet";
 
 function App() {
   const auth = useAuth();
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   switch (auth.activeNavigator) {
-    case 'signinSilent':
+    case "signinSilent":
       return <div>Signing you in...</div>;
-    case 'signoutRedirect':
+    case "signoutRedirect":
       return <div>Signing you out...</div>;
   }
-  
+
   if (auth.isLoading) {
     return <div>Loading...</div>;
   }
@@ -30,10 +31,9 @@ function App() {
     return (
       <div>
         <div>
-          <h1 className='font-extrabold text-9xl'>
+          <h1 className="font-extrabold text-9xl">
             Click <a href="./docs">HERE</a> for Docs!
           </h1>
-
         </div>
         <h1>Frontend Demo Page</h1>
         <div className="card">
@@ -42,9 +42,7 @@ function App() {
           </button>
           <button onClick={() => void auth.removeUser()}>Log out</button>
         </div>
-        <p className="read-the-docs">
-          Hello
-        </p>
+        <p className="read-the-docs">Hello</p>
         <div>Hello {auth.user?.profile.sub}</div>
       </div>
     );
@@ -53,9 +51,10 @@ function App() {
   return (
     <div>
       <Navbar />
-      <button onClick={() => void auth.signinRedirect()}>Log in</button>  
+      <button onClick={() => void auth.signinRedirect()}>Log in</button>
+      <Pet />
     </div>
-  ) 
+  );
 }
 
 export default App;

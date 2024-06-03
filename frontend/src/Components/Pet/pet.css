@@ -1,0 +1,28 @@
+.pet_container{
+    display: flex;
+    flex-direction: row;
+}
+
+.pet_image{
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin: 2rem;
+}
+
+.pet_image img{
+    height: 100%;
+    width: 100%;
+}
+
+.pet_status_container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    margin: 2rem;
+    width: 95vw;
+}
