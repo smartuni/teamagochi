@@ -4,7 +4,10 @@
   "type": "string",
   "enum": [
     "U",
+    "S",
     "US",
-    "UQ"
+    "UQ",
+    "SQ",
+    "USQ"
   ]
 }

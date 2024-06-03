@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "Client",
+  "title": "ClientDto",
+  "description": "Representation of a LwM2M client as provided by the Leshan Server.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -12,11 +13,11 @@
     },
     "registrationDate": {
       "type": "integer",
-      "format": "utc-millisec"
+      "format": "date-time"
     },
     "lastUpdate": {
       "type": "integer",
-      "format": "utc-millisec"
+      "format": "date-time"
     },
     "address": {
       "type": "string"
