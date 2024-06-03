@@ -1,6 +1,6 @@
 BOARD ?= feather-nrf52840-sense
 UPLINK ?= cdc-ecm
-PREFIX_CONF ?= uhcpd
+PREFIX_CONF ?= uhcp
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../../RIOT
 
