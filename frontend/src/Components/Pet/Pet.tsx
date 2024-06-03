@@ -11,34 +11,28 @@ const Pet = () => {
         <img src={petImage} alt="pet name" />
       </div>
       <div className="pet_status_container">
-        <div className="pet_status_name">(Pet name)</div>
-        <div className="pet_status_HP">
-          HP
+        <div className="pet_status_contents pet_status_name">(Pet name)</div>
+        <div className="pet_status_contents pet_status_HP">
           <ProgressBar
             // className="space"
-            label={"My Progress Red"}
+            label={"HP"}
             progressColor={"red"}
-            darkTheme
             score={25}
           />
         </div>
-        <div className="pet_status_HP">
-          Happiness
+        <div className="pet_status_contents pet_status_Happiness">
           <ProgressBar
             className="space"
-            label={"My Progress Purple"}
+            label={"Happiness"}
             progressColor={"purple"}
-            darkTheme
             score={50}
           />
         </div>
-        <div className="pet_status_HP">
-          XP
+        <div className="pet_status_contents pet_status_XP">
           <ProgressBar
             className="space"
-            label={"My Progress Green"}
+            label={"XP"}
             progressColor={"green"}
-            darkTheme
             score={80}
           />
         </div>

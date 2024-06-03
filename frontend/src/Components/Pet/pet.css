@@ -23,6 +23,9 @@
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    margin: 2rem;
-    width: 95vw;
+}
+
+.pet_status_contents{
+    width: 90%;
+    margin: 1rem;
 }
