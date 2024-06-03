@@ -8,7 +8,7 @@
       "$ref": "Registration.json"
     },
     "update": {
-      "$ref": "../common/Update.json"
+      "$ref": "UpdatedUpdate.json"
     }
   },
   "required": [
