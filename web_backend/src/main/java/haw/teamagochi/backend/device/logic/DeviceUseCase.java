@@ -4,7 +4,7 @@ package haw.teamagochi.backend.device.logic;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 
-public interface DeviceService {
+public interface DeviceUseCase {
 
   /**
    * Creates a device and saves it persistently in the database.
