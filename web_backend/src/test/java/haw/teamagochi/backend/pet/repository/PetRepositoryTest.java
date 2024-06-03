@@ -10,6 +10,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,9 +47,9 @@ public class PetRepositoryTest {
   }
 
 
-  @BeforeEach
+  @AfterEach
   @Transactional
-  public void beforeEach() {
+  public void afterEach() {
 
     // Deletion order important?
     petRepository.deleteAll();

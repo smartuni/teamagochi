@@ -3,6 +3,7 @@ package haw.teamagochi.backend.device.logic;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
+import java.util.List;
 
 public interface DeviceUseCase {
 
@@ -26,5 +27,9 @@ public interface DeviceUseCase {
    * Deletes all devices from the database.
    */
   void deleteAll();
+
+  DeviceEntity getDevice(long deviceID);
+
+  List<DeviceEntity> getDevices(long userID);
 
 }

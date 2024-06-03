@@ -16,4 +16,8 @@ public class PetTypeUseCaseImpl implements PetTypeUseCase {
     petTypeRepository.persist(petType);
     return petType;
   }
+
+  public void deleteAll() {
+    petTypeRepository.deleteAll();
+  }
 }

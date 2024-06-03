@@ -51,9 +51,12 @@ public class PetUseCaseImpl implements PetUseCase {
     return petRepository.deleteById(petID);
   }
 
-  //TODO: das hier testen!!
+
   public List<PetEntity> getPets(long userID) {
-    return petRepository.findByOwner(userID);
+    UserEntity user = userRepository.findById(userID);
+    if (user == null) throw new NullPointerException("User not found in database.");
+
+    return petRepository.findByOwner(user);
   }
 
   public void changeDevice(long petID, long deviceID) {
@@ -63,5 +66,9 @@ public class PetUseCaseImpl implements PetUseCase {
     if (pet == null|device ==null) throw new NullPointerException("Either device or pet not found in the database.");
 
     pet.setDevice(device);
+  }
+
+  public void deleteAll() {
+    petRepository.deleteAll();
   }
 }
