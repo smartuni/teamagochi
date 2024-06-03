@@ -1,5 +1,5 @@
 APPLICATION = teamagotchi
-BOARD = feather-nrf52840-sense
+BOARD ?= feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
@@ -15,13 +15,12 @@ DEVELHELP ?= 1
 
 # FEATURES_REQUIRED += cpp
 # FEATURES_REQUIRED += libstdcpp
-FEATURES_REQUIRED += periph_gpio_irq
 
 # Internal Modules
 # Teamagotchi MODULES
 USEMODULE += io_handler
 USEMODULE += display_handler
-USEMODULE += lwm2m_handler
+# USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
 
 # External modules
@@ -29,8 +28,6 @@ EXTERNAL_MODULE_DIRS += modules
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
-USEMODULE += xtimer
-
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
 #SHOULD_RUN_KCONFIG ?=
@@ -55,7 +52,7 @@ BOARD_BLACKLIST += native64
 
 ## DEBUG
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-
+FEATURES_BLACKLIST +=  tinyusb
 ##### LWM2M #####
 LWM2M_SERVER_SHORT_ID ?= 1 
 CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'

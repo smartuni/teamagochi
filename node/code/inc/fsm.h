@@ -25,8 +25,8 @@ extern "C" {
 #include "event.h"
 #include "events.h"
 
-void *fsm_thread(void * arg);
-void fsm_handle(event_t *event);
+void fsm_start_thread(void);
+
 /**
  * @brief   event handler type definition
  */

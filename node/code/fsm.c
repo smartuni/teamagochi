@@ -5,12 +5,15 @@
 
 #include "event.h"
 #include "events.h"
-#include "lwm2m_handler.h"
+#include "msg.h"
+// #include "lwm2m_handler.h"
 #include "display_handler.h"
 #include "io_handler.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
+
+char fsm_thread_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
 typedef struct hierarchical_state state_t;
 
@@ -27,6 +30,8 @@ struct hierarchical_state {
 handler_result_t testHandler(EVENT_T event);
 void main_state_init_entry_handler(void);
 handler_result_t main_state_init_handler(EVENT_T event);
+void fsm_handle(EVENT_T event);
+void *fsm_thread(void * arg);
 // // This is an array of root (top most) states .
 // static const state_t Top_Level[] = {{
 //     top_level_awake_handler,        // state handler
@@ -142,34 +147,45 @@ static const state_t RunningState[] = {{
 
 static const state_t *currentState = &MainState[0];
 
+void fsm_start_thread(void){
+    set_t_events_pid(thread_create(fsm_thread_stack, sizeof(fsm_thread_stack),
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
+                  fsm_thread, NULL, "fsm_thread"));
+}
+
 void *fsm_thread(void *arg) {
   (void)arg;
+  DEBUG("[FSM:thread]: start\n");
   currentState->Entry();
-  events_handler_init(fsm_handle);
-  events_start();
+//   events_handler_init(fsm_handle);
+    events_start(fsm_handle);
+
   return NULL;
 }
 
-void fsm_handle(event_t *event) {
-  puts("handle\n");
-  team_event_t *t_event = container_of(event, team_event_t, super);
+void fsm_handle(EVENT_T event) {
+    DEBUG("[FSM:fsm_handle]: handle\n");
+    // team_event_t *t_event = container_of(event, team_event_t, super_event);
+    // DEBUG("[FSM:fsm_handle]: event defined: %d\n",t_event->event);
+    handler_result_t result = currentState->Handler(event);
+    if (result != EVENT_HANDLED) {
+        const state_t *pState = currentState;
+        do {
+        // check if state has parent state.
+        if (pState->Parent == NULL)  // Is Node reached top
+        {
+            DEBUG("[FSM:fsm_handle]: Fatal error, terminating.\n");
+            // This is a fatal error. terminate state machine.
+            return;
+        }
 
-  handler_result_t result = currentState->Handler(t_event->event);
-  if (result != EVENT_HANDLED) {
-    const state_t *pState = currentState;
-    do {
-      // check if state has parent state.
-      if (pState->Parent == NULL)  // Is Node reached top
-      {
-        // This is a fatal error. terminate state machine.
-        return;
-      }
-
-      pState = pState->Parent;  // traverse to parent state
-    } while (pState->Handler ==
-             NULL);  // repeat again if parent state doesn't have handler
-    pState->Handler(t_event->event);
-  }
+        pState = pState->Parent;  // traverse to parent state
+        } while (pState->Handler ==
+                NULL);  // repeat again if parent state doesn't have handler
+        pState->Handler(event);
+    }else{
+        DEBUG("[FSM:fsm_handle]: Event handled\n");
+    }
 }
 
 void traverse_state(state_t target_state) {
@@ -201,17 +217,19 @@ handler_result_t testHandler(EVENT_T event) {
 }
 
 void main_state_init_entry_handler(void) {
-  lwm2m_handler_init();
-  lwm2m_handler_start();
-  io_init();
-  display_init();
-  startDisplayThread();
+    DEBUG("[FSM:init_entry]\n");
+    // lwm2m_handler_init();
+    // lwm2m_handler_start();
+    io_init();
+    display_init();
+    startDisplayThread();
 }
 
 handler_result_t main_state_init_handler(EVENT_T event) {
-    DEBUG("[FSM:main_state_init_handler]\n");
-    lwm2m_handleEvent(event);
-    displayHandler_handleEvent(event);
+    DEBUG("[FSM:main_state_init_handler]: lwm2m handle\n");
+    // lwm2m_handleEvent(event);
     ioHandler_handleEvent(event);
+    displayHandler_handleEvent(event);
+    
     return EVENT_HANDLED;
 }

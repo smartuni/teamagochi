@@ -23,6 +23,7 @@ extern "C" {
 #endif
 
 #include "event.h"
+#include "thread.h"
 
 typedef enum {
     UNDEFINED,
@@ -52,7 +53,7 @@ typedef enum {
 }EVENT_T;
 
 typedef struct {
-    event_t super;
+    event_t super_event;
     EVENT_T event;
 } team_event_t;
 
@@ -65,11 +66,9 @@ typedef enum
   TRIGGERED_TO_SELF,
 }handler_result_t;
 
-void trigger_event_input(EVENT_T event);
 void trigger_event(EVENT_T event);
-void events_handler_init(event_handler_t handlerfn);
-void events_start(void);
-event_queue_t * get_queue_standard(void);
+void events_start(void (*fsm_callback)(EVENT_T event));
+void set_t_events_pid(kernel_pid_t pid);
 
 #ifdef __cplusplus
 }

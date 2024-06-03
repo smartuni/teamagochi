@@ -27,7 +27,6 @@
 #define ENABLE_DEBUG  1
 #include "debug.h"
 
-//TODO: change the actual pin layout according to PCB Design
 gpio_t button_ok = GPIO_PIN(0, 5); //PIN A1
 gpio_t button_right = GPIO_PIN(0, 30); //PIN sA2
 gpio_t button_up = GPIO_PIN(0, 28); //PIN A3
@@ -59,11 +58,11 @@ void button_up_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_up)) {
         DEBUG("Button up pressed!\n");
-        trigger_event_input(BUTTON_UP_PRESSED);
+        trigger_event(BUTTON_UP_PRESSED);
     }
     else {
         DEBUG("Button up released!\n");
-        trigger_event_input(BUTTON_UP_RELEASED);
+        trigger_event(BUTTON_UP_RELEASED);
     }
 }
 
@@ -72,11 +71,11 @@ void button_left_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_left)) {
         DEBUG("Button left pressed!\n");
-        trigger_event_input(BUTTON_LEFT_PRESSED);
+        trigger_event(BUTTON_LEFT_PRESSED);
     }
     else {
         DEBUG("Button left released!\n");
-        trigger_event_input(BUTTON_LEFT_RELEASED);
+        trigger_event(BUTTON_LEFT_RELEASED);
     }
 }
 
@@ -85,25 +84,25 @@ void button_down_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_down)) {
         DEBUG("Button down pressed!\n");
-        trigger_event_input(BUTTON_DOWN_PRESSED);
+        trigger_event(BUTTON_DOWN_PRESSED);
     }
     else {
         DEBUG("Button down released!\n");
-        trigger_event_input(BUTTON_DOWN_RELEASED);
+        trigger_event(BUTTON_DOWN_RELEASED);
     }
 }
 
 void button_right_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
-    // if (!gpio_read(button_right)) {
-    //     DEBUG("Button right pressed!\n");
-    //     trigger_event_input(BUTTON_RIGHT_PRESSED);
-    // }
-    // else {
-    //     DEBUG("Button right released!\n");
-    //     trigger_event_input(BUTTON_RIGHT_RELEASED);
-    // }
+    if (!gpio_read(button_right)) {
+        DEBUG("Button right pressed!\n");
+        trigger_event(BUTTON_RIGHT_PRESSED);
+    }
+    else {
+        DEBUG("Button right released!\n");
+        trigger_event(BUTTON_RIGHT_RELEASED);
+    }
 }
 
 void button_ok_callback (void *arg)
@@ -111,11 +110,11 @@ void button_ok_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_ok)) {
         DEBUG("Button ok pressed!\n");
-        trigger_event_input(BUTTON_OK_PRESSED);
+        trigger_event(BUTTON_OK_PRESSED);
     }
     else {
         DEBUG("Button ok released!\n");
-        trigger_event_input(BUTTON_OK_RELEASED);
+        trigger_event(BUTTON_OK_RELEASED);
     }
 }
 

@@ -1,32 +1,33 @@
 #include "events.h"
 #include "event.h"
 
-static event_queue_t queues[2];
-static event_handler_t handler_fn;
+#define ENABLE_DEBUG  1
+#include "debug.h"
 
-event_queue_t * get_queue_standard(void){
-    return &queues[1];
-    // return &queues[1];
+#define RCV_QUEUE_SIZE  (8)
+
+kernel_pid_t t_events_pid;
+static msg_t rcv_queue[RCV_QUEUE_SIZE];
+
+void set_t_events_pid(kernel_pid_t pid){
+    t_events_pid = pid;
 }
 
-void trigger_event_input(EVENT_T event){
-    team_event_t t_event = {.super.handler = handler_fn, .event = event};
-    event_post(&queues[0],&t_event.super);
-}
-
-
-void trigger_event(EVENT_T event){
-    team_event_t t_event = {.super.handler = handler_fn, .event = event};
-    event_post(&queues[1],&t_event.super);
-}
-
-
-void events_handler_init(event_handler_t handlerfn){
-    handler_fn = handlerfn;
-    event_queues_init(queues,2);
+void trigger_event(EVENT_T _event){
+    DEBUG("event input \n");
+    msg_t msg;
+    msg.type = _event;
+    if (msg_try_send(&msg, t_events_pid) == 0) {
+            printf("Receiver queue full.\n");
+        }
 }
 
 
-void events_start(void){  
-    event_loop_multi(queues,2);
+void events_start(void (*fsm_callback)(EVENT_T event)){  
+    msg_t msg;
+    msg_init_queue(rcv_queue, RCV_QUEUE_SIZE);
+    while (1) {
+        msg_receive(&msg);
+        fsm_callback(msg.type);
+    }
 }
