@@ -1,14 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "Awake",
+  "title": "Attributes",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "ep": {
+    "rt": {
+      "type": "string"
+    },
+    "ver": {
+      "type": "string"
+    },
+    "ct": {
       "type": "string"
     }
   },
-  "required": [
-    "ep"
-  ]
+  "required": []
 }
