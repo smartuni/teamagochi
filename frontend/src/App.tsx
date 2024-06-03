@@ -1,12 +1,13 @@
 import React from "react";
-import { useAuth } from "react-oidc-context";
+//import { useAuth } from "react-oidc-context";
 import { useState } from 'react'
 import './App.css'
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
+import Settings from './Components/Settings'
 
 function App() {
-  const auth = useAuth();
+  /*const auth = useAuth();
   const [count, setCount] = useState(0)
 
   switch (auth.activeNavigator) {
@@ -50,6 +51,11 @@ function App() {
   }
 
   return <button onClick={() => void auth.signinRedirect()}>Log in</button>;
+  */
+  return[
+    <Settings/>,
+  <Footer/>
+  ];
 }
 
 export default App;
