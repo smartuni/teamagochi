@@ -1,18 +1,22 @@
 package haw.teamagochi.backend.pet.dataaccess.model;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
@@ -30,6 +34,10 @@ public class PetEntity {
   private long id;
 
   public PetEntity() {}
+
+  @NonNull
+  @ManyToOne
+  private UserEntity owner;
 
 
   @NonNull
