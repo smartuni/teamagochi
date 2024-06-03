@@ -28,14 +28,30 @@ function App() {
 
   if (auth.isAuthenticated) {
     return (
-      <div>
+      <div style={{ backgroundColor: '#F5F5DC'}}>
         <div>
-          <h1 className='font-extrabold text-9xl'>
-            Click <a href="./docs">HERE</a> for Docs!
+        <div><Navbar /> </div>
+        <h1 >WELCOME TO TEAMAGOCHI GANG</h1>
+          <h1 className='font-extrabold text-9xl' >
+             <a href="https://www.youtube.com/watch?v=sf0PJsknZiM">CARTI </a>
           </h1>
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
+          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />  
+          
+
+          
 
         </div>
-        <h1>Frontend Demo Page</h1>
         <div className="card">
           <button onClick={() => setCount((count) => count + 1)}>
             count is {count}[]
@@ -52,8 +68,7 @@ function App() {
 
   return (
     <div>
-      <Navbar />
-      <button onClick={() => void auth.signinRedirect()}>Log in</button>  
+      <Navbar /> 
     </div>
   ) 
 }
