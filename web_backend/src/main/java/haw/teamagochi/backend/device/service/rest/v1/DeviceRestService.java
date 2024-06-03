@@ -11,14 +11,11 @@ import java.util.List;
 
 //@RegisterRestClient //needed for oidc??
 @Path("Device")
-public class DeviceAPI {
+public class DeviceRestService {
 //Map Struct --> Mapper --> entitys auf json
   @Inject
   DeviceMapper deviceMapper;
-  RegistrationManager registrationManager; //how does quarkus load the API --> how to pass the registrationManager instance
-  DeviceAPI(RegistrationManager registrationManager){
-    this.registrationManager = registrationManager;
-  }
+
 
   /**
    * @param userAuthToken --> the user to get the devices for

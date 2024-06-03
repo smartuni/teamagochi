@@ -8,7 +8,16 @@ import org.mapstruct.Mapping;
 //ggf als abstrct class um custom mappings zu erstellen --> ermöglicht nutzen von methoden??!
 @Mapper(componentModel="cdi")
 public interface PetMapper {
-  @Mapping(source = "id", target = "PetID")
+  @Mapping(target = "petID", expression = "java(pet.getId())")
+  @Mapping(target ="petName", expression = "java(pet.getName())")
+  @Mapping(target ="happiness", expression = "java(pet.getHappiness())")
+  @Mapping(target ="wellbeing", expression = "java(pet.getWellbeing())")
+  @Mapping(target ="health", expression = "java(pet.getHealth())")
+  @Mapping(target ="hunger", expression = "java(pet.getHunger())")
+  @Mapping(target ="cleanliness", expression = "java(pet.getCleanliness())")
+  @Mapping(target ="fun", expression = "java(pet.getFun())")
+  @Mapping(target = "petTypeName", expression = "java(pet.getPetType().toString())")
+
   @Mapping(target ="level", expression = "java(computeLevel(pet))")
   @Mapping(target ="levelProgress", expression = "java(computeProgress(pet))")
   PetDTO toResource(PetEntity pet);
