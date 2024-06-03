@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.leshanclient.eventlistener;
+package haw.teamagochi.backend.device.logic.clients.sse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,6 +9,7 @@ import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,10 +62,10 @@ public class EventObjectMapperTests {
   }
 
   @Test
-  public void testCoaplogMapper() throws IOException {
+  public void testCoaplogMapper() throws IOException, ParseException {
     File jsonFile = new File("src/test/resources/fixtures/json/Coaplog.json");
     CoaplogDto dto = objectMapper.readValue(jsonFile, CoaplogDto.class);
 
-    assertEquals(1715613660326L, dto.timestamp);
+    assertEquals("Mon May 13 17:21:00 CEST 2024", dto.timestamp.toString());
   }
 }

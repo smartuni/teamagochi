@@ -1,6 +1,6 @@
-package haw.teamagochi.backend.leshanclient.eventlistener.filter;
+package haw.teamagochi.backend.device.logic.clients.sse.filter;
 
-import haw.teamagochi.backend.leshanclient.eventlistener.EventType;
+import haw.teamagochi.backend.device.logic.clients.sse.EventType;
 import org.jboss.resteasy.reactive.client.SseEvent;
 
 /**

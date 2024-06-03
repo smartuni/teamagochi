@@ -180,10 +180,12 @@
           <annotationStyle>jackson</annotationStyle>
           <serializable>true</serializable>
           <classNameSuffix>Dto</classNameSuffix>
-          <includeToString>false</includeToString>
+          <includeToString>true</includeToString>
           <includeSetters>false</includeSetters>
           <includeGetters>false</includeGetters>
           <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
+          <includeTypeInfo>false</includeTypeInfo>
+          <useTitleAsClassname>false</useTitleAsClassname>
         </configuration>
       </plugin>
     </plugins>

@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.leshanclient.logic;
+package haw.teamagochi.backend.device.logic;
 
 import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
