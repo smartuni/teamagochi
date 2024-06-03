@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.device.service.rest.v1.model;
+package haw.teamagochi.backend.device.service.rest.v1.mapper;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;

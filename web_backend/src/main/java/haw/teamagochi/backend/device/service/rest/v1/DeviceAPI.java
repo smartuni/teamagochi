@@ -1,6 +1,6 @@
 package haw.teamagochi.backend.device.service.rest.v1;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
-import haw.teamagochi.backend.device.service.rest.v1.model.DeviceMapper;
+import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.app.Services.RegistrationManager;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

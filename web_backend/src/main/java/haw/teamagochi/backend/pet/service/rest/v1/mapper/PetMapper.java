@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.pet.service.rest.v1.model;
+package haw.teamagochi.backend.pet.service.rest.v1.mapper;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
