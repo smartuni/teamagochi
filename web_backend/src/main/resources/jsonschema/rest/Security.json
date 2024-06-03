@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Security",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "endpoint": {
+      "type": "string"
+    },
+    "registrationId": {
+      "type": "string"
+    },
+    "registrationDate": {
+      "type": "integer",
+      "format": "date-time"
+    },
+    "lastUpdate": {
+      "type": "integer",
+      "format": "date-time"
+    },
+    "address": {
+      "type": "string"
+    },
+    "lwM2mVersion": {
+      "type": "string"
+    },
+    "lifetime": {
+      "type": "integer"
+    },
+    "bindingMode": {
+      "$ref": "../common/BindingMode.json"
+    },
+    "rootPath": {
+      "$ref": "../common/RootPath.json"
+    },
+    "objectLinks": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/ObjectLink.json"
+      }
+    },
+    "secure": {
+      "type": "boolean"
+    },
+    "additionalRegistrationAttributes": {
+      "$ref": "../common/AdditionalRegistrationAttributes.json"
+    },
+    "queuemode": {
+      "type": "boolean"
+    },
+    "availableInstances": {
+      "$ref": "../common/AvailableInstances.json"
+    },
+    "sleeping": {
+      "type": "boolean"
+    },
+    "smsNumber": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "additionalRegistrationAttributes",
+    "address",
+    "availableInstances",
+    "bindingMode",
+    "endpoint",
+    "lastUpdate",
+    "lifetime",
+    "lwM2mVersion",
+    "objectLinks",
+    "queuemode",
+    "registrationDate",
+    "registrationId",
+    "rootPath",
+    "secure"
+  ]
+}
