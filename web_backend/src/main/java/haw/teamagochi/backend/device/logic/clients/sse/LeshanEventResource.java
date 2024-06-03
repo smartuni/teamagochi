@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.leshanclient.eventlistener.client;
+package haw.teamagochi.backend.device.logic.clients.sse;
 
 import io.smallrye.mutiny.Multi;
 import jakarta.inject.Singleton;

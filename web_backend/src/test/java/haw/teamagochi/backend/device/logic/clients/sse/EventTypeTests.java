@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.leshanclient.eventlistener;
+package haw.teamagochi.backend.device.logic.clients.sse;
 
 import static org.junit.jupiter.api.Assertions.*;
 

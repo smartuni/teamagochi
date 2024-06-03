@@ -1,11 +1,11 @@
-package haw.teamagochi.backend.leshanclient.eventlistener.client;
+package haw.teamagochi.backend.device.logic.clients.sse;
 
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.AwakeEventFilter;
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.CoaplogEventFilter;
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.DeregistrationEventFilter;
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.RegistrationEventFilter;
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.SleepingEventFilter;
-import haw.teamagochi.backend.leshanclient.eventlistener.filter.UpdatedEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.AwakeEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.CoaplogEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.DeregistrationEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.RegistrationEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.SleepingEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.UpdatedEventFilter;
 import io.smallrye.mutiny.Multi;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.GET;
