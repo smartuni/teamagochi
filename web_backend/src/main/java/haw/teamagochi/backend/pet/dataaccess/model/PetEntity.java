@@ -71,10 +71,6 @@ public class PetEntity {
   private PetTypeEntity petType;
 
 
-  @OneToOne
-  @Nullable
-  private DeviceEntity device;
-
 
   @Override
   public boolean equals(Object o) {
