@@ -19,19 +19,26 @@
 #define LWM2M_TEAMAGOTCHI_HANDLER_T
 
 #include "events.h"
-#include "event.h"
 
 #ifndef LWM2M_SERVER_ID
 #define LWM2M_SERVER_ID 0
 #endif
 
-
+/**
+ * @brief Inits the Handler
+ */
 void lwm2m_handler_init(void);
 
+/**
+ * @brief Start the handler Thread
+ */
 void lwm2m_handler_start(void);
 
-int lwm2m_handler_cli(int argc, char **argv);
-
+/**
+ * @brief Handler for the FSM states
+ *
+ * @param[in] event Event which should be handled
+ */
 handler_result_t lwm2m_handleEvent(EVENT_T event);
 
 

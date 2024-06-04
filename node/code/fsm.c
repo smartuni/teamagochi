@@ -3,10 +3,8 @@
 
 #include <stdio.h>
 
-#include "event.h"
 #include "events.h"
-#include "msg.h"
-// #include "lwm2m_handler.h"
+#include "lwm2m_handler.h"
 #include "display_handler.h"
 #include "io_handler.h"
 
@@ -154,19 +152,16 @@ void fsm_start_thread(void){
 }
 
 void *fsm_thread(void *arg) {
-  (void)arg;
-  DEBUG("[FSM:thread]: start\n");
-  currentState->Entry();
-//   events_handler_init(fsm_handle);
+    (void)arg;
+    DEBUG("[FSM:thread]: start\n");
+    currentState->Entry();
     events_start(fsm_handle);
 
-  return NULL;
+    return NULL;
 }
 
 void fsm_handle(EVENT_T event) {
     DEBUG("[FSM:fsm_handle]: handle\n");
-    // team_event_t *t_event = container_of(event, team_event_t, super_event);
-    // DEBUG("[FSM:fsm_handle]: event defined: %d\n",t_event->event);
     handler_result_t result = currentState->Handler(event);
     if (result != EVENT_HANDLED) {
         const state_t *pState = currentState;
@@ -205,21 +200,10 @@ void traverse_state(state_t target_state) {
   if (currentState->Entry) currentState->Entry();
 }
 
-handler_result_t testHandler(EVENT_T event) {
-  switch (event) {
-    case PET_FEED:
-      puts("PET feed");
-      break;
-    default:
-      break;
-  }
-  return EVENT_HANDLED;
-}
-
 void main_state_init_entry_handler(void) {
     DEBUG("[FSM:init_entry]\n");
-    // lwm2m_handler_init();
-    // lwm2m_handler_start();
+    lwm2m_handler_init();
+    lwm2m_handler_start();
     io_init();
     display_init();
     startDisplayThread();
@@ -227,7 +211,7 @@ void main_state_init_entry_handler(void) {
 
 handler_result_t main_state_init_handler(EVENT_T event) {
     DEBUG("[FSM:main_state_init_handler]: lwm2m handle\n");
-    // lwm2m_handleEvent(event);
+    lwm2m_handleEvent(event);
     ioHandler_handleEvent(event);
     displayHandler_handleEvent(event);
     

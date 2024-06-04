@@ -10,9 +10,9 @@
  *
  * @{
  * @file
- * @brief       
+ * @brief    FSM for the Teamagotchi Project   
  *
- * @author      
+ * @author  Moritz Holzer <moritz.holzer@haw-hamburg.de>
  */
 
 #ifndef FSM_H
@@ -22,9 +22,11 @@
 extern "C" {
 #endif
 
-#include "event.h"
 #include "events.h"
 
+/**
+ * @brief Starts the Thread of the FSM
+ */
 void fsm_start_thread(void);
 
 /**

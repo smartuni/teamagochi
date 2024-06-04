@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 
+ * Copyright (C) 2024 HAW-Hamburg
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -10,9 +10,10 @@
  *
  * @{
  * @file
- * @brief       
+ * @brief   Events for the Teamagotchi
  *
- * @author      
+ * @author  Moritz Holzer <moritz.holzer@haw-hamburg.de>
+ * @}  
  */
 
 #ifndef EVENTS_H_T
@@ -25,6 +26,8 @@ extern "C" {
 #include "event.h"
 #include "thread.h"
 
+
+/* Enum of all Events */
 typedef enum {
     UNDEFINED,
     TERMINATE,
@@ -52,12 +55,7 @@ typedef enum {
     VIBRATE,
 }EVENT_T;
 
-typedef struct {
-    event_t super_event;
-    EVENT_T event;
-} team_event_t;
-
-
+/* Enum of the fsm handler return values*/
 typedef enum
 {
   EVENT_HANDLED,      //!< Event handled successfully.
@@ -66,8 +64,26 @@ typedef enum
   TRIGGERED_TO_SELF,
 }handler_result_t;
 
+
+/**
+ * @brief Triggers an Event for the FSM
+ *
+ * @param[in] event Event which should be send
+ */
 void trigger_event(EVENT_T event);
+
+/**
+ * @brief Sets the Callback for the FSM and starts the event loop
+ *
+ * @param[in] fsm_callback Function Pointer to the FSM Callback
+ */
 void events_start(void (*fsm_callback)(EVENT_T event));
+
+/**
+ * @brief Sets the PID of the Thread tho which the Events should be send
+ *
+ * @param[in] pid PID of the Thread
+ */
 void set_t_events_pid(kernel_pid_t pid);
 
 #ifdef __cplusplus
