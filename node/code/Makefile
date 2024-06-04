@@ -11,6 +11,7 @@ DEVELHELP ?= 1
 
 # Internal Modules
 # Teamagotchi MODULES
+USEMODULE += fsm
 USEMODULE += io_handler
 USEMODULE += display_handler
 USEMODULE += lwm2m_handler
