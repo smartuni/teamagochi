@@ -7,6 +7,7 @@ import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,23 +22,25 @@ public class DeviceUseCaseImpl implements DeviceUseCase {
   //@Inject
   //RegistrationManager registrationManager; //TODO: Merlin. vllt. Injectable machen? Weil nur eine Instanz erlaubt.
 
-  @Override
+  @Transactional
   public DeviceEntity createDevice(String name, DeviceType deviceType) {
     DeviceEntity device = new DeviceEntity(name, deviceType);
     deviceRepository.persist(device);
     return device;
   }
 
-  @Override
+  @Transactional
   public boolean deviceExists(long id) {
     DeviceEntity device = deviceRepository.findById(id);
     return device != null;
   }
 
+  @Transactional
   public DeviceEntity getDevice(long deviceID) {
     return deviceRepository.findById(deviceID);
   }
 
+  @Transactional
   public List<DeviceEntity> getDevices(long userID) {
     UserEntity user = userRepository.findById(userID);
     if (user == null) throw new NullPointerException("User not found in database.");
@@ -45,7 +48,7 @@ public class DeviceUseCaseImpl implements DeviceUseCase {
     return deviceRepository.findByOwner(user);
   }
 
-  @Override
+  @Transactional
   public void deleteAll() {
     deviceRepository.deleteAll();
   }
