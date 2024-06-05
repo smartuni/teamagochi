@@ -1,5 +1,4 @@
 #include "events.h"
-#include "event.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"

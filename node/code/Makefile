@@ -3,24 +3,18 @@ BOARD ?= feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
-TEAMAGOTCHI_NODES_BASE = $(CURDIR)
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
 DEVELHELP ?= 1
 
-# Include test_folder example to showcase directories being included
-# DIR += test_folder
-
-# FEATURES_REQUIRED += cpp
-# FEATURES_REQUIRED += libstdcpp
-
 # Internal Modules
 # Teamagotchi MODULES
+USEMODULE += fsm
 USEMODULE += io_handler
 USEMODULE += display_handler
-# USEMODULE += lwm2m_handler
+USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
 
 # External modules
@@ -28,6 +22,7 @@ EXTERNAL_MODULE_DIRS += modules
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
+USEMODULE += ps
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
 #SHOULD_RUN_KCONFIG ?=
@@ -39,20 +34,12 @@ INCLUDES += -I$(CURDIR)/inc
 # and enable all warnings
 CFLAGS += -std=c17 -Wall -Wextra
 
-# Set the C++ standard to C++20 [C++23 with all the cool stuff is not yet supported]
-# and enable all warnings
-# CXXEXFLAGS += -std=c++20 -Wall -Wextra
-
-# Disable volatile warnings
-# C++20 introduced a deprecation for this, which was then
-# reverted in C++23 because it wasn't thought through
-# CXXEXFLAGS += -Wno-volatile
-
 BOARD_BLACKLIST += native64
 
 ## DEBUG
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 FEATURES_BLACKLIST +=  tinyusb
+
 ##### LWM2M #####
 LWM2M_SERVER_SHORT_ID ?= 1 
 CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
