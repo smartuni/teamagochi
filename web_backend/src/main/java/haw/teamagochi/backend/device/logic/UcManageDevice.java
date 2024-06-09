@@ -5,7 +5,7 @@ import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import java.util.List;
 
-public interface DeviceUseCase {
+public interface UcManageDevice {
 
   /**
    * Creates a device and saves it persistently in the database.

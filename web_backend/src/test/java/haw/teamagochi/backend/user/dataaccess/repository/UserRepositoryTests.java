@@ -1,15 +1,14 @@
-package haw.teamagochi.backend.user;
+package haw.teamagochi.backend.user.dataaccess.repository;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
-import haw.teamagochi.backend.device.logic.DeviceUseCase;
+import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetTypeRepository;
-import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
-import haw.teamagochi.backend.user.logic.UserUseCase;
+import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -19,18 +18,17 @@ import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class UserRepositoryTest {
+public class UserRepositoryTests {
 
   @Inject
-  UserUseCase userUseCase;
+  UcManageUser ucManageUser;
 
   @Inject
-  DeviceUseCase deviceUseCase;
+  UcManageDevice ucManageDevice;
 
   @Inject
   UserRepository userRepository;
@@ -95,7 +93,7 @@ public class UserRepositoryTest {
     UUID uuid1 = new UUID(1,1);
     UUID uuid2 = new UUID(2,2);
 
-    UserEntity user = userUseCase.createUser(uuid1);
+    UserEntity user = ucManageUser.createUser(uuid1);
     user.setExternalID(uuid2);
 
     UserEntity loadedUser = userRepository.findById(user.getId());
@@ -109,7 +107,7 @@ public class UserRepositoryTest {
     UUID uuid1 = new UUID(1,1);
 
     UserEntity user = userService.createUser(uuid1);
-    DeviceEntity device = deviceUseCase.createDevice("name", DeviceType.FROG);
+    DeviceEntity device = ucManageDevice.createDevice("name", DeviceType.FROG);
     user.addDevice(device);
 
     UserEntity loadedUser = userRepository.findById(user.getId());
