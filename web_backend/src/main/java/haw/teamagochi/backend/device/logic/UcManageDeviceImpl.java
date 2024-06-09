@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
-public class DeviceUseCaseImpl implements DeviceUseCase {
+public class UcManageDeviceImpl implements UcManageDevice {
 
   @Inject
   DeviceRepository deviceRepository;

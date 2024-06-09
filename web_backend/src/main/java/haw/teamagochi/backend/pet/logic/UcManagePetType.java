@@ -2,7 +2,7 @@ package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 
-public interface PetTypeUseCase {
+public interface UcManagePetType {
 
   /**
    * Creates a pet type and saves it persistently in the database.

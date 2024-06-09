@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
-public class PetUseCaseImpl implements PetUseCase {
+public class UcManagePetImpl implements UcManagePet {
 
   @Inject
   PetRepository petRepository;

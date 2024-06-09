@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.pet.repository;
+package haw.teamagochi.backend.pet.dataaccess.repository;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
@@ -19,7 +19,7 @@ import io.quarkus.test.h2.H2DatabaseTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class PetRepositoryTest {
+public class PetRepositoryTests {
 
   @Inject
   PetRepository petRepository;

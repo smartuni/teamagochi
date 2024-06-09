@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import java.util.UUID;
 
 @ApplicationScoped
-public class UserUseCaseImpl implements UserUseCase {
+public class UcManageUserImpl implements UcManageUser {
 
   @Inject
   UserRepository userRepository;
