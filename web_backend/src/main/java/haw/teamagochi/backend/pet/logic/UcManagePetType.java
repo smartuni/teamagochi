@@ -2,7 +2,7 @@ package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 
-public interface PetTypeService {
+public interface UcManagePetType {
 
   /**
    * Creates a pet type and saves it persistently in the database.
@@ -11,4 +11,6 @@ public interface PetTypeService {
    * @return persisted pet type object
    */
   PetTypeEntity createPetType(String name);
+
+  void deleteAll();
 }
