@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import profile_pic1 from '../Misc/8-bit-dog-nobg.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Settings() {
+interface SettingsProps {
+  username: string; 
+}
+
+function Settings({ username }: SettingsProps) {
   const [items, setItems] = useState(['Device 1', 'Device 2', 'Device 3']);
 
   const removeItem = (index: number) => {
@@ -23,7 +27,7 @@ function Settings() {
             <div className="input-group-prepend">
               <div className="input-group-text" style={{ fontSize: "1.5rem", height: "60px", display: 'flex', alignItems: 'center' }}>@</div>
             </div>
-            <input type="text" className="form-control text-black" placeholder="Pedro" disabled style={{ fontSize: "1.5rem", height: "60px" }}></input>
+            <input type="text" className="form-control text-black" placeholder={username} disabled style={{ fontSize: "1.5rem", height: "60px" }}></input>
           </div>
           <div className='d-flex justify-content-center pt-2'>
             <button type="button" className="btn btn-outline-danger btn-block w-100" style={{ fontSize: "1.5rem", height: "60px" }} >Logout</button>
