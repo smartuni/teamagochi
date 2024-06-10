@@ -8,6 +8,7 @@ import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,6 +18,7 @@ import org.jboss.resteasy.reactive.client.SseEvent;
 /**
  * Subscribes to Leshan events and passes them to {@link UcHandleLeshanEvents}.
  */
+@UnlessBuildProfile("test")
 @ApplicationScoped
 public class LeshanEventListener {
 

@@ -25,36 +25,43 @@ import org.jboss.resteasy.reactive.client.SseEventFilter;
 public interface LeshanEventClient {
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(RegistrationEventFilter.class)
   Multi<SseEvent<String>> registration();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(DeregistrationEventFilter.class)
   Multi<SseEvent<String>> deregistration();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(UpdatedEventFilter.class)
   Multi<SseEvent<String>> updated();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(SleepingEventFilter.class)
   Multi<SseEvent<String>> sleeping();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(AwakeEventFilter.class)
   Multi<SseEvent<String>> awake();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(CoaplogEventFilter.class)
   Multi<SseEvent<String>> coaplog();
 
   @GET
+  @Path("/")
   @Produces(MediaType.SERVER_SENT_EVENTS)
   Multi<SseEvent<String>> events();
 }

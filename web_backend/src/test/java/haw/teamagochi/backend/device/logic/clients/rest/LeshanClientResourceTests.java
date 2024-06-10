@@ -29,6 +29,7 @@ public class LeshanClientResourceTests {
   @RestClient private LeshanClientRestclient clientService;
 
   /** Endpoint: /api/objectspecs/{endpoint}. */
+
   @Test
   public void testObjectspecs() {
     // When
@@ -89,6 +90,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}. */
+
   @Test
   public void testGetClientObject() {
     // Given
@@ -112,6 +114,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}/{instance}. */
+
   @Test
   public void testGetClientObjectInstance() {
     // Given
@@ -139,6 +142,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}/{instance}. */
+
   @Test
   public void testGetClientObjectInstance_NotFound() {
     // Given
@@ -161,6 +165,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}/{instance}/{resource}. */
+
   @Test
   public void testGetClientResource_singleResource() {
     // Given
@@ -191,6 +196,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}/{instance}/{resource}. */
+
   @Test
   public void testGetClientResource_multiResource() {
     // Given
@@ -224,6 +230,7 @@ public class LeshanClientResourceTests {
   }
 
   /** Endpoint: /api/clients/{endpoint}/{object}/{instance}/{resource}. */
+
   @Test
   public void testGetClientResource_NotFound() {
     // Given
