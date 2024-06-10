@@ -3,7 +3,7 @@ import profile_pic1 from '../Misc/8-bit-dog-nobg.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Settings() {
-  const [items, setItems] = useState(['Pet 1', 'Pet 2', 'Pet 3']);
+  const [items, setItems] = useState(['Device 1', 'Device 2', 'Device 3']);
 
   const removeItem = (index: number) => {
     setItems(items.filter((_, i) => i !== index));
@@ -34,8 +34,7 @@ function Settings() {
                 <li key={index} className="list-group-item d-flex justify-content-between align-items-center py-3">
                   {item}
                   <div>
-                    <button className="btn btn-warning btn-sm mx-1" style={{ fontSize: "1.2rem", padding: "0.5rem 1rem" }} onClick={() => resetItem(index)}>Reset</button>
-                    <button className="btn btn-danger btn-sm mx-1" style={{ fontSize: "1.2rem", padding: "0.5rem 1rem" }} onClick={() => removeItem(index)}>Remove</button>
+                    <button className="btn btn-danger btn-lg mx-1" onClick={() => removeItem(index)}>Remove</button>
                   </div>
                 </li>
               ))}
