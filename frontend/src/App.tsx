@@ -1,13 +1,14 @@
 import React from "react";
-import { useAuth } from "react-oidc-context";
+//import { useAuth } from "react-oidc-context";
 import { useState } from 'react'
 import './App.css'
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
-import Navbar from './Components/Navbar/Navbar'
+import Navbar from "./Components/Navbar/Navbar";
+import Settings from "./Components/Settings";
 
 function App() {
-  const auth = useAuth();
+  /*const auth = useAuth();
   const [count, setCount] = useState(0)
 
   switch (auth.activeNavigator) {
@@ -50,11 +51,12 @@ function App() {
     );
   }
 
-  return (
-    <div>
-      <Navbar /> 
-    </div>
-  ) 
+  return <button onClick={() => void auth.signinRedirect()}>Log in</button>; */
+  return[
+    <Navbar/>,
+    <Settings/>,
+    <Footer/>,
+  ];
 }
 
 export default App;

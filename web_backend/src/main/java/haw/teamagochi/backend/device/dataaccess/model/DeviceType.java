@@ -1,8 +1,9 @@
 package haw.teamagochi.backend.device.dataaccess.model;
 
-import jakarta.persistence.Embeddable;
 
-@Embeddable
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 public enum DeviceType {
   FROG;
 
