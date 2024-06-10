@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "react-oidc-context";
 import { useState } from 'react'
 import './App.css'
+import Pet from "./Components/Pet/Pet";
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
 import Navbar from './Components/Navbar/Navbar'
@@ -9,15 +10,15 @@ import Settings from './Components/Settings'
 
 function App() {
   const auth = useAuth();
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   switch (auth.activeNavigator) {
-    case 'signinSilent':
+    case "signinSilent":
       return <div>Signing you in...</div>;
-    case 'signoutRedirect':
+    case "signoutRedirect":
       return <div>Signing you out...</div>;
   }
-  
+
   if (auth.isLoading) {
     return <div>Loading...</div>;
   }
@@ -48,11 +49,9 @@ function App() {
        
         <div>Hello USERNAME: {auth.user?.profile?.preferred_username || 'User'}</div>
         <Footer/ >,
-
       </div>
     );
   }
-
   return[
     <Navbar/>,
     <Footer/>,
