@@ -1,7 +1,10 @@
-import React from "react";
+import React from 'react';
 
-const Inventory = () => {
-  return <div>Inventory</div>;
-};
+const Inventory = () => (
+  <div>
+    <h1>Inventory Page</h1>
+    <p>Welcome to the Inventory Page!</p>
+  </div>
+);
 
 export default Inventory;

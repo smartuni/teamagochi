@@ -1,0 +1,28 @@
+#ifndef INIT_LVGL_T
+#define INIT_LVGL_T
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "lvgl/lvgl.h"
+#include "thread.h"
+
+int init_lvgl(void);
+void enter_pressed(void);
+void enter_released(void);
+void up_pressed(void);
+void up_released(void);
+void down_pressed(void);
+void down_released(void);
+void left_pressed(void);
+void left_released(void);
+void right_pressed(void);
+void right_released(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* INIT_LVGL_T */

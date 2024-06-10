@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include "event.h"
+#include "events.h"
+#include "fsm.h"
+
+char fsm_thread_stack[THREAD_STACKSIZE_MAIN];
+
+int main(void)
+{
+    thread_create(fsm_thread_stack, sizeof(fsm_thread_stack),
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
+                  fsm, NULL, "fsm_thread");
+
+    // static event_t event = { .handler = handler };
+    team_event_t t_event = {.super.handler = fsm_handle, .event = PET_FEED};
+    event_post(get_queue_standard(), &t_event.super);
+}

@@ -1,5 +1,5 @@
 APPLICATION = teamagotchi
-BOARD = feather-nrf52840-sense
+BOARD ?= feather-nrf52840-sense
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
@@ -9,36 +9,23 @@ RIOTBASE ?= $(CURDIR)/RIOT
 # development process:
 DEVELHELP ?= 1
 
-# Include test_folder example to showcase directories being included
-DIR += test_folder
-
-FEATURES_REQUIRED += cpp
-FEATURES_REQUIRED += libstdcpp
-
 # Internal Modules
+# Teamagotchi MODULES
+USEMODULE += fsm
+USEMODULE += io_handler
+USEMODULE += display_handler
+USEMODULE += lwm2m_handler
 EXTERNAL_MODULE_DIRS += modules
-USEMODULE += external_module
 
 # External modules
-USEMODULE += cpp11-compat
-USEMODULE += ili9341
+# USEMODULE += cpp11-compat
 USEMODULE += ztimer
 USEMODULE += ztimer_msec
 USEMODULE += shell
-
-# Lvgl Related Modules
-DISABLE_MODULE += test_utils_interactive_sync
-USEPKG += lvgl
-USEMODULE += lvgl_contrib
-USEMODULE += lvgl_extra_widget_chart
-USEMODULE += lvgl_extra_widget_win
-USEMODULE += lvgl_extra_layout_flex
-USEMODULE += lvgl_extra_theme_default
-USEMODULE += lvgl_extra_theme_default_dark
-
+USEMODULE += ps
 # As there is an 'Kconfig' we want to explicitly disable Kconfig by setting
 # the variable to empty
-SHOULD_RUN_KCONFIG ?=
+#SHOULD_RUN_KCONFIG ?=
 
 # Include "inc" directory for the header files
 INCLUDES += -I$(CURDIR)/inc
@@ -47,20 +34,35 @@ INCLUDES += -I$(CURDIR)/inc
 # and enable all warnings
 CFLAGS += -std=c17 -Wall -Wextra
 
-# Set the C++ standard to C++20 [C++23 with all the cool stuff is not yet supported]
-# and enable all warnings
-CXXEXFLAGS += -std=c++20 -Wall -Wextra
+BOARD_BLACKLIST += native64
 
-# Disable volatile warnings
-# C++20 introduced a deprecation for this, which was then
-# reverted in C++23 because it wasn't thought through
-CXXEXFLAGS += -Wno-volatile
+## DEBUG
+CFLAGS += -DDEBUG_ASSERT_VERBOSE
+FEATURES_BLACKLIST +=  tinyusb
+
+##### LWM2M #####
+LWM2M_SERVER_SHORT_ID ?= 1 
+CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE='(3*1024)'
+# Uncomment to enable Wakaama debug log
+#CFLAGS += -DCONFIG_LWM2M_WITH_LOGS=1
+# Specific the server URI  address (NOTE: Domain names not supported yet)
+#LWM2M_SERVER_URI ?= '"coap://[2001:db8:1::1]:5683"'
+LWM2M_SERVER_URI ?= '"coap://[fd00:dead:beef::1]:5683"'
+# Configure via CFLAGS only if not done via Kconfig
+ifndef CONFIG_LWM2M_SERVER_URI
+  CFLAGS += -DCONFIG_LWM2M_SERVER_URI=$(LWM2M_SERVER_URI)
+  CFLAGS += -DCONFIG_LWM2M_SERVER_SHORT_ID=$(LWM2M_SERVER_SHORT_ID)
+  CFLAGS += -DCONFIG_DTLS_PEER_MAX=2
+  CFLAGS += -DCONFIG_MAX_BUF=1024
+  # Uncomment to enable Wakaama debug log
+  
+endif
+##### /LWM2M #####
+
 
 include $(RIOTBASE)/Makefile.include
 
-
-BOARD_BLACKLIST += native64
-
+CFLAGS += -DDISPLAY_STACKSIZE=2*1024
 
 # SDL requires more stack
 ifneq (,$(filter native native64,$(BOARD)))
@@ -70,6 +72,7 @@ else ifneq (,$(filter esp%,$(CPU_FAM)))
 else
   CFLAGS += -DTHREAD_STACKSIZE_MAIN=2*1024
 endif
+
 
 # Note that this will probably only work for me <3
 windows: all
@@ -85,36 +88,3 @@ windows: all
 	@echo "Cleaning up uf2 flash file"
 	@rm flash.uf2
 
-# Login Process
-# Frontend Mockup
-# Web Backend Authetnication showcase
-# Hardware Details
-# Flow Diagram of App (Node)
-# Lower M2M Objects (Node)
-# Timeline
-
-## Timeline
-# Registration
-# - Frontend
-#   - User enters ID from Device
-# - Backend
-#  - User ID is stored in DB
-#  - Displays ID on Device
-# - Device
-#   - Get and Display ID
-#   - Have some unqiue ID for each device
-# Deadline: 27. May 2024
-
-# Step One
-# - Getting Login to Work in Frontend 
-# - Helping with login for Frontend if neccessary (Web Backend)
-# - Starting the setup for Milestone 2 (Web Backend)
-# - Starting the setup of Node for Milestone 2
-# Deadline: 20 May 2024
-
-# Step Two
-# - Getting Device Registration to Work
-# - Frontend: Modal for Registration
-# - Backend: Store Device ID in DB and send Registration ID to Device
-# - Node: Display Registration ID and authenticate with Backend
-# Deadline 27 May 2024

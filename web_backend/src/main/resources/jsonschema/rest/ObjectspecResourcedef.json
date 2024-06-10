@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Resourcedef",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "operations": {
+      "type": "string"
+    },
+    "instancetype": {
+      "type": "string"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "range": {
+      "type": "string"
+    },
+    "units": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "description",
+    "id",
+    "instancetype",
+    "mandatory",
+    "name",
+    "operations",
+    "range",
+    "type",
+    "units"
+  ]
+}

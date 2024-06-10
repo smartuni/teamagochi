@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "ObjectInstanceResponseContent",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "Resource.json"
+      }
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "instances",
+    "kind"
+  ]
+}
