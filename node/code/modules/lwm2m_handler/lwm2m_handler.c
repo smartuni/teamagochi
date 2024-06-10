@@ -108,38 +108,6 @@ void lwm2m_handler_start(void){
     lwm2m_client_run(&client_data, obj_list, OBJ_COUNT);
 }
 
-int lwm2m_handler_cli(int argc, char **argv){
-    if (argc == 1) {
-        goto help_error;
-    }
-
-    if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "feed")) {
-        lwm2m_object_pet_feed(&client_data,0,obj_list[3]);
-        return 0;
-    }
-
-    if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "medicate")) {
-        lwm2m_object_pet_medicate(&client_data,0,obj_list[3]);
-        return 0;
-    }
-
-    if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "play")) {
-        lwm2m_object_pet_play(&client_data,0,obj_list[3]);
-        return 0;
-    }
-
-    if (IS_ACTIVE(DEVELHELP) && !strcmp(argv[1], "clean")) {
-        lwm2m_object_pet_clean(&client_data,0,obj_list[3]);
-        return 0;
-    }
-
-    help_error:
-    if (IS_ACTIVE(DEVELHELP)) {
-        printf("usage: %s <feed|mediacte|play|clean>\n", argv[0]);
-    }
-    return 1;
-}
-
 handler_result_t lwm2m_handleEvent(EVENT_T event){
     DEBUG("[Lwm2mHandler:handleEvent]\n");
     switch(event){
