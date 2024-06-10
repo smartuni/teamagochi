@@ -92,7 +92,8 @@ public class DeviceRestService {
   @APIResponse(responseCode = "404", description = "Not Found")
   public DeviceDTO registerDevice(@PathParam("registrationCode") String registrationCode) {
     // TODO replace with real implementation
-    if (registrationCode.equals("aaaaaa")) {
+    if (registrationCode.equals("aaaaaa")) { //if registration manager returns device
+      //return DeviceDTO of returned Device
       return new DeviceDTO(1, "mock-device");
     }
     throw new NotFoundException();

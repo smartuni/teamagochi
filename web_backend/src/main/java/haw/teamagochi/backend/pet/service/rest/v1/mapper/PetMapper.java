@@ -20,7 +20,7 @@ public interface PetMapper {
   @Mapping(target ="hunger", expression = "java(pet.getHunger())")
   @Mapping(target ="cleanliness", expression = "java(pet.getCleanliness())")
   @Mapping(target ="fun", expression = "java(pet.getFun())")
-  @Mapping(target = "petTypeName", expression = "java(pet.getPetType().toString())")
+  @Mapping(target = "petTypeName", expression = "java(pet.getPetType().getName())")
 
   @Mapping(target ="level", expression = "java(computeLevel(pet))")
   @Mapping(target ="levelProgress", expression = "java(computeProgress(pet))")

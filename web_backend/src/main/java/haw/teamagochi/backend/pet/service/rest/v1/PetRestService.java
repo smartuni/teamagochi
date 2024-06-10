@@ -73,7 +73,8 @@ public class PetRestService {
   public PetInfoDTO getPet(@PathParam("petId") long petId) {
     // TODO replace with real implementation, probably with PetDTO
     if (petId == 1) {
-      return new PetInfoDTO();
+      return null;
+      //return new PetInfoDTO();
     }
     throw new NotFoundException();
   }
@@ -93,7 +94,7 @@ public class PetRestService {
   public PetInfoDTO deletePet(@PathParam("petId") long petId) {
     // TODO replace with real implementation
     if (petId == 1) {
-      return new PetInfoDTO();
+      return null;//return new PetInfoDTO();
     }
     throw new NotFoundException();
   }
