@@ -45,9 +45,10 @@ function App() {
           <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
           <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   */}
         </div>
-        
+       
         <div>Hello USERNAME: {auth.user?.profile?.preferred_username || 'User'}</div>
         <Footer/ >,
+
       </div>
     );
   }
