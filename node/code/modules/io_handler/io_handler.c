@@ -22,7 +22,7 @@
 #include "init_buttons.h"
 #include "io_handler.h"
 
-//Define the vibration time here:
+//Define the vibration time (milliseconds) here:
 #define VIBRATE_FOR_MSEC 500
 
 void io_init(void){

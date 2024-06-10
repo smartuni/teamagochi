@@ -21,9 +21,6 @@
 #define ENABLE_DEBUG  1
 #include "debug.h"
 
-//Define the Vvibration time:
-#define VIBRATION_TIME_MSEC 500
-
 //Define the physical GPIO Pins used for buttons:
 gpio_t button_ok = GPIO_PIN(0, 5); //PIN A1
 gpio_t button_right = GPIO_PIN(0, 30); //PIN sA2
@@ -56,8 +53,10 @@ int init_buttons(void)
 
 //Vibrate for msec milliseconds:
 void vibrate(uint16_t msec) {
+    
     gpio_set(vibr_gpio);
     ztimer_sleep(ZTIMER_MSEC, msec);
+    gpio_clear(vibr_gpio);
 }
 
 void button_up_callback (void *arg)
