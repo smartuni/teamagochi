@@ -11,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
+
   @Override
   public void handleRegistration(RegistrationDto dto) {
     System.out.println("Registration: " + dto.registrationId);
