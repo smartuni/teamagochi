@@ -18,28 +18,28 @@
 
 #include "init_buttons.h"
 
-#include <stdio.h>
-
-#include "board.h"
-#include "periph/gpio.h"
-#include "events.h"
-
 #define ENABLE_DEBUG  1
 #include "debug.h"
 
+//Define the Vvibration time:
+#define VIBRATION_TIME_MSEC 500
+
+//Define the physical GPIO Pins used for buttons:
 gpio_t button_ok = GPIO_PIN(0, 5); //PIN A1
 gpio_t button_right = GPIO_PIN(0, 30); //PIN sA2
 gpio_t button_up = GPIO_PIN(0, 28); //PIN A3
 gpio_t button_down = GPIO_PIN(0, 2); //PIN A4
 gpio_t button_left = GPIO_PIN(0, 3); //PIN A5
 
+//Define the vibration module GPIO: 
 gpio_t vibr_gpio = GPIO_PIN(1, 9);
-gpio_mode_t vibr_gpio_mode = GPIO_OUT;
+gpio_mode_t vibr_gpio_mode = GPIO_OUT; //Define the vibr. GPIO as Output GPIO
 
 int init_buttons(void)
 {
     puts("Buttons initialization...");
 
+    //Initialize button interrupts and define callback funcs:
     gpio_init_int(button_up, GPIO_IN, GPIO_BOTH, button_up_callback, NULL);
     gpio_init_int(button_left, GPIO_IN, GPIO_BOTH, button_left_callback, NULL);
     gpio_init_int(button_down, GPIO_IN, GPIO_BOTH, button_down_callback, NULL);
@@ -48,9 +48,16 @@ int init_buttons(void)
     
     puts("Vibration Module initialization...");
     
+    //Initialize vibration module
     gpio_init(vibr_gpio, vibr_gpio_mode);
     gpio_clear(vibr_gpio);
     return 0;
+}
+
+//Vibrate for msec milliseconds:
+void vibrate(uint16_t msec) {
+    gpio_set(vibr_gpio);
+    ztimer_sleep(ZTIMER_MSEC, msec);
 }
 
 void button_up_callback (void *arg)
@@ -117,5 +124,3 @@ void button_ok_callback (void *arg)
         trigger_event(BUTTON_OK_RELEASED);
     }
 }
-
-
