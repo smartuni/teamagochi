@@ -14,6 +14,7 @@ public interface DeviceMapper {
   DeviceMapper MAPPER = Mappers.getMapper(DeviceMapper.class);
   @Mapping(source = "deviceID", target = "id")
   @Mapping(source = "deviceName", target = "name")
+  @Mapping(source = "DeviceType.valueOf(deviceType)", target = "deviceType")
   DeviceEntity toResource(DeviceDTO device);
 
   @InheritInverseConfiguration

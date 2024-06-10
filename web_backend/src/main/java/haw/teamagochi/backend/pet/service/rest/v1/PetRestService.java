@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 
 /**
  * Rest interface for the pet component.
@@ -31,6 +33,9 @@ public class PetRestService {
   @Inject
   PetInfoMapper petInfoMapper;
 
+  @Inject
+  JsonWebToken accessToken;
+//TODO
   /**
    * Get all pets.
    *
@@ -40,6 +45,7 @@ public class PetRestService {
   @Operation(summary = "Get all pets")
   @APIResponse(responseCode = "200")
   public List<PetInfoDTO> getPets() {
+    // TODO userID
     // TODO replace with real implementation
     return new ArrayList<>();
   }
