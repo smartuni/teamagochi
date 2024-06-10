@@ -1,18 +1,21 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
-import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
+import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetTypeRepository;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
-import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
+import haw.teamagochi.backend.user.logic.UcFindUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import java.util.List;
+import jakarta.ws.rs.NotFoundException;
 
+/**
+  * Default implementation for {@link UcManagePet}.
+  */
 @ApplicationScoped
 public class UcManagePetImpl implements UcManagePet {
 
@@ -23,57 +26,59 @@ public class UcManagePetImpl implements UcManagePet {
   PetTypeRepository petTypeRepository;
 
   @Inject
-  DeviceRepository deviceRepository;
+  UcFindDevice ucFindDevice;
 
   @Inject
-  UserRepository userRepository;
+  UcFindUser ucFindUser;
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   @Transactional
-  public PetEntity createPet(long userID, String name, long petTypeID) {
-    UserEntity user = userRepository.findById(userID);
-    PetTypeEntity petType = petTypeRepository.findById(petTypeID);
-    if (user == null|| petType == null ) throw new NullPointerException();
+  public PetEntity create(long userId, String name, long petTypeId) {
+    UserEntity user = ucFindUser.find(userId);
+    PetTypeEntity petType = petTypeRepository.findById(petTypeId);
+
+    if (user == null || petType == null) {
+      throw new NotFoundException();
+    }
 
     PetEntity pet = new PetEntity(user, name, petType);
     petRepository.persist(pet);
+
     return pet;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Transactional
-  public PetEntity getPet(long petID) {
-    return petRepository.findById(petID); // Null if not found
+  @Override
+  public boolean delete(long petId) {
+    return petRepository.deleteById(petId);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Transactional
-  public PetEntity getPet(String name) {
-    return petRepository.findByName(name); // Null if not found
-  }
+  @Override
+  public void changeDevice(long petId, long deviceId) {
+    PetEntity pet = petRepository.findById(petId);
+    DeviceEntity device = ucFindDevice.find(deviceId);
 
-  @Transactional
-  public boolean deletePet(long petID) {
-    return petRepository.deleteById(petID);
-  }
-
-
-  @Transactional
-  public List<PetEntity> getPets(long userID) {
-    UserEntity user = userRepository.findById(userID);
-    if (user == null) throw new NullPointerException("User not found in database.");
-
-    return petRepository.findByOwner(user);
-  }
-
-
-  @Transactional
-  public void changeDevice(long petID, long deviceID) {
-    PetEntity pet = petRepository.findById(petID);
-    DeviceEntity device = deviceRepository.findById(deviceID);
-
-    if (pet == null|device == null) throw new NullPointerException("Either device or pet not found in the database.");
+    if (pet == null | device == null) {
+      throw new NotFoundException("Either device or pet not found in the database.");
+    }
 
     device.setPet(pet);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void deleteAll() {
     petRepository.deleteAll();
   }

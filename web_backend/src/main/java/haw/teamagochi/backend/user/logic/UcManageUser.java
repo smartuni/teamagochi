@@ -3,16 +3,26 @@ package haw.teamagochi.backend.user.logic;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import java.util.UUID;
 
+/**
+ * Operations to manage users.
+ */
 public interface UcManageUser {
 
   /**
-   * Creates a user and saves it persistently in the database.
-   * Any future changes to the user object's attributes will be updated automatically in the database.
-   * @param uuid the UUID for the user
+   * Similar to {@link UcManageUser#create(UUID)}.
+   */
+  UserEntity create(String uuid);
+
+  /**
+   * Create a user.
+   *
+   * @param uuid the system-wide id of the user
    * @return persisted user object
    */
-  UserEntity createUser(UUID uuid);
+  UserEntity create(UUID uuid);
 
+  /**
+   * Delete all users.
+   */
   void deleteAll();
-
 }

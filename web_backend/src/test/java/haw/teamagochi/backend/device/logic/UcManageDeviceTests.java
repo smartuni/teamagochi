@@ -1,19 +1,24 @@
 package haw.teamagochi.backend.device.logic;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
-import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+/**
+  * Tests for {@link UcManageDevice}.
+  */
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
 public class UcManageDeviceTests {
@@ -24,37 +29,31 @@ public class UcManageDeviceTests {
   @Inject
   UcManageUser ucManageUser;
 
+  @Inject
+  DeviceRepository deviceRepository;
 
   @AfterEach
   @Transactional
   public void afterEach() {
-    ucManageDevice.deleteAll();
+    deviceRepository.deleteAll();
     ucManageUser.deleteAll();
   }
 
-
   @Test
-  @Transactional
-  public void testGetDevicesFromUser() {
-    UserEntity user1 = ucManageUser.createUser(new UUID(1,1));
-    UserEntity user2 = ucManageUser.createUser(new UUID(2,1));
+  void testCreateDevice() {
+    // Given
+    String name = "the-device";
+    DeviceType type = DeviceType.FROG;
 
-    DeviceEntity device1 = ucManageDevice.createDevice("d1", DeviceType.FROG);
-    DeviceEntity device2 = ucManageDevice.createDevice("d2", DeviceType.FROG);
-    DeviceEntity device3 = ucManageDevice.createDevice("d3", DeviceType.FROG);
+    // When
+    DeviceEntity entity = ucManageDevice.create(name, type);
+    DeviceEntity fetchedEntity = deviceRepository.findById(entity.getId());
 
-    device1.setOwner(user1);
-    device2.setOwner(user1);
-    device3.setOwner(user2);
-
-    List<DeviceEntity> devicesOfuser1 = ucManageDevice.getDevices(user1.getId());
-
-    assert devicesOfuser1.contains(device1);
-    assert devicesOfuser1.contains(device2);
-    assert  ! devicesOfuser1.contains(device3);
-
-
+    // Then
+    assertNotNull(fetchedEntity);
+    assertEquals(entity.getName(), fetchedEntity.getName());
   }
+
   /*
   @Test
   @Transactional
@@ -65,6 +64,5 @@ public class UcManageDeviceTests {
     });
 
   }
-
-   */
+  */
 }

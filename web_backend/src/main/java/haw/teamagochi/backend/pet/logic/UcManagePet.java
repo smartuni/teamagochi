@@ -1,28 +1,40 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
-import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
-import java.util.List;
 
+/**
+ * Operations to manage pets.
+ */
 public interface UcManagePet {
+
   /**
-   * Creates a pet and saves it persistently in the database.
-   * Any future changes to the pet object's attributes will be updated automatically in the database.
-
-   * @return persisted pet object
+   * Create a pet.
+   *
+   * @param userId of the pet owner
+   * @param name of the pet
+   * @param petTypeId of the pet
+   * @return the created entity
    */
-  PetEntity createPet(long userID, String name, long petTypeID);
+  PetEntity create(long userId, String name, long petTypeId);
 
-  PetEntity getPet(long petID);
-  PetEntity getPet(String name);
+  /**
+   * Delete a pet.
+   *
+   * @param petId of the pet
+   * @return TODO
+   */
+  boolean delete(long petId);
 
-  boolean deletePet(long petID);
+  /**
+   * Change a pets assigned device.
+   *
+   * @param petId of the pet
+   * @param deviceId of the assigned device
+   */
+  void changeDevice(long petId, long deviceId);
 
-  List<PetEntity> getPets(long userID);
-
-  void changeDevice(long petID, long deviceID);
-
+  /**
+   * Delete all pets.
+   */
   void deleteAll();
-
-
 }
