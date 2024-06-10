@@ -233,7 +233,7 @@ void init_default_screen(void){
     /* Style for top bar */
     static lv_style_t style_top_bar;
     lv_style_init(&style_top_bar);
-    lv_style_set_bg_color(&style_top_bar,lv_color_hex(0x545354));
+    lv_style_set_bg_color(&style_top_bar,lv_color_hex(0x6e1b50));
     lv_style_set_border_width(&style_top_bar,0);
     lv_style_set_radius(&style_top_bar,0);
 
@@ -267,7 +267,7 @@ void init_default_screen(void){
     /* Style of the bottom bar*/
     static lv_style_t style_bottom_bar;
     lv_style_init(&style_bottom_bar);
-    lv_style_set_bg_color(&style_bottom_bar,lv_color_hex(0x858585));
+    lv_style_set_bg_color(&style_bottom_bar,lv_color_hex(0x6e1b50));
     lv_style_set_border_width(&style_bottom_bar,0);
     lv_style_set_radius(&style_bottom_bar,0);
 
