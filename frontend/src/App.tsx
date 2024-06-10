@@ -70,7 +70,7 @@ function App() {
   return <button onClick={() => void auth.signinRedirect()}>Log in</button>; */
   return[
     <Navbar/>,
-    <Settings/>,
+    <LinkDevice/>,
     <Footer/>,
   ];
 }
