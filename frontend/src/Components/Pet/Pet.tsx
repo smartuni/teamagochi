@@ -4,6 +4,8 @@ import petImage from "../../assets/pet_frog.png";
 import petImage2 from "../../assets/petyboi_carti.png";
 import { ProgressBar } from "react-progressbar-fancy";
 
+// https://github.com/RavinRau/react-progressbar-fancy?tab=readme-ov-file
+
 const Pet = () => {
   return (
     <div className="pet_container">
