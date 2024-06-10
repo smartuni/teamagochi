@@ -1,13 +1,17 @@
 package haw.teamagochi.backend.pet.service.rest.v1.mapper;
 
+import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 //ggf als abstrct class um custom mappings zu erstellen --> ermöglicht nutzen von methoden??!
 @Mapper(componentModel="cdi")
 public interface PetMapper {
+
+  PetMapper MAPPER = Mappers.getMapper(PetMapper.class);
   @Mapping(target = "petID", expression = "java(pet.getId())")
   @Mapping(target ="petName", expression = "java(pet.getName())")
   @Mapping(target ="happiness", expression = "java(pet.getHappiness())")

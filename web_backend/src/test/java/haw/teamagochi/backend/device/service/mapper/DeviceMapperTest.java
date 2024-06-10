@@ -29,6 +29,7 @@ public class DeviceMapperTest {
     //DeviceEntity device = deviceService.createDevice("name", DeviceType.FROG);
     //DeviceMapper deviceMapper = new
     DeviceEntity device = new DeviceEntity("name", DeviceType.FROG);
+    DeviceEntity dev2 = new DeviceEntity();
     DeviceDTO deviceDTO = deviceMapper.fromResource(device);
     Assertions.assertEquals(deviceDTO.getDeviceID(), device.getId());
     Assertions.assertEquals(deviceDTO.getDeviceName(), device.getName());

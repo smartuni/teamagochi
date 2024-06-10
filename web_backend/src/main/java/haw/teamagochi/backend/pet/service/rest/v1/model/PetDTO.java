@@ -1,5 +1,8 @@
 package haw.teamagochi.backend.pet.service.rest.v1.model;
 
+import lombok.Getter;
+
+@Getter
 public class PetDTO {
 
   long petID; //mapping done
