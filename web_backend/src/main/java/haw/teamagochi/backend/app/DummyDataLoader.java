@@ -9,6 +9,7 @@ import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.logic.UcManagePetType;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcManageUser;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.UUID;
@@ -29,12 +30,13 @@ public class DummyDataLoader {
   @Inject
   UcManagePetType ucManagePetType;
 
+
   @ConfigProperty(name = "dummydata.load")
   private boolean load;
 
   public void load() {
     if (load) {
-      System.out.println("Loading dummy data NEW ...");
+      System.out.println("Loading dummy data ...");
       UserEntity user1 = ucManageUser.create(new UUID(0,1));
       UserEntity user2 = ucManageUser.create(new UUID(0,2));
 
@@ -51,6 +53,7 @@ public class DummyDataLoader {
 
       PetEntity pet3 = ucManagePet.create(user2.getId(), "Baba", petType.getId());
       ucManagePet.create(user2.getId(), "Giggle", petType.getId());
+
 
       // Put pets on devices
       device1.setPet(pet1);
