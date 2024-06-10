@@ -1,9 +1,7 @@
-package haw.teamagochi.backend.pet.repository;
+package haw.teamagochi.backend.pet.dataaccess.repository;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
-import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
-import haw.teamagochi.backend.pet.dataaccess.repository.PetTypeRepository;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -12,14 +10,13 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class PetRepositoryTest {
+public class PetRepositoryTests {
 
   @Inject
   PetRepository petRepository;

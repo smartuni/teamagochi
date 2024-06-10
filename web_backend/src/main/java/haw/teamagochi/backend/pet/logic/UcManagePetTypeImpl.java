@@ -7,7 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class PetTypeUseCaseImpl implements PetTypeUseCase {
+public class UcManagePetTypeImpl implements UcManagePetType {
 
   @Inject
   PetTypeRepository petTypeRepository;

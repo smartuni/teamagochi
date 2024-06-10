@@ -2,13 +2,13 @@ package haw.teamagochi.backend.app;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
-import haw.teamagochi.backend.device.logic.DeviceUseCase;
+import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
-import haw.teamagochi.backend.pet.logic.PetTypeUseCase;
-import haw.teamagochi.backend.pet.logic.PetUseCase;
+import haw.teamagochi.backend.pet.logic.UcManagePet;
+import haw.teamagochi.backend.pet.logic.UcManagePetType;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
-import haw.teamagochi.backend.user.logic.UserUseCase;
+import haw.teamagochi.backend.user.logic.UcManageUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.UUID;
@@ -18,16 +18,16 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class DummyDataLoader {
 
   @Inject
-  UserUseCase userUseCase;
+  UcManageUser ucManageUser;
 
   @Inject
-  DeviceUseCase deviceUseCase;
+  UcManageDevice ucManageDevice;
 
   @Inject
-  PetUseCase petUseCase;
+  UcManagePet ucManagePet;
 
   @Inject
-  PetTypeUseCase petTypeUseCase;
+  UcManagePetType ucManagePetType;
 
   @ConfigProperty(name = "dummydata.load")
   private boolean load;
@@ -35,22 +35,22 @@ public class DummyDataLoader {
   public void load() {
     if (load) {
       System.out.println("Loading dummy data NEW ...");
-      UserEntity user1 = userUseCase.createUser(new UUID(0,1));
-      UserEntity user2 = userUseCase.createUser(new UUID(0,2));
+      UserEntity user1 = ucManageUser.create(new UUID(0,1));
+      UserEntity user2 = ucManageUser.create(new UUID(0,2));
 
-      DeviceEntity device1 = deviceUseCase.createDevice("DEVICE_NR1", DeviceType.FROG);
+      DeviceEntity device1 = ucManageDevice.create("DEVICE_NR1", DeviceType.FROG);
       device1.setOwner(user1);
 
-      DeviceEntity device2 = deviceUseCase.createDevice("DEVICE_NR2", DeviceType.FROG);
+      DeviceEntity device2 = ucManageDevice.create("DEVICE_NR2", DeviceType.FROG);
       device2.setOwner(user2);
 
-      PetTypeEntity petType = petTypeUseCase.createPetType("Frog");
+      PetTypeEntity petType = ucManagePetType.createPetType("Frog");
 
-      PetEntity pet1 = petUseCase.createPet(user1.getId(), "Fifi", petType.getId());
-      petUseCase.createPet(user1.getId(), "Kiki", petType.getId());
+      PetEntity pet1 = ucManagePet.create(user1.getId(), "Fifi", petType.getId());
+      ucManagePet.create(user1.getId(), "Kiki", petType.getId());
 
-      PetEntity pet3 = petUseCase.createPet(user2.getId(), "Baba", petType.getId());
-       petUseCase.createPet(user2.getId(), "Giggle", petType.getId());
+      PetEntity pet3 = ucManagePet.create(user2.getId(), "Baba", petType.getId());
+      ucManagePet.create(user2.getId(), "Giggle", petType.getId());
 
       // Put pets on devices
       device1.setPet(pet1);
