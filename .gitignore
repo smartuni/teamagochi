@@ -275,3 +275,5 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/c,dart,java,c++,assembler,node
+
+*:*
