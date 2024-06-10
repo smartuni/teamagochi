@@ -7,11 +7,11 @@ import lombok.Getter;
 public class DeviceDTO {
   long deviceID;
   String deviceName;
-  String deviceType;
+  //String deviceType;
 
-  public DeviceDTO (long deviceID, String deviceName, String deviceType){
+  public DeviceDTO (long deviceID, String deviceName){//} String deviceType){
       this.deviceID = deviceID;
       this.deviceName = deviceName;
-      this.deviceType = deviceType;
+      //this.deviceType = deviceType;
   }
 }
