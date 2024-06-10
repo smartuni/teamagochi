@@ -246,6 +246,11 @@ void init_default_screen(void){
     lv_obj_add_style(top_bar,&style_top_bar,LV_PART_MAIN);
     lv_obj_clear_flag(top_bar,LV_OBJ_FLAG_SCROLLABLE);
 
+    // // Add a label to the top bar
+    lv_obj_t * pet_label = lv_label_create(top_bar);
+    lv_label_set_text(pet_label, "Kevin the Frog | Lvl 2 | 89/100 | Disconnected");
+    lv_obj_set_style_text_color(pet_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+
     // /* Style for center */
     static lv_style_t style_center;
     lv_style_init(&style_center);
