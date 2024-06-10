@@ -1,10 +1,20 @@
 package haw.teamagochi.backend.device.dataaccess.model;
+import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,8 +27,6 @@ import lombok.Setter;
 @Entity
 public class DeviceEntity {
 
-  // oh nooo, I changed smt. Plz recompile
-
   public DeviceEntity() {}
 
   @Id
@@ -29,9 +37,18 @@ public class DeviceEntity {
   @Size(max = 255)
   private String name;
 
-  @Embedded
   @NonNull
+  @Enumerated(EnumType.STRING) // save enum as string
   private DeviceType deviceType;
+
+
+  @ManyToOne
+  @Nullable
+  private UserEntity owner;
+
+  @OneToOne
+  @Nullable
+  private PetEntity pet;
 
 
   @Override

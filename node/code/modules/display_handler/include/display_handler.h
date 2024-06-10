@@ -10,9 +10,9 @@
  * @{
  *
  * @file
- * @brief       Wakaama LwM2M Handler
+ * @brief       Display Handler
  *
- * @author      
+ * @author      Moritz Holzer <moritz.holzer@haw-hamburg.de>
  * @}
  */
 #ifndef DISPLAY_HANDLER_T
@@ -20,8 +20,21 @@
 
 #include "events.h"
 
+/**
+ * @brief Handler for the FSM states
+ *
+ * @param[in] event Event which should be handled
+ */
 handler_result_t displayHandler_handleEvent(EVENT_T event);
+
+/**
+ * @brief Starts the Thread of the Display Handler
+ */
 void startDisplayThread(void);
+
+/**
+ * @brief Inits the GUI
+ */
 void display_init(void);
 
 #endif /* DISPLAY_HANDLER_T */
