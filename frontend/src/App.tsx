@@ -1,14 +1,14 @@
 import React from "react";
-//import { useAuth } from "react-oidc-context";
+import { useAuth } from "react-oidc-context";
 import { useState } from 'react'
 import './App.css'
 import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
-import Navbar from "./Components/Navbar/Navbar";
-import Settings from "./Components/Settings";
+import Navbar from './Components/Navbar/Navbar'
+import Settings from './Components/Settings'
 
 function App() {
-  /*const auth = useAuth();
+  const auth = useAuth();
   const [count, setCount] = useState(0)
 
   switch (auth.activeNavigator) {
@@ -46,12 +46,12 @@ function App() {
           <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   */}
         </div>
         
-        <div>Hello {auth.user?.profile?.preferred_username || 'User'}</div>
+        <div>Hello USERNAME: {auth.user?.profile?.preferred_username || 'User'}</div>
+        <Footer/ >,
       </div>
     );
   }
 
-  return <button onClick={() => void auth.signinRedirect()}>Log in</button>; */
   return[
     <Navbar/>,
     <Settings/>,
