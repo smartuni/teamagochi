@@ -476,8 +476,8 @@ int init_lvgl(void)
 
 
     init_default_screen();
-    init_not_registered();
-    // init_registered_pet();
+    //init_not_registered();
+    init_registered_pet();
     init_menu();
     return 0;
 }
