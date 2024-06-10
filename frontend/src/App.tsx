@@ -52,7 +52,7 @@ function App() {
     <div>
       <Navbar />
       <button onClick={() => void auth.signinRedirect()}>Log in</button>
-      <Pet />
+      {/* <Pet /> */}
     </div>
   );
 }

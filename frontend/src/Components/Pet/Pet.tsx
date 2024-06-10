@@ -13,7 +13,9 @@ const Pet = () => {
         <img src={petImage} alt="pet name" />
       </div>
       <div className="pet_status_container">
-        <div className="pet_status_contents pet_status_name">(Pet name)</div>
+        <div className="pet_status_contents pet_status_name text-primary">
+          (Pet name)
+        </div>
         <div className="pet_status_contents pet_status_HP">
           <ProgressBar
             // className="space"
