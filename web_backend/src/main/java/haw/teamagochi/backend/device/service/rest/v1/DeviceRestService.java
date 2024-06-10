@@ -1,5 +1,7 @@
 package haw.teamagochi.backend.device.service.rest.v1;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.logic.UcFindDeviceImpl;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import jakarta.inject.Inject;
@@ -25,6 +27,9 @@ public class DeviceRestService {
   @Inject
   protected DeviceMapper deviceMapper;
 
+  @Inject
+  protected UcFindDeviceImpl findDevice;
+
   /**
    * Get all devices.
    *
@@ -34,8 +39,16 @@ public class DeviceRestService {
   @Operation(summary = "Get all devices")
   @APIResponse(responseCode = "200")
   public List<DeviceDTO> getDevices() {
-    // TODO replace with real implementation
-    return new ArrayList<>();
+    //TODO auth + UserID
+    long userID = 0l; //TODO
+
+    List<DeviceEntity> allDevices = findDevice.findAllByUserId(userID);
+    ArrayList<DeviceDTO> allDevicesDTO = new ArrayList<>();
+    for(DeviceEntity e : allDevices){
+      allDevicesDTO.add(deviceMapper.fromResource(e));
+    }
+    return allDevicesDTO;
+    //TODO handle possible errors
   }
 
   /**
@@ -51,9 +64,11 @@ public class DeviceRestService {
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
   public DeviceDTO getDeviceById(@PathParam("deviceId") long deviceId) {
-    // TODO replace with real implementation
-    if (deviceId == 1) {
-      return new DeviceDTO(deviceId, "mock-device");
+    //TODO user auth
+    if (findDevice.exists(deviceId)) {
+      DeviceEntity device = findDevice.find(deviceId);
+      DeviceDTO deviceDTO = deviceMapper.fromResource(device);
+      return deviceDTO;
     }
     throw new NotFoundException();
   }
