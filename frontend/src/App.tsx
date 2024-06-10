@@ -6,6 +6,7 @@ import LinkDevice from './Components/LinkDevice'
 import Footer from './Components/Footer';
 import Navbar from "./Components/Navbar/Navbar";
 import Settings from "./Components/Settings";
+import CreatePetModal from "./Components/CreatePetModal";
 
 function App() {
   /*const auth = useAuth();
@@ -70,7 +71,7 @@ function App() {
   return <button onClick={() => void auth.signinRedirect()}>Log in</button>; */
   return[
     <Navbar/>,
-    <Settings/>,
+    <CreatePetModal/>,
     <Footer/>,
   ];
 }

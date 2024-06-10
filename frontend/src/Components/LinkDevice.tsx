@@ -17,7 +17,7 @@ function LinkDevice() {
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault(); // Prevent form from reloading the page
-        if (deviceKey.trim() === "") {
+        if (deviceKey.trim() === "" || deviceName.trim() === "") {
             return;
         }
         // TODO: Save the device ID or perform any action with the input value
