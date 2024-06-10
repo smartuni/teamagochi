@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "Updated",
+  "title": "ObjectLink",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "registration": {
-      "$ref": "Registration.json"
+    "url": {
+      "type": "string"
     },
-    "update": {
-      "$ref": "UpdatedUpdate.json"
+    "attributes": {
+      "$ref": "Attributes.json"
     }
   },
   "required": [
-    "registration",
-    "update"
+    "attributes",
+    "url"
   ]
 }

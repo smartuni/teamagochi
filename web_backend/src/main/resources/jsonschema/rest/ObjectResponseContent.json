@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$comment": "Wrapped by ObjectResponse",
+  "title": "ObjectContent",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "instances": {
+      "type": "array",
+      "items": {
+        "$ref": "ObjectInstance.json"
+      }
+    },
+    "kind": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "instances",
+    "kind"
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "Registration",
+  "title": "ClientDto",
+  "description": "Representation of a LwM2M client as provided by the Leshan Server.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -28,10 +29,10 @@
       "type": "integer"
     },
     "bindingMode": {
-      "type": "string"
+      "$ref": "../common/BindingMode.json"
     },
     "rootPath": {
-      "type": "string"
+      "$ref": "../common/RootPath.json"
     },
     "objectLinks": {
       "type": "array",
@@ -43,7 +44,7 @@
       "type": "boolean"
     },
     "additionalRegistrationAttributes": {
-      "$ref": "../common/AdditionalAttributes.json"
+      "$ref": "../common/AdditionalRegistrationAttributes.json"
     },
     "queuemode": {
       "type": "boolean"
@@ -53,6 +54,9 @@
     },
     "sleeping": {
       "type": "boolean"
+    },
+    "smsNumber": {
+      "type": "string"
     }
   },
   "required": [
