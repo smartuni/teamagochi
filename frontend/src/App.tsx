@@ -55,7 +55,6 @@ function App() {
 
   return[
     <Navbar/>,
-    <Settings username={auth.user?.profile?.preferred_username || 'User'} />,
     <Footer/>,
   ];
 }
