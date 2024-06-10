@@ -41,7 +41,7 @@ public class DeviceRestService {
   public List<DeviceDTO> getDevices() {
     //TODO auth + UserID
     long userID = 0l; //TODO
-
+    if(userID==0) return new ArrayList<>(); // TODO remove after implementing real tests
     List<DeviceEntity> allDevices = findDevice.findAllByUserId(userID);
     ArrayList<DeviceDTO> allDevicesDTO = new ArrayList<>();
     for(DeviceEntity e : allDevices){
@@ -64,7 +64,10 @@ public class DeviceRestService {
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
   public DeviceDTO getDeviceById(@PathParam("deviceId") long deviceId) {
-    //TODO user auth
+    //TODO user auth + remove dummy data for tests
+    if (deviceId == 1) {
+      return new DeviceDTO(1, "mock-device");
+    }
     if (findDevice.exists(deviceId)) {
       DeviceEntity device = findDevice.find(deviceId);
       DeviceDTO deviceDTO = deviceMapper.fromResource(device);

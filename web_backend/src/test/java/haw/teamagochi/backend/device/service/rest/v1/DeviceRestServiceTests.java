@@ -3,9 +3,13 @@ package haw.teamagochi.backend.device.service.rest.v1;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
+import haw.teamagochi.backend.device.logic.UcFindDeviceImpl;
+import haw.teamagochi.backend.device.logic.UcManageDeviceImpl;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,6 +19,11 @@ import org.junit.jupiter.api.Test;
 @TestHTTPEndpoint(DeviceRestService.class)
 public class DeviceRestServiceTests {
 
+
+  @Inject
+  UcManageDeviceImpl deviceManager;
+  @Inject
+  UcFindDeviceImpl findDevice;
   // TODO implement the real test
   @Test
   public void testGetAllDevices() {

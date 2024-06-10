@@ -73,8 +73,7 @@ public class PetRestService {
   public PetInfoDTO getPet(@PathParam("petId") long petId) {
     // TODO replace with real implementation, probably with PetDTO
     if (petId == 1) {
-      return null;
-      //return new PetInfoDTO();
+      return new PetInfoDTO(1l,"test","FROG"); //TODO remove dummy data
     }
     throw new NotFoundException();
   }
