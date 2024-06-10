@@ -101,11 +101,11 @@ public class DeviceRestService {
    * @throws NotFoundException if the registration code is not found
    */
   @POST
-  @Path("/register/{registrationCode}")
+  @Path("/register/{registrationCode}/{deviceName}")
   @Operation(summary = "Register a device using a registration code")
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
-  public DeviceDTO registerDevice(@PathParam("registrationCode") String registrationCode) {
+  public DeviceDTO registerDevice(@PathParam("registrationCode") String registrationCode, @PathParam("deviceName") String deviceName) {
     // TODO replace with real implementation
     if (registrationCode.equals("aaaaaa")) { //if registration manager returns device
       //return DeviceDTO of returned Device

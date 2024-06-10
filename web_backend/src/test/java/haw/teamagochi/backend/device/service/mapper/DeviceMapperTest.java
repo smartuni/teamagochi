@@ -2,7 +2,6 @@ package haw.teamagochi.backend.device.service.mapper;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
-import haw.teamagochi.backend.device.logic.DeviceService;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import io.quarkus.test.common.QuarkusTestResource;
