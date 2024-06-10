@@ -93,7 +93,7 @@ public class UserRepositoryTests {
     UUID uuid1 = new UUID(1,1);
     UUID uuid2 = new UUID(2,2);
 
-    UserEntity user = ucManageUser.createUser(uuid1);
+    UserEntity user = ucManageUser.create(uuid1);
     user.setExternalID(uuid2);
 
     UserEntity loadedUser = userRepository.findById(user.getId());

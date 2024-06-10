@@ -3,13 +3,14 @@ package haw.teamagochi.backend.device.logic;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
-import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
-import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
+import haw.teamagochi.backend.user.logic.UcFindUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import java.util.List;
 
+/**
+ * Default implementation for {@link UcManageDevice}.
+ */
 @ApplicationScoped
 public class UcManageDeviceImpl implements UcManageDevice {
 
@@ -17,42 +18,31 @@ public class UcManageDeviceImpl implements UcManageDevice {
   DeviceRepository deviceRepository;
 
   @Inject
-  UserRepository userRepository;
+  UcFindUser ucFindUser;
 
+  // TODO uncomment if https://github.com/smartuni/teamagochi/pull/100 was merged
   //@Inject
-  //RegistrationManager registrationManager; //TODO: Merlin. vllt. Injectable machen? Weil nur eine Instanz erlaubt.
+  //RegistrationManager registrationManager;
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   @Transactional
-  public DeviceEntity createDevice(String name, DeviceType deviceType) {
+  public DeviceEntity create(String name, DeviceType deviceType) {
     DeviceEntity device = new DeviceEntity(name, deviceType);
     deviceRepository.persist(device);
     return device;
   }
 
-  @Transactional
-  public boolean deviceExists(long id) {
-    DeviceEntity device = deviceRepository.findById(id);
-    return device != null;
-  }
-
-  @Transactional
-  public DeviceEntity getDevice(long deviceID) {
-    return deviceRepository.findById(deviceID);
-  }
-
-  @Transactional
-  public List<DeviceEntity> getDevices(long userID) {
-    UserEntity user = userRepository.findById(userID);
-    if (user == null) throw new NullPointerException("User not found in database.");
-
-    return deviceRepository.findByOwner(user);
-  }
-
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   @Transactional
   public void deleteAll() {
     deviceRepository.deleteAll();
   }
-
 
   /*
   public boolean registerDevice(long userID, String key) {
@@ -68,6 +58,5 @@ public class UcManageDeviceImpl implements UcManageDevice {
     device.setOwner(user);
     return true;
   }
-
-   */
+  */
 }
