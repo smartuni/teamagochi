@@ -170,6 +170,74 @@ static uint32_t keypad_get_key(void)
     return 0;
 }
 
+void init_default_screen(char* top_bar_text){
+    lv_obj_clean(lv_scr_act());
+    static lv_style_t style_base;
+    lv_style_init(&style_base);
+    lv_style_set_border_width(&style_base,0);
+    lv_obj_t * screen = lv_obj_create(lv_scr_act());
+    lv_obj_clear_flag(screen,LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_size(screen, 320, 240);
+    lv_obj_add_style(screen,&style_base, LV_PART_MAIN);
+
+    /* Style for top bar */
+    static lv_style_t style_top_bar;
+    lv_style_init(&style_top_bar);
+    lv_style_set_bg_color(&style_top_bar,lv_color_hex(0x6e1b50));
+    lv_style_set_border_width(&style_top_bar,0);
+    lv_style_set_radius(&style_top_bar,0);
+
+    /*Create a container for the top row*/
+    top_bar = lv_obj_create(screen);
+    lv_obj_set_size(top_bar, 320, 30);
+    lv_obj_set_x(top_bar,-13);
+    lv_obj_set_y(top_bar,-13);
+    lv_obj_set_flex_flow(top_bar, LV_FLEX_FLOW_ROW);
+    lv_obj_add_style(top_bar,&style_top_bar,LV_PART_MAIN);
+    lv_obj_clear_flag(top_bar,LV_OBJ_FLAG_SCROLLABLE);
+
+    // // Add a label to the top bar
+    lv_obj_t * pet_label = lv_label_create(top_bar);
+    lv_label_set_text(pet_label, top_bar_text);
+    lv_obj_set_style_text_color(pet_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+
+    // /* Style for center */
+    static lv_style_t style_center;
+    lv_style_init(&style_center);
+    lv_style_set_border_width(&style_center,0);
+    lv_style_set_radius(&style_center,0);
+
+    // /*Create a container for the center*/
+    center = lv_obj_create(screen);
+    lv_obj_set_size(center, 320, 160);
+    lv_obj_set_x(center,-13);
+    lv_obj_set_y(center,17);
+    lv_obj_add_style(center,&style_center,LV_PART_MAIN);
+    lv_obj_clear_flag(center,LV_OBJ_FLAG_SCROLLABLE);
+    
+    /* Background of the room*/
+    LV_IMG_DECLARE(background);
+    lv_obj_set_style_bg_img_src(center, &background,LV_PART_MAIN);
+    
+    /* Style of the bottom bar*/
+    static lv_style_t style_bottom_bar;
+    lv_style_init(&style_bottom_bar);
+    lv_style_set_bg_color(&style_bottom_bar,lv_color_hex(0x6e1b50));
+    lv_style_set_border_width(&style_bottom_bar,0);
+    lv_style_set_radius(&style_bottom_bar,0);
+
+     /*Create a container for the bottom row*/
+    bottom_bar = lv_obj_create(screen);
+    lv_obj_set_size(bottom_bar, 320, 50);
+    lv_obj_set_x(bottom_bar,-13);
+    lv_obj_set_y(bottom_bar,177);
+    lv_obj_set_flex_flow(bottom_bar, LV_FLEX_FLOW_ROW);
+    lv_obj_add_style(bottom_bar,&style_top_bar,LV_PART_MAIN);
+    lv_obj_clear_flag(bottom_bar,LV_OBJ_FLAG_SCROLLABLE);
+
+    
+}
+
 void enter_pressed(void){
     buttons[0].state = true;
 }
@@ -179,6 +247,9 @@ void enter_released(void){
 }
 
 void up_pressed(void){
+    init_default_screen("Kevin the Frog | Lvl 2 | 89/100 | Disconnected");
+    init_menu();
+    init_registered_pet();
     buttons[1].state = true;
 }
 
@@ -187,6 +258,9 @@ void up_released(void){
 }
 
 void down_pressed(void){
+    init_default_screen("Registering ...");
+    init_menu();
+    init_not_registered();
     buttons[2].state = true;
 }
 
@@ -217,75 +291,6 @@ static void timer_cb(lv_timer_t *param){
 
 static void timer_deactivate(void){
     lv_timer_del(wakeup_task);
-}
-
-void init_default_screen(void){
-    
-    lv_obj_clean(lv_scr_act());
-    static lv_style_t style_base;
-    lv_style_init(&style_base);
-    lv_style_set_border_width(&style_base,0);
-    lv_obj_t * screen = lv_obj_create(lv_scr_act());
-    lv_obj_clear_flag(screen,LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_size(screen, 320, 240);
-    lv_obj_add_style(screen,&style_base, LV_PART_MAIN);
-
-    /* Style for top bar */
-    static lv_style_t style_top_bar;
-    lv_style_init(&style_top_bar);
-    lv_style_set_bg_color(&style_top_bar,lv_color_hex(0x6e1b50));
-    lv_style_set_border_width(&style_top_bar,0);
-    lv_style_set_radius(&style_top_bar,0);
-
-    /*Create a container for the top row*/
-    top_bar = lv_obj_create(screen);
-    lv_obj_set_size(top_bar, 320, 30);
-    lv_obj_set_x(top_bar,-13);
-    lv_obj_set_y(top_bar,-13);
-    lv_obj_set_flex_flow(top_bar, LV_FLEX_FLOW_ROW);
-    lv_obj_add_style(top_bar,&style_top_bar,LV_PART_MAIN);
-    lv_obj_clear_flag(top_bar,LV_OBJ_FLAG_SCROLLABLE);
-
-    // // Add a label to the top bar
-    lv_obj_t * pet_label = lv_label_create(top_bar);
-    lv_label_set_text(pet_label, "Kevin the Frog | Lvl 2 | 89/100 | Disconnected");
-    lv_obj_set_style_text_color(pet_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-
-    // /* Style for center */
-    static lv_style_t style_center;
-    lv_style_init(&style_center);
-    lv_style_set_border_width(&style_center,0);
-    lv_style_set_radius(&style_center,0);
-
-    // /*Create a container for the center*/
-    center = lv_obj_create(screen);
-    lv_obj_set_size(center, 320, 160);
-    lv_obj_set_x(center,-13);
-    lv_obj_set_y(center,17);
-    lv_obj_add_style(center,&style_center,LV_PART_MAIN);
-    lv_obj_clear_flag(center,LV_OBJ_FLAG_SCROLLABLE);
-    
-    /* Background of the room*/
-    LV_IMG_DECLARE(background_1);
-    lv_obj_set_style_bg_img_src(center, &background_1,LV_PART_MAIN);
-    
-    /* Style of the bottom bar*/
-    static lv_style_t style_bottom_bar;
-    lv_style_init(&style_bottom_bar);
-    lv_style_set_bg_color(&style_bottom_bar,lv_color_hex(0x6e1b50));
-    lv_style_set_border_width(&style_bottom_bar,0);
-    lv_style_set_radius(&style_bottom_bar,0);
-
-     /*Create a container for the bottom row*/
-    bottom_bar = lv_obj_create(screen);
-    lv_obj_set_size(bottom_bar, 320, 50);
-    lv_obj_set_x(bottom_bar,-13);
-    lv_obj_set_y(bottom_bar,177);
-    lv_obj_set_flex_flow(bottom_bar, LV_FLEX_FLOW_ROW);
-    lv_obj_add_style(bottom_bar,&style_top_bar,LV_PART_MAIN);
-    lv_obj_clear_flag(bottom_bar,LV_OBJ_FLAG_SCROLLABLE);
-
-    
 }
 
 void init_not_registered(void){
@@ -373,9 +378,9 @@ void init_registered_pet(void){
     lv_obj_align(align, LV_ALIGN_CENTER,0,0);
 
     /* Pet*/
-    LV_IMG_DECLARE(forg);
+    LV_IMG_DECLARE(frog);
     lv_obj_t * pet = lv_img_create(align);
-    lv_img_set_src(pet, &forg);
+    lv_img_set_src(pet, &frog);
     lv_obj_align(pet, LV_ALIGN_CENTER, 0, 0);
 }
 
@@ -478,11 +483,7 @@ int init_lvgl(void)
     indev = lv_indev_drv_register(&drv);
 
     lv_indev_set_group(indev,group1);
-
-
-    init_default_screen();
-    //init_not_registered();
-    init_registered_pet();
+    init_default_screen("Initializing ...");
     init_menu();
     return 0;
 }
