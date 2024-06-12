@@ -1,5 +1,6 @@
 package haw.teamagochi.backend.pet.logic;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
@@ -36,6 +37,8 @@ public class UcFindPetImpl implements UcFindPet {
   public PetEntity find(String name) {
     return petRepository.findByName(name);
   }
+
+
 
   /**
    * {@inheritDoc}

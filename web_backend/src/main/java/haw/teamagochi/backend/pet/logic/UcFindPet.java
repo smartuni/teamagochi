@@ -1,6 +1,9 @@
 package haw.teamagochi.backend.pet.logic;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+
 import java.util.List;
 
 /**

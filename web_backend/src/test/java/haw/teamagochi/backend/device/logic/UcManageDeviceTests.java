@@ -1,9 +1,5 @@
 package haw.teamagochi.backend.device.logic;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
@@ -15,6 +11,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
   * Tests for {@link UcManageDevice}.
@@ -54,6 +52,22 @@ public class UcManageDeviceTests {
     assertEquals(entity.getName(), fetchedEntity.getName());
   }
 
+//  @Test
+//  void testDeleteDevice() {
+//    String name = "the-device";
+//    DeviceType type = DeviceType.FROG;
+//
+//    // When
+//    DeviceEntity entity = ucManageDevice.create(name, type);
+//    DeviceEntity fetchedEntity = deviceRepository.findById(entity.getId());
+//
+//    // Then
+//    assertNotNull(fetchedEntity);
+//
+//    //Delete
+//    ucManageDevice.deleteDevice(entity.getId());
+//    assertNull(fetchedEntity);
+//  }
   /*
   @Test
   @Transactional

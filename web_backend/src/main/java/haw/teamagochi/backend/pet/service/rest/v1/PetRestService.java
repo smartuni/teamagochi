@@ -1,10 +1,14 @@
 package haw.teamagochi.backend.pet.service.rest.v1;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
+import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetInfoMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetInfoDTO;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -34,7 +38,12 @@ public class PetRestService {
   PetInfoMapper petInfoMapper;
 
   @Inject
-  JsonWebToken accessToken;
+  UcFindPet findPet;
+
+  @Inject
+  UserEntity user;
+
+
 //TODO
   /**
    * Get all pets.
@@ -47,7 +56,12 @@ public class PetRestService {
   public List<PetInfoDTO> getPets() {
     // TODO userID
     // TODO replace with real implementation
-    return new ArrayList<>();
+    List<PetEntity> allPets = findPet.findByUserId(user.getId());
+    ArrayList<PetInfoDTO> allPetInfoDTO = new ArrayList<>();
+    for(PetEntity e : allPets){
+      allPetInfoDTO.add(petInfoMapper.toResource(e));
+    }
+    return allPetInfoDTO;
   }
 
   /**

@@ -44,6 +44,12 @@ public class UcManageDeviceImpl implements UcManageDevice {
     deviceRepository.deleteAll();
   }
 
+  @Override
+  @Transactional
+  public void deleteDevice(long id){
+    deviceRepository.deleteById(id);
+  }
+
   /*
   public boolean registerDevice(long userID, String key) {
     long deviceID = registrationManager.getDevice(key);

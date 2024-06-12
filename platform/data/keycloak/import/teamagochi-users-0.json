@@ -1,6 +1,23 @@
 {
   "realm" : "teamagochi",
   "users" : [ {
+    "id" : "0a02ff2c-b109-4f06-ad78-cc19eb50e6d5",
+    "username" : "service-account-teamagochi-backend",
+    "emailVerified" : false,
+    "createdTimestamp" : 1718119156026,
+    "enabled" : true,
+    "totp" : false,
+    "serviceAccountClientId" : "teamagochi-backend",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-teamagochi" ],
+    "clientRoles" : {
+      "teamagochi-backend" : [ "uma_protection" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
     "id" : "e1fd1cdf-924c-4c13-b5de-2594ac8f1231",
     "username" : "testmanager01",
     "email" : "testmanager01@teamagochi.local",
