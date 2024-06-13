@@ -1,17 +1,21 @@
 package haw.teamagochi.backend.device.service.rest.v1.model;
 
-import haw.teamagochi.backend.pet.service.rest.v1.model.PetInfoDTO;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * A data transfer object (DTO) for device.
+ */
 @Getter
+@Setter
+@AllArgsConstructor
+@RegisterForReflection
 public class DeviceDTO {
-  long deviceID;
-  String deviceName;
-  //String deviceType;
-
-  public DeviceDTO (long deviceID, String deviceName){//} String deviceType){
-      this.deviceID = deviceID;
-      this.deviceName = deviceName;
-      //this.deviceType = deviceType;
-  }
+  long id;
+  String name;
+  String type;
+  String ownerId;
+  Long petId;
 }
