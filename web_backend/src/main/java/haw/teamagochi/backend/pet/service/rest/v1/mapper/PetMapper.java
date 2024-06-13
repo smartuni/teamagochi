@@ -2,6 +2,7 @@ package haw.teamagochi.backend.pet.service.rest.v1.mapper;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
+import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.pet.logic.UcFindPetType;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
@@ -30,7 +31,7 @@ public interface PetMapper {
    */
   @Mapping(source = "id", target = "id")
   @Mapping(source = "name", target = "name")
-  @Mapping(source = "type", target = "petType")
+  @Mapping(source = "type", target = "petType.id")
   @Mapping(source = "state.happiness", target = "happiness")
   @Mapping(source = "state.wellbeing", target = "wellbeing")
   @Mapping(source = "state.health", target = "health")
@@ -58,4 +59,9 @@ public interface PetMapper {
    * See {@link PetMapper#mapEntityToTransferObject(PetEntity)}.
    */
   List<PetDTO> mapEntityToTransferObject(List<PetEntity> petEntities);
+
+  @ObjectFactory
+  default PetTypeEntity lookup(Long id, @Context UcFindPetType ucFindPetType) {
+    return ucFindPetType.find(id);
+  }
 }

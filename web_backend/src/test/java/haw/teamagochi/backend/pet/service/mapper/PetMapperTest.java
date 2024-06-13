@@ -83,8 +83,7 @@ public class PetMapperTest {
     // Then
     assertEquals(entity.getId(), dto.getId());
     assertEquals(entity.getName(), dto.getName());
-    assertEquals(entity.getPetType().getId(), dto.getType().getId());
-    assertEquals(entity.getPetType().getName(), dto.getType().getName());
+    assertEquals(entity.getPetType().getId(), dto.getType());
 
     assertEquals(entity.getHappiness(), dto.getState().getHappiness());
     assertEquals(entity.getWellbeing(), dto.getState().getWellbeing());
@@ -102,7 +101,8 @@ public class PetMapperTest {
     PetTypeDTO petTypeDto =
         new PetTypeDTO(sourceEntity.getPetType().getId(), sourceEntity.getPetType().getName());
     PetStateDTO petStateDto = new PetStateDTO(10, 11, 12, 13, 14, 15, 16);
-    PetDTO dto = new PetDTO(sourceEntity.getId(), sourceEntity.getName(), petTypeDto, petStateDto);
+    PetDTO dto =
+        new PetDTO(sourceEntity.getId(), sourceEntity.getName(), petTypeDto.getId(), petStateDto);
 
     // When
     PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
@@ -110,8 +110,7 @@ public class PetMapperTest {
     // Then
     assertEquals(dto.getId(), entity.getId());
     assertEquals(dto.getName(), entity.getName());
-    assertEquals(dto.getType().getId(), entity.getPetType().getId());
-    assertEquals(dto.getType().getName(), entity.getPetType().getName());
+    assertEquals(dto.getType(), entity.getPetType().getId());
 
     assertEquals(dto.getState().getHappiness(), entity.getHappiness());
     assertEquals(dto.getState().getWellbeing(), entity.getWellbeing());

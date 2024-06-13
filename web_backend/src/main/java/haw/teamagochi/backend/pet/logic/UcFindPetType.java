@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
+import java.util.List;
 
 /**
  * Operations to find pet types.
@@ -14,4 +15,11 @@ public interface UcFindPetType {
    * @return entity if found, otherwise null
    */
   PetTypeEntity find(long id);
+
+  /**
+   * Find all pet types.
+   *
+   * @return entities if found, otherwise empty list
+   */
+  List<PetTypeEntity> findAll();
 }

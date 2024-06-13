@@ -17,6 +17,6 @@ import lombok.ToString;
 public class PetDTO {
   Long id;
   String name;
-  PetTypeDTO type;
+  Long type;
   PetStateDTO state;
 }
