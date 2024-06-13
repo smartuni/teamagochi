@@ -30,32 +30,47 @@ public class DummyDataLoader {
   UcManagePetType ucManagePetType;
 
   @ConfigProperty(name = "dummydata.load")
-  private boolean load;
+  boolean load;
 
-  public void load() {
+  void load() {
     if (load) {
       System.out.println("Loading dummy data NEW ...");
-      UserEntity user1 = ucManageUser.create(new UUID(0,1));
-      UserEntity user2 = ucManageUser.create(new UUID(0,2));
 
-      DeviceEntity device1 = ucManageDevice.create("DEVICE_NR1", DeviceType.FROG);
-      device1.setOwner(user1);
+      /*
+       * Create users
+       */
+      UserEntity user1 =
+          ucManageUser.create(UUID.fromString("96daba6c-00ae-4ddb-bea5-e9c0cdb5a459"));
+      UserEntity user2 =
+          ucManageUser.create(UUID.fromString("6b7ec589-17ff-43d0-9ed6-9f44f3bc9c73"));
 
-      DeviceEntity device2 = ucManageDevice.create("DEVICE_NR2", DeviceType.FROG);
-      device2.setOwner(user2);
-
+      /*
+       * Create pets
+       */
       PetTypeEntity petType = ucManagePetType.createPetType("Frog");
 
       PetEntity pet1 = ucManagePet.create(user1.getId(), "Fifi", petType.getId());
       ucManagePet.create(user1.getId(), "Kiki", petType.getId());
 
-      PetEntity pet3 = ucManagePet.create(user2.getId(), "Baba", petType.getId());
+      PetEntity pet2 = ucManagePet.create(user2.getId(), "Baba", petType.getId());
       ucManagePet.create(user2.getId(), "Giggle", petType.getId());
 
-      // Put pets on devices
+      /*
+       * Create devices
+       */
+      DeviceEntity device1 = new DeviceEntity("DEVICE_NR1", DeviceType.FROG);
+      device1.setOwner(user1);
       device1.setPet(pet1);
-      device2.setPet(pet3);
+      ucManageDevice.create(device1);
 
+      DeviceEntity device2 = new DeviceEntity("DEVICE_NR2", DeviceType.FROG);
+      device2.setOwner(user2);
+      device2.setPet(pet2);
+      ucManageDevice.create(device2);
+
+      DeviceEntity device3 = new DeviceEntity("DEVICE_NR3", DeviceType.FROG);
+      device3.setOwner(user1);
+      ucManageDevice.create(device3);
     }
   }
 }
