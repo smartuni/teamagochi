@@ -9,6 +9,14 @@ package haw.teamagochi.backend.device.logic.registrationmanager;
 public interface RegistrationManager {
 
   /**
+   * Register a client.
+   *
+   * @param registrationCode the key associated with the client
+   * @return the "Endpoint Client Name" of a LwM2M client
+   */
+  String registerClient(String registrationCode);
+
+  /**
    * Add a device.
    *
    * @param endpoint is the "Endpoint Client Name" of a LwM2M client
@@ -33,16 +41,4 @@ public interface RegistrationManager {
    * @return the amount of clients
    */
   int size();
-
-  /**
-   * Check whether a registration code is valid. TODO
-   */
-  //boolean validateRegistrationCode(String registrationCode);
-
-  /**
-   * Get a device. TODO
-   * @param registrationCode the key associated with the device
-   * @return the deviceID, or -1 if key not found
-   */
-  //void getDevice(String registrationCode)
 }

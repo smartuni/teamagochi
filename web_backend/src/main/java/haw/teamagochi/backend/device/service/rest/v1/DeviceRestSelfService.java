@@ -2,6 +2,7 @@ package haw.teamagochi.backend.device.service.rest.v1;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
+import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import haw.teamagochi.backend.general.security.SecurityUtil;
@@ -35,6 +36,9 @@ public class DeviceRestSelfService {
 
   @Inject
   protected UcFindDevice ucFindDevice;
+
+  @Inject
+  protected UcManageDevice ucManageDevice;
 
   /**
    * Get all devices.
@@ -88,9 +92,10 @@ public class DeviceRestSelfService {
   public DeviceDTO registerDevice(
       @PathParam("registrationCode") String registrationCode,
       @PathParam("deviceName") String deviceName) {
-    // TODO replace with real implementation
-    if (registrationCode.equals("aaaaaa")) {
-      return null;
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    DeviceEntity entity = ucManageDevice.registerDevice(registrationCode, deviceName, uuid);
+    if (entity != null) {
+      return deviceMapper.mapEntityToTransferObject(entity);
     }
     throw new NotFoundException();
   }
