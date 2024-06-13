@@ -3,6 +3,8 @@ package haw.teamagochi.backend.device.logic;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
+import haw.teamagochi.backend.device.logic.registrationmanager.RegistrationManager;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,6 +18,15 @@ public class UcManageDeviceImpl implements UcManageDevice {
 
   @Inject
   DeviceRepository deviceRepository;
+
+  @Inject
+  UcFindUser ucFindUser;
+
+  @Inject
+  UcManageDevice ucManageDevice;
+
+  @Inject
+  RegistrationManager registrationManager;
 
   /**
    * {@inheritDoc}
@@ -54,5 +65,27 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Transactional
   public void deleteAll() {
     deviceRepository.deleteAll();
+  }
+
+  /**
+   * {@inheritDoc}
+   * TODO whe have no way to determine the device type here. Lets default to "FROG".
+   */
+  @Override
+  @Transactional
+  public DeviceEntity registerDevice(String registrationCode, String deviceName, String uuid) {
+    String endpoint = registrationManager.registerClient(registrationCode);
+    if (endpoint == null) {
+      return null;
+    }
+
+    UserEntity owner = ucFindUser.find(uuid);
+    if (owner == null) {
+      throw new IllegalArgumentException("User does not exist");
+    }
+
+    DeviceEntity device = new DeviceEntity(deviceName, DeviceType.FROG);
+    device.setOwner(owner);
+    return ucManageDevice.create(device);
   }
 }

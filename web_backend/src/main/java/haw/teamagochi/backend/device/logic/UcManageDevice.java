@@ -38,4 +38,14 @@ public interface UcManageDevice {
    * Delete all devices.
    */
   void deleteAll();
+
+  /**
+   * Register a device.
+   *
+   * @param registrationCode displayed on the device
+   * @param deviceName for the created device
+   * @param uuid of the owner
+   * @return the created entity
+   */
+  public DeviceEntity registerDevice(String registrationCode, String deviceName, String uuid);
 }

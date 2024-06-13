@@ -40,6 +40,25 @@ public class MemoryRegistrationManager implements RegistrationManager {
 
   /**
    * {@inheritDoc}
+   */
+  @Override
+  public String registerClient(String registrationCode) {
+    String endpoint = registrationCodeMap.remove(registrationCode);
+
+    if (endpoint != null) {
+      LOGGER.info(
+          "The client '"
+              + endpoint
+              + "' was registered with code '"
+              + registrationCode
+              + "'.");
+    }
+
+    return endpoint;
+  }
+
+  /**
+   * {@inheritDoc}
    *
    * @param endpoint is the "Endpoint Client Name" of a LwM2M client
    */
@@ -62,12 +81,18 @@ public class MemoryRegistrationManager implements RegistrationManager {
           "The client '"
               + endpoint
               + "' is available for registration (timeout: "
-              + getTimeoutUpperBound() + " seconds)");
+              + getTimeoutUpperBound() + " seconds, code: "
+              + registrationCode + ").");
     } else {
-      LOGGER.info("The timeout timer for '"
+      String registrationCode = registrationCodeMap.entrySet().stream()
+          .filter(entry -> endpoint.equals(entry.getValue()))
+          .map(Map.Entry::getKey).findFirst().orElse(null);
+
+      LOGGER.info("The timer for '"
               + endpoint
-              + "' has been reset to"
-              + getTimeoutUpperBound() + " seconds)");
+              + "' has been reset (timeout: "
+              + getTimeoutUpperBound() + " seconds, code: "
+              + registrationCode + ").");
     }
   }
 
