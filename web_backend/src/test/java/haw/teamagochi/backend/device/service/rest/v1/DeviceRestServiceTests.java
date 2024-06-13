@@ -69,7 +69,10 @@ public class DeviceRestServiceTests {
   @AfterEach
   @Transactional
   public void afterEach() {
+    ucManagePet.deleteAll();
+    ucManagePetType.deleteAll();
     ucManageDevice.deleteAll();
+    ucManageUser.deleteAll();
     deviceEntities = null;
   }
 
@@ -81,7 +84,6 @@ public class DeviceRestServiceTests {
         .body("size()", is(2));
   }
 
-  // TODO implement the real test
   @Test
   public void testGetDeviceById() {
     DeviceEntity entity = deviceEntities.get("device-1");

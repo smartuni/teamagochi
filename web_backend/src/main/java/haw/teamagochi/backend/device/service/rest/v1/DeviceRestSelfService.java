@@ -24,7 +24,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
  * @apiNote all 'self' endpoints read the user id of the JWT token
  */
 @Path("/v1/devices/self")
-@Tag(name = "devices/self", description = "Everything about devices.")
+@Tag(name = "devices/self", description = "Everything about a users devices.")
 public class DeviceRestSelfService {
 
   @Inject
