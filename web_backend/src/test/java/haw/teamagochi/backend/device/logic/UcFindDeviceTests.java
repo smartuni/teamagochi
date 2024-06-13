@@ -1,6 +1,8 @@
 package haw.teamagochi.backend.device.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
@@ -16,6 +18,7 @@ import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +58,7 @@ public class UcFindDeviceTests {
     deviceRepository.persist(entity1);
 
     DeviceEntity entity2 = new DeviceEntity();
-    entity2.setName("device-1");
+    entity2.setName("device-2");
     entity2.setDeviceType(DeviceType.FROG);
     deviceRepository.persist(entity2);
 
@@ -73,7 +76,7 @@ public class UcFindDeviceTests {
   }
 
   @Test
-  void testExists() {
+  void testExists_GivenExistingEntityId_ReturnsTrue() {
     // Given
     long entityId = deviceEntities.get("device-1").getId();
 
@@ -84,71 +87,99 @@ public class UcFindDeviceTests {
     assertTrue(doesExist);
   }
 
-  @Transactional
   @Test
-  void testFindById() {
+  void testExists_GivenNonExistingEntityId_ReturnsFalse() {
     // Given
-    DeviceEntity entity = new DeviceEntity();
-    deviceRepository.persist(entity);
+    long entityId = 9999;
 
     // When
-    DeviceEntity fetchedDevice = ucFindDevice.find(entity.getId());
+    boolean doesExist = ucFindDevice.exists(entityId);
 
     // Then
-    assertEquals(entity.getId(), fetchedDevice.getId());
+    assertFalse(doesExist);
   }
 
-  @Transactional
   @Test
-  void testFindAllByUser() {
+  @Transactional
+  void testFind_GivenExistingId_ReturnsEntity() {
+    // Given
+    long entityId = deviceEntities.get("device-1").getId();
+
+    // When
+    DeviceEntity fetchedDevice = ucFindDevice.find(entityId);
+
+    // Then
+    assertEquals(fetchedDevice.getId(), entityId);
+  }
+
+  @Test
+  @Transactional
+  void testFind_GivenNonExistingId_ReturnsNull() {
+    // Given
+    long entityId = 9999;
+
+    // When
+    DeviceEntity fetchedDevice = ucFindDevice.find(entityId);
+
+    // Then
+    assertNull(fetchedDevice);
+  }
+
+  @Test
+  @Transactional
+  void testFindOptional_GivenExistingId_ReturnsOptional() {
+    // Given
+    long entityId = deviceEntities.get("device-1").getId();
+
+    // WhenById
+    Optional<DeviceEntity> fetchedDevice = ucFindDevice.findOptional(entityId);
+
+    // Then
+    assertTrue(fetchedDevice.isPresent());
+    assertEquals(entityId, fetchedDevice.get().getId());
+  }
+
+  @Test
+  @Transactional
+  void testFindOptional_GivenNonExistingId_ReturnsEmptyOptional() {
+    // Given
+    long entityId = 9999;
+
+    // When
+    Optional<DeviceEntity> fetchedDevice = ucFindDevice.findOptional(entityId);
+
+    // Then
+    assertFalse(fetchedDevice.isPresent());
+  }
+
+  @Test
+  void testFindAll_ReturnsAllEntities() {
+    // When
+    List<DeviceEntity> fetchedEntities = ucFindDevice.findAll();
+
+    // Then
+    assertEquals(deviceEntities.size(), fetchedEntities.size());
+  }
+
+  @Test
+  @Transactional
+  void testFindAllByUser_GivenValidArguments_ReturnsAllUserOwnedEntities() {
     // Given
     DeviceEntity entity = new DeviceEntity();
     entity.setName("device-3");
     entity.setOwner(user1);
     deviceRepository.persist(entity);
+    String user1uuidString = String.valueOf(user1.getExternalID());
 
     // When
     List<DeviceEntity> fetchedByUser = ucFindDevice.findAllByUser(user1);
     List<DeviceEntity> fetchedByUserId = ucFindDevice.findAllByUserId(user1.getId());
+    List<DeviceEntity> fetchedByExternalUserId =
+        ucFindDevice.findAllByExternalUserId(user1uuidString);
 
     // Then
     assertEquals(2, fetchedByUser.size());
     assertEquals(2, fetchedByUserId.size());
+    assertEquals(2, fetchedByExternalUserId.size());
   }
-
-//
-//  @Test
-//  @Transactional
-//  public void testGetDevicesFromUser() {
-//    UserEntity user1 = ucManageUser.createUser(new UUID(1,1));
-//    UserEntity user2 = ucManageUser.createUser(new UUID(2,1));
-//
-//    DeviceEntity device1 = ucManageDevice.createDevice("d1", DeviceType.FROG);
-//    DeviceEntity device2 = ucManageDevice.createDevice("d2", DeviceType.FROG);
-//    DeviceEntity device3 = ucManageDevice.createDevice("d3", DeviceType.FROG);
-//
-//    device1.setOwner(user1);
-//    device2.setOwner(user1);
-//    device3.setOwner(user2);
-//
-//    List<DeviceEntity> devicesOfuser1 = ucManageDevice.getDevices(user1.getId());
-//
-//    assert devicesOfuser1.contains(device1);
-//    assert devicesOfuser1.contains(device2);
-//    assert  ! devicesOfuser1.contains(device3);
-//
-//
-//  }
-//  /*
-//  @Test
-//  @Transactional
-//  public void testConstraint() {
-//    DeviceEntity device = deviceService.createDevice("name", DeviceType.FROG);
-//    Assertions.assertThrows(ConstraintViolationException.class, ()-> {
-//      device.setName(null);
-//    });
-//
-//  }
-//
-//   */
 }
