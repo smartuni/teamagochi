@@ -15,6 +15,7 @@ import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +52,7 @@ public class PetMapperTest {
 
     petEntities = new HashMap<>();
     PetEntity pet1 = ucManagePet.create(owner.getId(), "Fifi", petType.getId());
+    pet1.setLastTimeOnDevice(new Date());
 
     pet1.setHappiness(10);
     pet1.setWellbeing(11);
@@ -84,6 +86,8 @@ public class PetMapperTest {
     assertEquals(entity.getId(), dto.getId());
     assertEquals(entity.getName(), dto.getName());
     assertEquals(entity.getPetType().getId(), dto.getType());
+    assertEquals(String.valueOf(entity.getOwner().getExternalID()), dto.getOwnerId());
+    assertEquals(entity.getLastTimeOnDevice(), dto.getLastTimeOnDevice());
 
     assertEquals(entity.getHappiness(), dto.getState().getHappiness());
     assertEquals(entity.getWellbeing(), dto.getState().getWellbeing());
@@ -101,8 +105,13 @@ public class PetMapperTest {
     PetTypeDTO petTypeDto =
         new PetTypeDTO(sourceEntity.getPetType().getId(), sourceEntity.getPetType().getName());
     PetStateDTO petStateDto = new PetStateDTO(10, 11, 12, 13, 14, 15, 16);
-    PetDTO dto =
-        new PetDTO(sourceEntity.getId(), sourceEntity.getName(), petTypeDto.getId(), petStateDto);
+    PetDTO dto = new PetDTO(
+        sourceEntity.getId(),
+        sourceEntity.getName(),
+        petTypeDto.getId(),
+        String.valueOf(owner.getExternalID()),
+        new Date(),
+        petStateDto);
 
     // When
     PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
@@ -111,6 +120,8 @@ public class PetMapperTest {
     assertEquals(dto.getId(), entity.getId());
     assertEquals(dto.getName(), entity.getName());
     assertEquals(dto.getType(), entity.getPetType().getId());
+    assertEquals(dto.getOwnerId(), String.valueOf(entity.getOwner().getExternalID()));
+    assertEquals(dto.getLastTimeOnDevice(), entity.getLastTimeOnDevice());
 
     assertEquals(dto.getState().getHappiness(), entity.getHappiness());
     assertEquals(dto.getState().getWellbeing(), entity.getWellbeing());
