@@ -53,6 +53,17 @@ public class UcManagePetImpl implements UcManagePet {
   /**
    * {@inheritDoc}
    */
+  @Override
+  @Transactional
+  public PetEntity create(PetEntity entity) {
+    petRepository.persist(entity);
+
+    return entity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Transactional
   @Override
   public boolean deleteById(long petId) {

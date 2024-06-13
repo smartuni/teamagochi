@@ -9,7 +9,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
@@ -44,21 +43,6 @@ public class PetRestService {
   public List<PetDTO> getAllPets() {
     List<PetEntity> entities = ucFindPet.findAll();
     return petMapper.mapEntityToTransferObject(entities);
-  }
-
-  /**
-   * Create a pet.
-   *
-   * @param dto containing the pet data
-   * @return the created pet
-   */
-  @POST
-  @Operation(summary = "Create a pet")
-  @APIResponse(responseCode = "200")
-  public PetDTO createPet(PetDTO dto) {
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
-    ucManagePet.create(entity);
-    return petMapper.mapEntityToTransferObject(entity);
   }
 
   /**

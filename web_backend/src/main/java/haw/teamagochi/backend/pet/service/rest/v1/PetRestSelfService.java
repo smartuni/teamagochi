@@ -3,12 +3,14 @@ package haw.teamagochi.backend.pet.service.rest.v1;
 import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
+import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
@@ -24,11 +26,17 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Tag(name = "pets/self", description = "Everything about a users pets.")
 public class PetRestSelfService {
 
-  @Inject SecurityIdentity identity;
+  @Inject
+  SecurityIdentity identity;
 
-  @Inject PetMapper petMapper;
+  @Inject
+  PetMapper petMapper;
 
-  @Inject protected UcFindPet ucFindPet;
+  @Inject
+  protected UcFindPet ucFindPet;
+
+  @Inject
+  protected UcManagePet ucManagePet;
 
   /**
    * Get all pets.
@@ -42,6 +50,23 @@ public class PetRestSelfService {
     String uuid = SecurityUtil.getExternalUserId(identity);
     List<PetEntity> entities = ucFindPet.findAllByExternalUserId(uuid);
     return petMapper.mapEntityToTransferObject(entities);
+  }
+
+  /**
+   * Create a pet.
+   *
+   * @param dto containing the pet data
+   * @return the created pet
+   */
+  @POST
+  @Operation(summary = "Create a pet")
+  @APIResponse(responseCode = "200")
+  public PetDTO createPet(PetDTO dto) {
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    dto.setOwnerId(uuid);
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
+    ucManagePet.create(entity);
+    return petMapper.mapEntityToTransferObject(entity);
   }
 
   /**
