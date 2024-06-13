@@ -74,7 +74,7 @@ public class DeviceRestService {
   @Operation(summary = "Delete a device by its id")
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
-  public DeviceDTO deleteDevice(@PathParam("deviceId") long deviceId) {
+  public DeviceDTO deleteDeviceById(@PathParam("deviceId") long deviceId) {
     DeviceEntity entity = ucFindDevice.find(deviceId);
     boolean wasDeleted = ucManageDevice.deleteById(deviceId);
     if (wasDeleted) {

@@ -32,16 +32,16 @@ import org.junit.jupiter.api.Test;
 public class DeviceMapperTest {
 
   @Inject
-  UcManageUser ucManageUser;
-
-  @Inject
-  UcManagePet ucManagePet;
-
-  @Inject
   UcFindUser ucFindUser;
 
   @Inject
+  UcManageUser ucManageUser;
+
+  @Inject
   UcFindPet ucFindPet;
+
+  @Inject
+  UcManagePet ucManagePet;
 
   @Inject
   UcManagePetType ucManagePetType;
@@ -76,6 +76,7 @@ public class DeviceMapperTest {
     deviceEntities = null;
     ucManagePet.deleteAll();
     ucManageUser.deleteAll();
+    ucManagePetType.deleteAll();
   }
 
   @Test
