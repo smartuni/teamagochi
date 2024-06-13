@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import haw.teamagochi.backend.device.logic.UcHandleLeshanEvents;
 import haw.teamagochi.backend.device.logic.clients.sse.LeshanEventClient;
+import haw.teamagochi.backend.device.logic.registrationmanager.MemoryRegistrationManager;
 import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
@@ -13,6 +14,7 @@ import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.client.SseEvent;
 
 /**
@@ -21,6 +23,8 @@ import org.jboss.resteasy.reactive.client.SseEvent;
 @UnlessBuildProfile("test")
 @ApplicationScoped
 public class LeshanEventListener {
+
+  private static final Logger LOGGER = Logger.getLogger(LeshanEventListener.class);
 
   private final ObjectMapper objectMapper;
 
@@ -37,7 +41,7 @@ public class LeshanEventListener {
   @Startup
   void receiveRegistrationEvents() {
     sseClient
-        .registration().onFailure().recoverWithCompletion()
+        .registration().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
               ucHandleLeshanEvents.handleRegistration(dto);
@@ -48,7 +52,7 @@ public class LeshanEventListener {
   @Startup
   void receiveDeregistrationEvents() {
     sseClient
-        .deregistration().onFailure().recoverWithCompletion()
+        .deregistration().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
               ucHandleLeshanEvents.handleDeregistration(dto);
@@ -59,7 +63,7 @@ public class LeshanEventListener {
   @Startup
   void receiveUpdatedEvents() {
     sseClient
-        .updated().onFailure().recoverWithCompletion()
+        .updated().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               UpdatedDto dto = objectMapper.readValue(event.data(), UpdatedDto.class);
               ucHandleLeshanEvents.handleUpdate(dto);
@@ -70,7 +74,7 @@ public class LeshanEventListener {
   @Startup
   void receiveSleepingEvents() {
     sseClient
-        .sleeping().onFailure().recoverWithCompletion()
+        .sleeping().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
               ucHandleLeshanEvents.handleSleeping(dto);
@@ -81,7 +85,7 @@ public class LeshanEventListener {
   @Startup
   void receiveAwakeEvents() {
     sseClient
-        .awake().onFailure().recoverWithCompletion()
+        .awake().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
               ucHandleLeshanEvents.handleAwake(dto);
@@ -92,7 +96,7 @@ public class LeshanEventListener {
   @Startup
   void receiveCoapLogEvents() {
     sseClient
-        .coaplog().onFailure().recoverWithCompletion()
+        .coaplog().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
         .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               CoaplogDto dto = objectMapper.readValue(event.data(), CoaplogDto.class);
               ucHandleLeshanEvents.handleCoapLog(dto);

@@ -13,6 +13,9 @@
     "secure": {
       "type": "boolean"
     },
+    "lifetime": {
+      "type": "integer"
+    },
     "additionalAttributes": {
       "$ref": "../common/AdditionalAttributes.json"
     }
