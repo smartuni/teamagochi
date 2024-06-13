@@ -12,6 +12,7 @@ import org.mapstruct.Context;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.ValueMapping;
 import org.mapstruct.factory.Mappers;
@@ -65,6 +66,7 @@ public interface DeviceMapper {
   @ValueMapping(source = "frog", target = "FROG")
   @ValueMapping(source = "FROG", target = "FROG")
   @ValueMapping(source = "Frog", target = "FROG")
+  @ValueMapping(source = MappingConstants.ANY_REMAINING, target = "UNDEFINED")
   DeviceType mapStringToDeviceType(String type);
 
   /**
