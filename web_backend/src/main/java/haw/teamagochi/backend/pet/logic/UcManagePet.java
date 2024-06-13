@@ -18,6 +18,14 @@ public interface UcManagePet {
   PetEntity create(long userId, String name, long petTypeId);
 
   /**
+   * Create a pet.
+   *
+   * @param entity to persist
+   * @return the created entity
+   */
+  PetEntity create(PetEntity entity);
+
+  /**
    * Delete a pet.
    *
    * @param petId of the pet
