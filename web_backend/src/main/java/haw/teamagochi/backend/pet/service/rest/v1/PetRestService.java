@@ -36,7 +36,7 @@ public class PetRestService {
   /**
    * Get all pets.
    *
-   * @return a list of all {@link PetDTO PetInfoDTOs}, possibly empty
+   * @return a list of all {@link PetDTO PetDTOs}, possibly empty
    */
   @GET
   @Operation(summary = "Get all pets")
@@ -56,9 +56,9 @@ public class PetRestService {
   @Operation(summary = "Create a pet")
   @APIResponse(responseCode = "200")
   public PetDTO createPet(PetDTO dto) {
-    System.out.println(dto);
-    // TODO replace with real implementation
-    return dto;
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
+    ucManagePet.create(entity);
+    return petMapper.mapEntityToTransferObject(entity);
   }
 
   /**

@@ -123,7 +123,7 @@ public class DeviceMapperTest {
     PetTypeEntity petType = ucManagePetType.createPetType("Frog");
     PetEntity pet = ucManagePet.create(owner.getId(), "Fifi", petType.getId());
 
-    DeviceDTO dto = new DeviceDTO(1, "device-0", "frog",
+    DeviceDTO dto = new DeviceDTO(1L, "device-0", "frog",
         String.valueOf(owner.getExternalID()), pet.getId());
 
     // When
@@ -145,7 +145,7 @@ public class DeviceMapperTest {
   @Test
   public void testMapTransferObjectToEntity_WithoutOwnerAndPet() {
     // Given
-    DeviceDTO dto = new DeviceDTO(1, "device-0", "frog", null, null);
+    DeviceDTO dto = new DeviceDTO(1L, "device-0", "frog", null, null);
 
     // When
     DeviceEntity entity = deviceMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPet);
