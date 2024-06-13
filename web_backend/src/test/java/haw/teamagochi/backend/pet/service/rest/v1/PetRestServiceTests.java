@@ -104,8 +104,7 @@ public class PetRestServiceTests {
 
     assertEquals(entity.getId(), resultDto.getId());
     assertEquals(entity.getName(), resultDto.getName());
-    assertEquals(entity.getPetType().getId(), resultDto.getType().getId());
-    assertEquals(entity.getPetType().getName(), resultDto.getType().getName());
+    assertEquals(entity.getPetType().getId(), resultDto.getType());
     // TODO pet owner
     //assertEquals(String.valueOf(entity.getOwner().getExternalID()), resultDto);
 

@@ -15,6 +15,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @RegisterForReflection
 public class PetTypeDTO {
-  Integer id;
+  Long id;
   String name;
 }
