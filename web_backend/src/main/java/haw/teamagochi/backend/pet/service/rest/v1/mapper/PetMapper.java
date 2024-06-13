@@ -1,45 +1,61 @@
 package haw.teamagochi.backend.pet.service.rest.v1.mapper;
 
-import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
+import haw.teamagochi.backend.pet.logic.UcFindPetType;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.user.logic.UcFindUser;
+import java.util.List;
+import org.mapstruct.Context;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
-//ggf als abstrct class um custom mappings zu erstellen --> ermöglicht nutzen von methoden??!
+/**
+ * Mapper between {@link PetEntity} and {@link PetDTO}.
+ */
 @Mapper(componentModel="cdi")
 public interface PetMapper {
 
   PetMapper MAPPER = Mappers.getMapper(PetMapper.class);
-  @Mapping(target = "petID", expression = "java(pet.getId())")
-  @Mapping(target ="petName", expression = "java(pet.getName())")
-  @Mapping(target ="happiness", expression = "java(pet.getHappiness())")
-  @Mapping(target ="wellbeing", expression = "java(pet.getWellbeing())")
-  @Mapping(target ="health", expression = "java(pet.getHealth())")
-  @Mapping(target ="hunger", expression = "java(pet.getHunger())")
-  @Mapping(target ="cleanliness", expression = "java(pet.getCleanliness())")
-  @Mapping(target ="fun", expression = "java(pet.getFun())")
-  @Mapping(target = "petTypeName", expression = "java(pet.getPetType().getName())")
 
-  @Mapping(target ="level", expression = "java(computeLevel(pet))")
-  @Mapping(target ="levelProgress", expression = "java(computeProgress(pet))")
-  PetDTO toResource(PetEntity pet);
+  /**
+   * Map a transfer object to an entity.
+   *
+   * @param petDto as the mapping source
+   * @return an entity
+   */
+  @Mapping(source = "id", target = "id")
+  @Mapping(source = "name", target = "name")
+  @Mapping(source = "type", target = "petType")
+  @Mapping(source = "state.happiness", target = "happiness")
+  @Mapping(source = "state.wellbeing", target = "wellbeing")
+  @Mapping(source = "state.health", target = "health")
+  @Mapping(source = "state.hunger", target = "hunger")
+  @Mapping(source = "state.cleanliness", target = "cleanliness")
+  @Mapping(source = "state.fun", target = "fun")
+  @Mapping(source = "state.xp", target = "xp")
+  PetEntity mapTransferObjectToEntity(PetDTO petDto);
 
+  /**
+   * See {@link PetMapper#mapTransferObjectToEntity(PetDTO)}.
+   */
+  List<PetEntity> mapTransferObjectToEntity(List<PetDTO> petDtos);
 
-  default int computeLevel(PetEntity pet){
-    //int[] levelInfo = LevelingManager.computeLevel(pet.xp);
-    //return levelInfo[0];
-    //TODO
-    return 0;
+  /**
+   * Map an entity to a transfer object.
+   *
+   * @param petEntity as the mapping source
+   * @return a transfer object (dto)
+   */
+  @InheritInverseConfiguration
+  PetDTO mapEntityToTransferObject(PetEntity petEntity);
 
-  }
-  default int computeProgress(PetEntity pet){
-    //int[] levelInfo = LevelingManager.computeLevel(pet.xp);
-    //return levelInfo[1];
-    //TODO
-    return 0;
-  }
-
-
+  /**
+   * See {@link PetMapper#mapEntityToTransferObject(PetEntity)}.
+   */
+  List<PetDTO> mapEntityToTransferObject(List<PetEntity> petEntities);
 }

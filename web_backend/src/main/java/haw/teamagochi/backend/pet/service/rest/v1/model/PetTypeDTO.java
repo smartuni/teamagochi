@@ -7,16 +7,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * A data transfer object (DTO) for pets.
+ * A data transfer object (DTO) for pet types.
  */
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @RegisterForReflection
-public class PetDTO {
-  Long id;
+public class PetTypeDTO {
+  Integer id;
   String name;
-  PetTypeDTO type;
-  PetStateDTO state;
 }
