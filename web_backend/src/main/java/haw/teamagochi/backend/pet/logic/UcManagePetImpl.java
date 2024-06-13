@@ -55,7 +55,7 @@ public class UcManagePetImpl implements UcManagePet {
    */
   @Transactional
   @Override
-  public boolean delete(long petId) {
+  public boolean deleteById(long petId) {
     return petRepository.deleteById(petId);
   }
 
@@ -65,14 +65,14 @@ public class UcManagePetImpl implements UcManagePet {
   @Transactional
   @Override
   public void changeDevice(long petId, long deviceId) {
-    PetEntity pet = petRepository.findById(petId);
-    DeviceEntity device = ucFindDevice.find(deviceId);
-
-    if (pet == null | device == null) {
-      throw new NotFoundException("Either device or pet not found in the database.");
-    }
-
-    device.setPet(pet);
+//    PetEntity pet = petRepository.findById(petId);
+//    DeviceEntity device = ucFindDevice.find(deviceId);
+//
+//    if (pet == null | device == null) {
+//      throw new NotFoundException("Either device or pet not found in the database.");
+//    }
+//
+//    device.setPet(pet);
   }
 
   /**

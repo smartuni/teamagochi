@@ -1,18 +1,18 @@
 package haw.teamagochi.backend.pet.service.rest.v1;
 
+import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
-import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
+import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -20,18 +20,15 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 /**
  * Rest interface for the pet component.
  */
-@Path("/v1/pets")
-@Tag(name = "pets", description = "Everything about pets.")
-public class PetRestService {
+@Path("/v1/pets/self")
+@Tag(name = "pets/self", description = "Everything about a users pets.")
+public class PetRestSelfService {
 
-  @Inject
-  PetMapper petMapper;
+  @Inject SecurityIdentity identity;
 
-  @Inject
-  protected UcFindPet ucFindPet;
+  @Inject PetMapper petMapper;
 
-  @Inject
-  protected UcManagePet ucManagePet;
+  @Inject protected UcFindPet ucFindPet;
 
   /**
    * Get all pets.
@@ -39,26 +36,12 @@ public class PetRestService {
    * @return a list of all {@link PetDTO PetInfoDTOs}, possibly empty
    */
   @GET
-  @Operation(summary = "Get all pets")
+  @Operation(summary = "Get all pets owned by a given user")
   @APIResponse(responseCode = "200")
   public List<PetDTO> getAllPets() {
-    List<PetEntity> entities = ucFindPet.findAll();
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    List<PetEntity> entities = ucFindPet.findAllByExternalUserId(uuid);
     return petMapper.mapEntityToTransferObject(entities);
-  }
-
-  /**
-   * Create a pet.
-   *
-   * @param dto containing the pet data
-   * @return the created pet
-   */
-  @POST
-  @Operation(summary = "Create a pet")
-  @APIResponse(responseCode = "200")
-  public PetDTO createPet(PetDTO dto) {
-    System.out.println(dto);
-    // TODO replace with real implementation
-    return dto;
   }
 
   /**
@@ -74,26 +57,11 @@ public class PetRestService {
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
   public PetDTO getPetById(@PathParam("petId") long petId) {
-    PetEntity pet = ucFindPet.findOptional(petId).orElseThrow(NotFoundException::new);
-    return petMapper.mapEntityToTransferObject(pet);
-  }
-
-  /**
-   * Delete a pet by its id.
-   *
-   * @param petId of the pet to delete
-   * @return the {@link PetDTO} if deleted
-   * @throws NotFoundException if no device was found
-   */
-  @DELETE
-  @Path("/{petId}")
-  @Operation(summary = "Delete a pet by its id")
-  @APIResponse(responseCode = "200")
-  @APIResponse(responseCode = "404", description = "Not Found")
-  public PetDTO deletePetById(@PathParam("petId") long petId) {
+    String uuid = SecurityUtil.getExternalUserId(identity);
     PetEntity pet = ucFindPet.find(petId);
-    boolean wasDeleted = ucManagePet.deleteById(petId);
-    if (wasDeleted) {
+    if (pet != null
+        && pet.getOwner() != null
+        && Objects.equals(pet.getOwner().getExternalID().toString(), uuid)) {
       return petMapper.mapEntityToTransferObject(pet);
     }
     throw new NotFoundException();
