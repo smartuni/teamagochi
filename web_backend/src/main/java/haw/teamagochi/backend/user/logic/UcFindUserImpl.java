@@ -31,6 +31,7 @@ public class UcFindUserImpl implements UcFindUser {
   public UserEntity find(String uuid) {
     return userRepository.findByExternalId(UUID.fromString(uuid));
   }
+
   /**
    * {@inheritDoc}
    */
