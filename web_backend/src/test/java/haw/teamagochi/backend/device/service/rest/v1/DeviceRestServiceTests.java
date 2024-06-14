@@ -69,9 +69,9 @@ public class DeviceRestServiceTests {
   @AfterEach
   @Transactional
   public void afterEach() {
+    ucManageDevice.deleteAll();
     ucManagePet.deleteAll();
     ucManagePetType.deleteAll();
-    ucManageDevice.deleteAll();
     ucManageUser.deleteAll();
     deviceEntities = null;
   }

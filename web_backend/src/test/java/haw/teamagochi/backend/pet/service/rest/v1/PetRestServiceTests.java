@@ -71,8 +71,8 @@ public class PetRestServiceTests {
   @Transactional
   public void afterEach() {
     ucManagePet.deleteAll();
-    ucManageUser.deleteAll();
     ucManagePetType.deleteAll();
+    ucManageUser.deleteAll();
     petEntities = null;
   }
 

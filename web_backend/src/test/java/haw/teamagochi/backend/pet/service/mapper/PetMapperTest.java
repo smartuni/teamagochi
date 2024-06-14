@@ -70,8 +70,8 @@ public class PetMapperTest {
   public void afterEach() {
     petEntities = null;
     ucManagePet.deleteAll();
-    ucManageUser.deleteAll();
     ucManagePetType.deleteAll();
+    ucManageUser.deleteAll();
   }
 
   @Test
