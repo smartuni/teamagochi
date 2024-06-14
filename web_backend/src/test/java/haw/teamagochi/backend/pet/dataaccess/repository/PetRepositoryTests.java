@@ -1,5 +1,9 @@
 package haw.teamagochi.backend.pet.dataaccess.repository;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
@@ -7,11 +11,15 @@ import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.hibernate.JDBCException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.function.Executable;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 
 @QuarkusTest
@@ -81,8 +89,45 @@ public class PetRepositoryTests {
     Assertions.assertEquals(newName, persistedPet.getName());
   }
 
+  @Test
+  @Transactional
+  public void testDeletePetEntityDoesNotDeletePetTypeEntity() {
+    // Given
+    PetTypeEntity petType = new PetTypeEntity();
+    petType.setName("MyPetType");
+    petTypeRepository.persist(petType);
+    PetEntity entity = new PetEntity();
+    entity.setPetType(petType);
+    petRepository.persist(entity);
 
+    // When
+    Executable deleteFn = () -> petRepository.delete(entity);
 
+    // Then
+    assertDoesNotThrow(deleteFn);
+    assertNotNull(petTypeRepository.findById(petType.getId()));
+  }
 
+  @Test
+  @Transactional
+  public void testDeletePetEntityDoesNotDeletePetTypeEntity2() {
+    // Given
+    PetTypeEntity petType = new PetTypeEntity();
+    petType.setName("MyPetType");
+    petTypeRepository.persist(petType);
+    PetEntity entity = new PetEntity();
+    entity.setPetType(petType);
+    petRepository.persist(entity);
 
+    // When
+    Executable deleteFn = () -> {
+      petTypeRepository.delete(petType);
+
+      // Needed for exception to be thrown, otherwise assertThrows is always false
+      petTypeRepository.flush();
+    };
+
+    // Then
+    assertThrows(PersistenceException.class, deleteFn);
+  }
 }

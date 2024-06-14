@@ -75,8 +75,8 @@ public class DeviceMapperTest {
   public void afterEach() {
     deviceEntities = null;
     ucManagePet.deleteAll();
-    ucManageUser.deleteAll();
     ucManagePetType.deleteAll();
+    ucManageUser.deleteAll();
   }
 
   @Test
