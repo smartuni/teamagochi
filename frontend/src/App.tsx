@@ -1,12 +1,12 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
-import { useState } from 'react'
-import './App.css'
-import Pet from "./Components/Pet/Pet";
-import LinkDevice from './Components/LinkDevice'
-import Footer from './Components/Footer';
-import Navbar from './Components/Navbar/Navbar'
-import Settings from './Components/Settings'
+import { useState } from "react";
+import "./App.css";
+import LinkDevice from "./Components/LinkDevice";
+import Footer from "./Components/Footer";
+import Navbar from "./Components/Navbar/Navbar";
+import Settings from "./Components/Settings";
+import PetPage from "./Components/PetPage";
 
 function App() {
   const auth = useAuth();
@@ -30,11 +30,12 @@ function App() {
 
   if (auth.isAuthenticated) {
     return (
-      
-      <div style={{ backgroundColor: '#F5F5DC'}}>
+      <div style={{ backgroundColor: "#F5F5DC" }}>
         <div>
-        <div><Navbar /> </div>
-{/*         
+          <div>
+            <Navbar />{" "}
+          </div>
+          {/*         
         <h1 >WELCOME TO TEAMAGOCHI GANG</h1>
           <h1 className='font-extrabold text-9xl' >
              <a href="https://www.youtube.com/watch?v=sf0PJsknZiM">CARTI </a>
@@ -46,16 +47,14 @@ function App() {
           <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
           <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   */}
         </div>
-       
-        <div>Hello USERNAME: {auth.user?.profile?.preferred_username || 'User'}</div>
-        <Footer/ >,
+        <div>
+          Hello USERNAME: {auth.user?.profile?.preferred_username || "User"}
+        </div>
+        <Footer />,
       </div>
     );
   }
-  return[
-    <Navbar/>,
-    <Footer/>,
-  ];
+  return [<Navbar />, <PetPage />, <Footer />];
 }
 
 export default App;
