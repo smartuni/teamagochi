@@ -1,0 +1,8 @@
+services:
+  teashan:
+    ports:
+      - "[fd00:dead:beef::1]:5683:5683/udp" # [coap://]      CoAP over UDP (with experimental OSCORE)
+      - "[fd00:dead:beef::1]:5683:5683/tcp" # [coap+tcp://]  CoAP over TCP (experimental) 
+      - "[fd00:dead:beef::1]:5684:5684/udp" # [coaps://]     CoAP over DTLS
+      - "[fd00:dead:beef::1]:5684:5684/tcp" # [coaps+tcp://] CoAP over TLS (experimental)
+      - "[fd00:dead:beef::1]:5685:5685/udp" # [coap://]      CoAP over UDP[::]

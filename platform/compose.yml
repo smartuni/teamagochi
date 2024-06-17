@@ -54,12 +54,15 @@ services:
       - "127.0.0.1:5684:5684/udp" # [coaps://]     CoAP over DTLS
       - "127.0.0.1:5684:5684/tcp" # [coaps+tcp://] CoAP over TLS (experimental)
       - "127.0.0.1:5685:5685/udp" # [coap://]      CoAP over UDP
-      # TODO IPv6?
+      # Bootstrap
+      - "127.0.0.1:5783:5783/udp" # [coap://]      CoAP over UDP
+      - "127.0.0.1:5784:5784/udp" # [coaps://]     CoAP over DTLS
     environment:
       NGINX_ENABLE: "false"
       # Overriding LESHAN_CMD and LESHAN_BS_CMD allows changing ports and more, see ./teashan/Dockerfile
     networks:
       - proxy
+      - public
 
   # Keycloak Identity Provider and Access Management
   keycloak:
