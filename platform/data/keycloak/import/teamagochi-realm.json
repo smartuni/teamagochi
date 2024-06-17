@@ -735,7 +735,7 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "http://localhost:3030/*", "/*" ],
+    "redirectUris" : [ "http://localhost:3030/*", "http://localhost:5173/*" ],
     "webOrigins" : [ "http://localhost:3030", "+" ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -748,7 +748,7 @@
     "frontchannelLogout" : true,
     "protocol" : "openid-connect",
     "attributes" : {
-      "post.logout.redirect.uris" : "/*##http://localhost:3030",
+      "post.logout.redirect.uris" : "/*##http://localhost:3030##http://localhost:5173/*",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false",
       "use.refresh.tokens" : "true",
