@@ -9,7 +9,7 @@ public enum PetEvents {
   DIRTY,
   PLAY,
   BORED,
-  REACHED_MAX;
+  REACHED_MAX_STATUS;
 
 
 }

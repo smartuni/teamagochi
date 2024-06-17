@@ -3,8 +3,10 @@ package haw.teamagochi.backend.pet.logic;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.Events.PetEvents;
 import haw.teamagochi.backend.pet.logic.UcPetConditionsImpl;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+@ApplicationScoped
 public class UcPetInteractionsImpl implements UcPetInteractions{
 
   @Inject

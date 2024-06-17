@@ -1,7 +1,10 @@
 package haw.teamagochi.backend.pet.logic.gameCycle;
 
+import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.logic.UcFindDeviceImpl;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
+import haw.teamagochi.backend.pet.logic.UcFindPetImpl;
 import haw.teamagochi.backend.pet.logic.UcPetConditionsImpl;
 import haw.teamagochi.backend.pet.logic.UcPetStatusImpl;
 import io.quarkus.scheduler.Scheduled;
@@ -11,8 +14,11 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
 public class GameCycleImpl implements GameCycle{
+
   @Inject
   PetRepository petRepository;
+  @Inject
+  UcFindDeviceImpl findDevice;
 
   @Inject
   UcPetStatusImpl status;
@@ -24,17 +30,21 @@ public class GameCycleImpl implements GameCycle{
   @Scheduled(every = "{GameCycleImpl.interval}")
   public void petGameCylce() {
     Random randomNum = new Random();
-      for(PetEntity pet: petRepository.listAll()){
-        conditions.increaseHunger(pet);
-        conditions.decreaseFun(pet);
-        conditions.decreaseCleanliness(pet);
-        if(randomNum.nextInt(10)==1){ //health decrease is random based
-          conditions.decreaseHealth(pet);
-        }
-        status.decreaseWellbeing(pet);
-        status.decreaseHappiness(pet);
-        petRepository.persist(pet);
-      }
+      for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
+        PetEntity pet = device.getPet();
+        if(pet != null){
+          conditions.increaseHunger(pet);
+          conditions.decreaseFun(pet);
+          conditions.decreaseCleanliness(pet);
+          if(randomNum.nextInt(10)==1){ //health decrease is random based
+            conditions.decreaseHealth(pet);
+          }//if
+          status.decreaseWellbeing(pet);
+          status.decreaseHappiness(pet);
+          petRepository.persist(pet);
+        }//if
+
+      }//method
   }
 
 

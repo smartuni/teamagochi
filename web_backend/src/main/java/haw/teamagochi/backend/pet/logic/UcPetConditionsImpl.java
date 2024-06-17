@@ -1,8 +1,13 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+@ApplicationScoped
 public class UcPetConditionsImpl implements UcPetConditions{
+
   @Override
   public void decreaseHunger(PetEntity pet) {
     int decrease = 10;
