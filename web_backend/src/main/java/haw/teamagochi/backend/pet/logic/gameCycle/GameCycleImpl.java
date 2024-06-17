@@ -1,34 +1,35 @@
 package haw.teamagochi.backend.pet.logic.gameCycle;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcFindDeviceImpl;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.repository.PetRepository;
-import haw.teamagochi.backend.pet.logic.UcFindPetImpl;
-import haw.teamagochi.backend.pet.logic.UcPetConditionsImpl;
-import haw.teamagochi.backend.pet.logic.UcPetStatusImpl;
+import haw.teamagochi.backend.pet.logic.*;
 import io.quarkus.scheduler.Scheduled;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.Random;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-
+@ApplicationScoped
 public class GameCycleImpl implements GameCycle{
 
   @Inject
   PetRepository petRepository;
   @Inject
-  UcFindDeviceImpl findDevice;
+  UcFindDevice findDevice;
 
   @Inject
-  UcPetStatusImpl status;
+  UcPetStatus status;
 
   @Inject
-  UcPetConditionsImpl conditions;
+  UcPetConditions conditions;
 
   @Override
   @Scheduled(every = "{GameCycleImpl.interval}")
   public void petGameCylce() {
+    System.out.println("Gamecycling!");
     Random randomNum = new Random();
       for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
         PetEntity pet = device.getPet();

@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import jakarta.transaction.Transactional;
 
 /**
  * Use Case for the Conitions of a pet like:

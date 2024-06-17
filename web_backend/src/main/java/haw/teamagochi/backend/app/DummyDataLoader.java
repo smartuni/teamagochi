@@ -3,10 +3,13 @@ package haw.teamagochi.backend.app;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.logic.UcManageDevice;
+import haw.teamagochi.backend.device.logic.clients.devicesimulator.DeviceSimulator;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.logic.UcManagePetType;
+import haw.teamagochi.backend.pet.logic.gameCycle.GameCycle;
+import haw.teamagochi.backend.pet.logic.gameCycle.GameCycleImpl;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,12 +32,18 @@ public class DummyDataLoader {
   @Inject
   UcManagePetType ucManagePetType;
 
+  @Inject
+  GameCycle gameCycle;
+
+  @Inject
+  DeviceSimulator deviceSimulator;
+
   @ConfigProperty(name = "dummydata.load")
   boolean load;
 
   void load() {
     if (load) {
-      System.out.println("Loading dummy data NEW ...");
+      System.out.println("Loading dummy data V4 ...");
 
       /*
        * Create users
@@ -71,6 +80,11 @@ public class DummyDataLoader {
       DeviceEntity device3 = new DeviceEntity("DEVICE_NR3", DeviceType.FROG);
       device3.setOwner(user1);
       ucManageDevice.create(device3);
+
+      /*
+       * Start simulation
+       */
+
     }
   }
 }
