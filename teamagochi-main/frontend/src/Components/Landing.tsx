@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const Landing = () =>{
     
     return (
-        <div>landing</div>
+        <div>landing  testing</div>
     )
 }
 
