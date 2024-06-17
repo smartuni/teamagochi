@@ -22,6 +22,9 @@
 #include "init_buttons.h"
 #include "io_handler.h"
 
+//Define the vibration time (milliseconds) here:
+#define VIBRATE_FOR_MSEC 500
+
 void io_init(void){
     init_buttons();
 }
@@ -31,7 +34,7 @@ handler_result_t ioHandler_handleEvent(EVENT_T event){
     switch(event){
         case VIBRATE:
             DEBUG("[IoHandler:handleEvent]: vibrate\n");
-            // vibrate();
+            vibrate(VIBRATE_FOR_MSEC);
         break;
         default:
         break;
