@@ -5,7 +5,7 @@ import haw.teamagochi.backend.pet.logic.Events.PetEvents;
 
 public class UcPetStatusImpl implements UcPetStatus {
   @Override
-  public PetEntity increaseHappiness(PetEntity pet, PetEvents event) {
+  public void increaseHappiness(PetEntity pet, PetEvents event) {
     //TODO ballancing
     int happinessIncrease;
     switch (event){
@@ -17,35 +17,26 @@ public class UcPetStatusImpl implements UcPetStatus {
     }//switch
     if(pet.getHappiness() + happinessIncrease > 100){
       pet.setHappiness(100);
-      pet = increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
+      increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
     }else if(happinessIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setHappiness(pet.getHappiness() + happinessIncrease);
       //pet = increaseXP(pet, event); //seperate call from interactions UC
     }
-    return pet;
   }//method
 
   @Override
-  public PetEntity decreaseHappiness(PetEntity pet, PetEvents event) {
-    //TODO ballancing
-    int happinessDecrease;
-    switch (event){
-      case SICK -> happinessDecrease = 5;
-      case BORED -> happinessDecrease = 15;
-      case DIRTY -> happinessDecrease = 5;
-      case HUNGRY -> happinessDecrease = 15;
-      default -> happinessDecrease = 0;
-    }
+  public void decreaseHappiness(PetEntity pet) {
+    int happinessDecrease = checkHappinessLimits(pet.getFun());//
+    happinessDecrease += checkHappinessLimits(pet.getHunger());
     if(pet.getHappiness() - happinessDecrease < 0){
       pet.setHappiness(0);
     }else if(happinessDecrease != 0){
       pet.setHappiness(pet.getHappiness() - happinessDecrease);
     }
-    return pet;
   }
 
   @Override
-  public PetEntity increaseWellbeing(PetEntity pet, PetEvents event) {
+  public void increaseWellbeing(PetEntity pet, PetEvents event) {
     //TODO ballancing
     int wellbeingIncrease;
     switch (event){
@@ -57,35 +48,26 @@ public class UcPetStatusImpl implements UcPetStatus {
     }//switch
     if(pet.getWellbeing() + wellbeingIncrease > 100){
       pet.setWellbeing(100);
-      pet = increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
+      increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
     }else if(wellbeingIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setWellbeing(pet.getWellbeing() + wellbeingIncrease);
       //pet = increaseXP(pet, event); seperate call drom interactionsUC
     }
-    return pet;
   }
 
   @Override
-  public PetEntity decreaseWellbeing(PetEntity pet, PetEvents event) {
-    //TODO ballancing
-    int wellbeingDecrease;
-    switch (event){
-      case SICK -> wellbeingDecrease = 15;
-      case BORED -> wellbeingDecrease = 5;
-      case DIRTY -> wellbeingDecrease = 15;
-      case HUNGRY -> wellbeingDecrease = 5;
-      default -> wellbeingDecrease = 0;
-    }
+  public void decreaseWellbeing(PetEntity pet) {
+    int wellbeingDecrease = checkWellbeingLimits(pet.getHealth());
+    wellbeingDecrease = wellbeingDecrease + checkWellbeingLimits(pet.getCleanliness());
     if(pet.getWellbeing() - wellbeingDecrease < 0){
       pet.setWellbeing(0);
     }else if(wellbeingDecrease != 0){
       pet.setWellbeing(pet.getWellbeing() - wellbeingDecrease);
     }
-    return pet;
   }
 
   @Override
-  public PetEntity increaseXP(PetEntity pet, PetEvents event) {
+  public void increaseXP(PetEntity pet, PetEvents event) {
     //TODO ballancing
     int xpIncrease;
     switch(event){
@@ -97,6 +79,33 @@ public class UcPetStatusImpl implements UcPetStatus {
       default -> xpIncrease = 0;
     }
     pet.setXp(pet.getXp() + xpIncrease);
-    return pet;
+  }
+
+  private int checkWellbeingLimits(int healthOrCleanlinessValue){
+    if(healthOrCleanlinessValue > 59){
+      return 0;
+    }else if(healthOrCleanlinessValue > 39){
+      return -5;
+    }else if(healthOrCleanlinessValue > 19){
+      return -10;
+    }else if(healthOrCleanlinessValue >= 1){
+      return -15;
+    }else{// healthOrCleanlinessValue == 0
+      return -20;
+    }
+  }
+
+  private int checkHappinessLimits(int hungerOrFunValue){
+    if(hungerOrFunValue > 59){
+      return 0;
+    }else if(hungerOrFunValue > 39){
+      return -5;
+    }else if(hungerOrFunValue > 19){
+      return -10;
+    }else if(hungerOrFunValue >= 1){
+      return -15;
+    }else{// hungerOrFunValue == 0
+      return -20;
+    }
   }
 }

@@ -1,26 +1,50 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import haw.teamagochi.backend.pet.logic.UcPetConditionsImpl;
+import jakarta.inject.Inject;
 
 public class UcPetInteractionsImpl implements UcPetInteractions{
 
+  @Inject
+  UcPetConditionsImpl conditions;
+  @Inject
+  UcPetStatusImpl status;
+
   @Override
   public PetEntity feedPet(PetEntity pet) {
-    return null;
+    conditions.decreaseHunger(pet);
+    status.increaseHappiness(pet, PetEvents.FEED);
+    status.increaseWellbeing(pet, PetEvents.FEED);
+    status.increaseXP(pet, PetEvents.FEED);
+    return pet;
   }
 
   @Override
   public PetEntity cleanPet(PetEntity pet) {
-    return null;
+    conditions.increaseCleanliness(pet);
+    status.increaseHappiness(pet, PetEvents.CLEAN);
+    status.increaseWellbeing(pet, PetEvents.CLEAN);
+    status.increaseXP(pet, PetEvents.CLEAN);
+    return pet;
   }
 
   @Override
   public PetEntity medicatePet(PetEntity pet) {
-    return null;
+    conditions.increaseHealth(pet);
+    status.increaseHappiness(pet, PetEvents.MEDICATE);
+    status.increaseWellbeing(pet, PetEvents.MEDICATE);
+    status.increaseXP(pet, PetEvents.MEDICATE);
+    return pet;
   }
 
   @Override
   public PetEntity playWithPet(PetEntity pet) {
-    return null;
+    conditions.increaseFun(pet);
+    status.increaseHappiness(pet, PetEvents.PLAY);
+    status.increaseWellbeing(pet, PetEvents.PLAY);
+    status.increaseXP(pet, PetEvents.PLAY);
+    return pet;
   }
 }
