@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import backgroundImage from '../../Misc/compute-ea4c57a4.png';
+import backgroundImage from '../Misc/compute-ea4c57a4.png';
 import Navbar from './Navbar/Navbar';
 
 const LandingPage = () => {
