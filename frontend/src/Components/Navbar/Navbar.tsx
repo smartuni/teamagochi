@@ -4,6 +4,7 @@ import Inventory from "../Inventory.tsx";
 import Settings from "../Settings.tsx";
 import Friends from "../Friends.tsx";
 import PetPage from "../PetPage.tsx";
+import LinkDevice from "../LinkDevice.tsx";
 import { useAuth } from "react-oidc-context";
 import "./navbar.css";
 
@@ -57,10 +58,9 @@ const Navbar = () => {
             <ul className="navbar-nav">
               {auth.isAuthenticated ? (
                 <>
+                      
                   <li
-                    className={`nav-item ${
-                      activePage === "Pet Page" ? "active" : ""
-                    }`}
+                    
                   >
                     <Link
                       className="nav-link"
