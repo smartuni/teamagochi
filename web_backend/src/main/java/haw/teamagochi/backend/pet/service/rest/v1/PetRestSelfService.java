@@ -6,6 +6,9 @@ import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.user.logic.UcFindUser;
+import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -38,6 +41,12 @@ public class PetRestSelfService {
   @Inject
   protected UcManagePet ucManagePet;
 
+  @Inject
+  protected UcFindUser ucFindUser;
+
+  @Inject
+  protected UcManageUser ucManageUser;
+
   /**
    * Get all pets.
    *
@@ -63,6 +72,10 @@ public class PetRestSelfService {
   @APIResponse(responseCode = "200")
   public PetDTO createPet(PetDTO dto) {
     String uuid = SecurityUtil.getExternalUserId(identity);
+    UserEntity owner = ucFindUser.find(uuid);
+    if (owner == null) {
+      ucManageUser.create(uuid); // create userId in database
+    }
     dto.setOwnerId(uuid);
     PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
     ucManagePet.create(entity);
