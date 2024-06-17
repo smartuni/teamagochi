@@ -13,18 +13,6 @@ server {
   }
 
   #
-  # Leshan Server
-  #
-  location = /leshan {
-    rewrite ^ $scheme://$http_host/leshan/ permanent;
-  }
-
-  location /leshan/ {
-    proxy_pass ${TEASHAN_WEB_URL};
-    include proxy_params;
-  }
-
-  #
   # Leshan Bootstrap Server
   #
   location = /leshan/bs {
@@ -32,6 +20,18 @@ server {
   }
 
   location /leshan/bs/ {
+    proxy_pass ${TEASHAN_BS_WEB_URL};
+    include proxy_params;
+  }
+
+  #
+  # Leshan Server
+  #
+  location = /leshan {
+    rewrite ^ $scheme://$http_host/leshan/ permanent;
+  }
+
+  location /leshan/ {
     proxy_pass ${TEASHAN_WEB_URL};
     include proxy_params;
   }
