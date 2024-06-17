@@ -165,12 +165,92 @@ public class UcPetStatusImplTest {
 
   @Test
   void testIncreaseWellbeing(){
-    //TODO
-    Assertions.assertTrue(true);
+    Assertions.assertEquals(0, petEntities.get("pet1").getWellbeing());
+    Assertions.assertEquals(0, petEntities.get("pet1").getXp());
+    //Test valid Params:
+    for(int i = 1; i<=4; i++){
+      if(i%2 == 0){
+        status.increaseWellbeing(petEntities.get("pet1"), PetEvents.MEDICATE);
+        Assertions.assertEquals((i*2*10-5), petEntities.get("pet1").getWellbeing());
+        status.increaseWellbeing(petEntities.get("pet1"), PetEvents.FEED);
+      }else{
+        status.increaseWellbeing(petEntities.get("pet1"), PetEvents.CLEAN);
+        Assertions.assertEquals((i*2*10-5), petEntities.get("pet1").getWellbeing());
+        status.increaseWellbeing(petEntities.get("pet1"), PetEvents.PLAY);
+      }//if
+      Assertions.assertEquals((i*2*10), petEntities.get("pet1").getWellbeing());
+      Assertions.assertEquals(0, petEntities.get("pet1").getXp());
+    }//for
+    petEntities.get("pet1").setWellbeing(100);
+    status.increaseWellbeing(petEntities.get("pet1"), PetEvents.MEDICATE);
+    Assertions.assertEquals(100, petEntities.get("pet1").getWellbeing());
+    Assertions.assertEquals(40, petEntities.get("pet1").getXp());
+    //Test invalid Params:
+    petEntities.get("pet2").setWellbeing(0);
+    Assertions.assertEquals(0, petEntities.get("pet2").getWellbeing());
+    Assertions.assertEquals(0, petEntities.get("pet2").getXp());
+    status.increaseWellbeing(petEntities.get("pet2"), PetEvents.DIRTY);
+    Assertions.assertEquals(0, petEntities.get("pet2").getWellbeing());
+    Assertions.assertEquals(0, petEntities.get("pet2").getXp());
+    status.increaseWellbeing(petEntities.get("pet2"), PetEvents.BORED);
+    Assertions.assertEquals(0, petEntities.get("pet2").getWellbeing());
+    Assertions.assertEquals(0, petEntities.get("pet2").getXp());
+    status.increaseWellbeing(petEntities.get("pet2"), PetEvents.REACHED_MAX_STATUS);
+    Assertions.assertEquals(0, petEntities.get("pet2").getWellbeing());
+    Assertions.assertEquals(0, petEntities.get("pet2").getXp());
+    assertDoesNotThrow(() -> {
+      status.increaseWellbeing(null, PetEvents.FEED);
+    });
   }
 
   @Test
   void testDecreaseWellbeing(){
+    petEntities.get("pet1").setWellbeing(100);
+    petEntities.get("pet1").setHealth(0);
+    petEntities.get("pet1").setCleanliness(100);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(60);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setCleanliness(60);//60
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(40);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(95, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setCleanliness(40);//40
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(85, petEntities.get("pet1").getWellbeing());// 2* -5
+    petEntities.get("pet1").setCleanliness(60);//60
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(80, petEntities.get("pet1").getWellbeing());
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(75, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(20);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(65, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(1);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(50, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(0);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(30, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHealth(100);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(30, petEntities.get("pet1").getWellbeing());
+    Assertions.assertEquals(30, petEntities.get("pet1").getWellbeing());
+    petEntities.get("pet1").setHunger(100);
+    petEntities.get("pet1").setFun(0);
+    status.decreaseWellbeing(petEntities.get("pet1"));
+    Assertions.assertEquals(30, petEntities.get("pet1").getWellbeing());
+    assertDoesNotThrow(() -> {
+      status.decreaseWellbeing(null);
+    });
+  }
+
+  @Test
+  void testIncreaseXP(){
     //TODO
     Assertions.assertTrue(true);
   }
