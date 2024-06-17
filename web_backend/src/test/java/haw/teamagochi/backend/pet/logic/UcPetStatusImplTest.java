@@ -206,7 +206,7 @@ public class UcPetStatusImplTest {
   @Test
   void testDecreaseWellbeing(){
     petEntities.get("pet1").setWellbeing(100);
-    petEntities.get("pet1").setHealth(0);
+    petEntities.get("pet1").setHealth(100);
     petEntities.get("pet1").setCleanliness(100);
     status.decreaseWellbeing(petEntities.get("pet1"));
     Assertions.assertEquals(100, petEntities.get("pet1").getWellbeing());
