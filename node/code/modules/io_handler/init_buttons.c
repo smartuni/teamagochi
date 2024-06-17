@@ -17,6 +17,7 @@
  */
 
 #include "init_buttons.h"
+#include "ztimer.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
@@ -31,6 +32,8 @@ gpio_t button_left = GPIO_PIN(0, 3); //PIN A5
 //Define the vibration module GPIO: 
 gpio_t vibr_gpio = GPIO_PIN(1, 9);
 gpio_mode_t vibr_gpio_mode = GPIO_OUT; //Define the vibr. GPIO as Output GPIO
+
+bool long_pressed = false;
 
 int init_buttons(void)
 {
@@ -49,6 +52,12 @@ int init_buttons(void)
     gpio_init(vibr_gpio, vibr_gpio_mode);
     gpio_clear(vibr_gpio);
     return 0;
+}
+
+void timer_long_pressed_cb(void *arg) {
+    (void) arg;
+    long_pressed = true;
+    DEBUG("Hallo vom Timer");
 }
 
 //Vibrate for msec milliseconds:
@@ -115,11 +124,23 @@ void button_ok_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_ok)) {
-        //DEBUG("Button ok pressed!\n");
-        trigger_event(BUTTON_OK_PRESSED);
+        long_pressed = false;
+        ztimer_t timeout = { .callback=timer_long_pressed_cb };
+        ztimer_set(ZTIMER_SEC, &timeout, 2);
     }
     else {
-        //DEBUG("Button ok released!\n");
+        if (long_pressed) {
+            long_pressed = false;
+            DEBUG("Button ok long pressed!\n");
+            trigger_event(BUTTON_OK_LONG);
+        }
+        else {
+            DEBUG("Button ok pressed!\n");
+            //ztimer_remove(&timeout);
+            trigger_event(BUTTON_OK_PRESSED);
+        }
+        DEBUG("Button ok released!\n");
         trigger_event(BUTTON_OK_RELEASED);
     }
 }
+//EOF

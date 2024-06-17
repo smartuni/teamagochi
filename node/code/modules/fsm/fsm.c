@@ -225,6 +225,7 @@ handler_result_t on_handler(EVENT_T event) {
 
 void on_entry_handler(void) {
     DEBUG("[FSM:on_entry_handler]: called\n");
+    ioHandler_handleEvent(VIBRATE);
 }
 
 handler_result_t off_handler(EVENT_T event) {
@@ -233,14 +234,6 @@ handler_result_t off_handler(EVENT_T event) {
             DEBUG("[FSM:off_handler]: OK_BUTTON_PRESSED\n");
             displayHandler_handleEvent(event);
             traverse_state(&Top_Level[1]); //transition to on
-            return HANDLED;
-            break;
-        case BUTTON_UP_PRESSED:
-        case BUTTON_DOWN_PRESSED:
-        case BUTTON_LEFT_PRESSED:
-        case BUTTON_RIGHT_PRESSED:
-            DEBUG("[FSM:off_handler]: BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
             return HANDLED;
             break;
         default:
