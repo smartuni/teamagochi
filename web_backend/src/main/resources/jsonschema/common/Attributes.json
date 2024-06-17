@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Attributes",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "rt": {
+      "type": "string"
+    },
+    "ver": {
+      "type": "string"
+    },
+    "ct": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

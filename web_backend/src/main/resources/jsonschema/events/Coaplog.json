@@ -1,11 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Coaplog",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "timestamp": {
       "type": "integer",
-      "format": "utc-millisec"
+      "format": "date-time"
     },
     "incoming": {
       "type": "boolean"
@@ -40,6 +41,5 @@
     "timestamp",
     "token",
     "type"
-  ],
-  "title": "Coaplog"
+  ]
 }

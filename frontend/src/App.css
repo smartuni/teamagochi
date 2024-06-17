@@ -1,16 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 #root {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     min-height: 100vh;
+    flex-grow: 1;
 }
 
 .footer {
-    display: flex;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
+  display: flex;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
 }

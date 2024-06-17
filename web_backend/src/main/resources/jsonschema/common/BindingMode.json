@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "BindingMode",
+  "type": "string",
+  "enum": [
+    "U",
+    "S",
+    "US",
+    "UQ",
+    "SQ",
+    "USQ"
+  ]
+}

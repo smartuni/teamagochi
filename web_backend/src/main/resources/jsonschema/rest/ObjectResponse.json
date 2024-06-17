@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$comment": "Response for /api/clients/{endpoint}/{object}",
+  "title": "ObjectResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "failure": {
+      "type": "boolean"
+    },
+    "content": {
+      "$ref": "ObjectResponseContent.json"
+    }
+  },
+  "required": [
+    "failure",
+    "status",
+    "success",
+    "valid"
+  ]
+}
