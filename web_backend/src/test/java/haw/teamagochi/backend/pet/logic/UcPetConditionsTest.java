@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +24,6 @@ public class UcPetConditionsTest {
 
   @Inject
   UcManagePet ucManagePet;
-
-  @Inject
-  UcFindPet ucFindPet;
 
   @Inject
   UcManagePetType ucManagePetType;
@@ -74,21 +72,28 @@ public class UcPetConditionsTest {
 
   @Test
   void testDecreaseHunger() {
+    assertDoesNotThrow(() -> {
+      conditions.decreaseHunger(null);
+    });
     Assertions.assertEquals(10, petEntities.get("pet1").getHunger() );
     conditions.decreaseHunger(petEntities.get("pet1"));
     Assertions.assertEquals(0, petEntities.get("pet1").getHunger() );
     conditions.decreaseHunger(petEntities.get("pet1"));
     Assertions.assertEquals(0, petEntities.get("pet1").getHunger());
     //next Test-Part
-    Assertions.assertEquals(0, petEntities.get("pet1").getHunger());
+    Assertions.assertEquals(90, petEntities.get("pet2").getHunger());
     for (int i = 8; i >= 0; i--) {
       conditions.decreaseHunger(petEntities.get("pet2"));
       Assertions.assertEquals((i * 10), petEntities.get("pet2").getHunger());
     }
+
   }
 
   @Test
   void testIncreaseHunger(){
+    assertDoesNotThrow(() -> {
+      conditions.increaseHunger(null);
+    });
     petEntities.get("pet2").setHunger(95);
     Assertions.assertEquals(95, petEntities.get("pet2").getHunger() );
     conditions.increaseHunger(petEntities.get("pet2"));
@@ -105,37 +110,115 @@ public class UcPetConditionsTest {
 
   @Test
   void testIncreaseFun(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.increaseFun(null);
+    });
+    Assertions.assertEquals(90, petEntities.get("pet1").getFun() );
+    conditions.increaseFun(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getFun() );
+    conditions.increaseFun(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getFun());
+    //next Test-Part
+    Assertions.assertEquals(10, petEntities.get("pet2").getFun());
+    for (int i = 2; i <= 10; i++) {
+      conditions.increaseFun(petEntities.get("pet2"));
+      Assertions.assertEquals((i * 10), petEntities.get("pet2").getFun());
+    }
   }
 
   @Test
   void testDecreaseFun(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.decreaseFun(null);
+    });
+    Assertions.assertEquals(10, petEntities.get("pet2").getFun() );
+    conditions.decreaseFun(petEntities.get("pet2"));
+    Assertions.assertEquals(5, petEntities.get("pet2").getFun() );
+    conditions.decreaseFun(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getFun() );
+    conditions.decreaseFun(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getFun());
+    //next Test-Part
+    Assertions.assertEquals(90, petEntities.get("pet1").getFun());
+    for (int i = 85; i <= 0; i -= 5) {
+      conditions.decreaseFun(petEntities.get("pet1"));
+      Assertions.assertEquals(i, petEntities.get("pet2").getFun());
+    }
   }
 
   @Test
   void testIncreaseCleanliness(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.increaseCleanliness(null);
+    });
+    Assertions.assertEquals(90, petEntities.get("pet1").getCleanliness() );
+    conditions.increaseCleanliness(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getCleanliness() );
+    conditions.increaseCleanliness(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getCleanliness());
+    //next Test-Part
+    Assertions.assertEquals(10, petEntities.get("pet2").getCleanliness());
+    for (int i = 2; i <= 10; i++) {
+      conditions.increaseCleanliness(petEntities.get("pet2"));
+      Assertions.assertEquals((i * 10), petEntities.get("pet2").getCleanliness());
+    }
   }
 
   @Test
   void testDecreaseCleanliness(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.decreaseCleanliness(null);
+    });
+    Assertions.assertEquals(10, petEntities.get("pet2").getCleanliness() );
+    conditions.decreaseCleanliness(petEntities.get("pet2"));
+    Assertions.assertEquals(5, petEntities.get("pet2").getCleanliness() );
+    conditions.decreaseCleanliness(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getCleanliness() );
+    conditions.decreaseCleanliness(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getCleanliness());
+    //next Test-Part
+    Assertions.assertEquals(90, petEntities.get("pet1").getCleanliness());
+    for (int i = 85; i <= 0; i -= 5) {
+      conditions.decreaseCleanliness(petEntities.get("pet1"));
+      Assertions.assertEquals(i, petEntities.get("pet2").getCleanliness());
+    }
   }
 
   @Test
   void testIncreaseHealth(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.increaseHealth(null);
+    });
+    Assertions.assertEquals(90, petEntities.get("pet1").getHealth() );
+    conditions.increaseHealth(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getHealth() );
+    conditions.increaseHealth(petEntities.get("pet1"));
+    Assertions.assertEquals(100, petEntities.get("pet1").getHealth());
+    //next Test-Part
+    Assertions.assertEquals(10, petEntities.get("pet2").getHealth());
+    for (int i = 2; i <= 10; i++) {
+      conditions.increaseHealth(petEntities.get("pet2"));
+      Assertions.assertEquals((i * 10), petEntities.get("pet2").getHealth());
+    }
   }
 
   @Test
   void testDecreaseHealth(){
-    //TODO
-    Assertions.assertTrue(true);
+    assertDoesNotThrow(() -> {
+      conditions.decreaseHealth(null);
+    });
+    Assertions.assertEquals(10, petEntities.get("pet2").getHealth() );
+    conditions.decreaseHealth(petEntities.get("pet2"));
+    Assertions.assertEquals(5, petEntities.get("pet2").getHealth() );
+    conditions.decreaseHealth(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getHealth() );
+    conditions.decreaseHealth(petEntities.get("pet2"));
+    Assertions.assertEquals(0, petEntities.get("pet2").getHealth());
+    //next Test-Part
+    Assertions.assertEquals(90, petEntities.get("pet1").getHealth());
+    for (int i = 85; i <= 0; i -= 5) {
+      conditions.decreaseHealth(petEntities.get("pet1"));
+      Assertions.assertEquals(i, petEntities.get("pet2").getHealth());
+    }
   }
 }
