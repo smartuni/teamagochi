@@ -65,7 +65,7 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
      }
     lvgl_wakeup();
-    return EVENT_HANDLED;
+    return HANDLED;
 }
 
 void *display_run(void * arg){

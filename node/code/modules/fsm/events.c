@@ -13,7 +13,7 @@ void set_t_events_pid(kernel_pid_t pid){
 }
 
 void trigger_event(EVENT_T _event){
-    DEBUG("event input \n");
+    //DEBUG("event input \n");
     msg_t msg;
     msg.type = _event;
     if (msg_try_send(&msg, t_events_pid) == 0) {

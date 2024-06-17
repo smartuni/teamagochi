@@ -130,6 +130,6 @@ handler_result_t lwm2m_handleEvent(EVENT_T event){
         default:
             break;
     }
-    return EVENT_HANDLED; 
+    return HANDLED; 
 }
 

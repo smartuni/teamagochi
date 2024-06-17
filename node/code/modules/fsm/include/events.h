@@ -58,11 +58,11 @@ typedef enum {
 /* Enum of the fsm handler return values*/
 typedef enum
 {
-  EVENT_HANDLED,      //!< Event handled successfully.
-  EVENT_UN_HANDLED,    //!< Event could not be handled.
+  HANDLED,      //!< Event handled successfully.
+  UNHANDLED,    //!< Event could not be handled.
   //!< Handler handled the Event successfully and posted new event to itself.
   TRIGGERED_TO_SELF,
-}handler_result_t;
+} handler_result_t;
 
 
 /**

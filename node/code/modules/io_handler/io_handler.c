@@ -36,5 +36,5 @@ handler_result_t ioHandler_handleEvent(EVENT_T event){
         default:
         break;
     }
-    return EVENT_HANDLED;
+    return HANDLED;
 }

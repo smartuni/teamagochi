@@ -57,11 +57,11 @@ void button_up_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_up)) {
-        DEBUG("Button up pressed!\n");
+        //DEBUG("Button up pressed!\n");
         trigger_event(BUTTON_UP_PRESSED);
     }
     else {
-        DEBUG("Button up released!\n");
+        //DEBUG("Button up released!\n");
         trigger_event(BUTTON_UP_RELEASED);
     }
 }
@@ -70,11 +70,11 @@ void button_left_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_left)) {
-        DEBUG("Button left pressed!\n");
+        //DEBUG("Button left pressed!\n");
         trigger_event(BUTTON_LEFT_PRESSED);
     }
     else {
-        DEBUG("Button left released!\n");
+        //DEBUG("Button left released!\n");
         trigger_event(BUTTON_LEFT_RELEASED);
     }
 }
@@ -83,11 +83,11 @@ void button_down_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_down)) {
-        DEBUG("Button down pressed!\n");
+        //DEBUG("Button down pressed!\n");
         trigger_event(BUTTON_DOWN_PRESSED);
     }
     else {
-        DEBUG("Button down released!\n");
+        //DEBUG("Button down released!\n");
         trigger_event(BUTTON_DOWN_RELEASED);
     }
 }
@@ -96,11 +96,11 @@ void button_right_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_right)) {
-        DEBUG("Button right pressed!\n");
+        //DEBUG("Button right pressed!\n");
         trigger_event(BUTTON_RIGHT_PRESSED);
     }
     else {
-        DEBUG("Button right released!\n");
+        //DEBUG("Button right released!\n");
         trigger_event(BUTTON_RIGHT_RELEASED);
     }
 }
@@ -109,11 +109,11 @@ void button_ok_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_ok)) {
-        DEBUG("Button ok pressed!\n");
+        //DEBUG("Button ok pressed!\n");
         trigger_event(BUTTON_OK_PRESSED);
     }
     else {
-        DEBUG("Button ok released!\n");
+        //DEBUG("Button ok released!\n");
         trigger_event(BUTTON_OK_RELEASED);
     }
 }
