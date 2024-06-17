@@ -6,6 +6,7 @@ import LinkDevice from "./Components/LinkDevice";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
 import Settings from "./Components/Settings";
+import CreatePetModal from "./Components/CreatePetModal";
 import PetPage from "./Components/PetPage";
 
 function App() {
