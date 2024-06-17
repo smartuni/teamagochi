@@ -38,11 +38,12 @@ typedef handler_result_t (*fsm_handler)(EVENT_T);
 void *fsm_thread(void * arg);
 void fsm_handle(EVENT_T event);
 
-void *printingThread(void *arg);
-
 handler_result_t default_handler(EVENT_T event);
 void default_entry_handler(void);
 void default_exit_handler(void);
+
+handler_result_t firstStart_handler(EVENT_T event);
+void firstStart_entry_handler(void);
 
 handler_result_t on_handler(EVENT_T event);
 void on_entry_handler(void);
