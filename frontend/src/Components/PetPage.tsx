@@ -2,6 +2,7 @@ import React from "react";
 import petImage from "../assets/pet_frog.png";
 import { ProgressBar } from "react-progressbar-fancy";
 
+
 // https://github.com/RavinRau/react-progressbar-fancy?tab=readme-ov-file
 
 const Pet = () => {
@@ -22,7 +23,7 @@ const Pet = () => {
           />
         </div>
         <div>
-          <div className="h5 px-3">Hapiness</div>
+          <div className="h5 px-3">Happiness</div>
           <ProgressBar
             className="px-1 pb-3"
             hideText={true}

@@ -2,10 +2,13 @@ package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class UcPetStatusImpl implements UcPetStatus {
   @Override
   public void increaseHappiness(PetEntity pet, PetEvents event) {
+    if(pet == null) return;
     //TODO ballancing
     int happinessIncrease;
     switch (event){
@@ -17,26 +20,27 @@ public class UcPetStatusImpl implements UcPetStatus {
     }//switch
     if(pet.getHappiness() + happinessIncrease > 100){
       pet.setHappiness(100);
-      increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
+      increaseXP(pet, PetEvents.REACHED_MAX_STATUS); // will add more xp than normal event
     }else if(happinessIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setHappiness(pet.getHappiness() + happinessIncrease);
-      //pet = increaseXP(pet, event); //seperate call from interactions UC
     }
   }//method
 
   @Override
   public void decreaseHappiness(PetEntity pet) {
+    if(pet == null) return;
     int happinessDecrease = checkHappinessLimits(pet.getFun());//
-    happinessDecrease += checkHappinessLimits(pet.getHunger());
-    if(pet.getHappiness() - happinessDecrease < 0){
+    happinessDecrease += checkHappinessLimits(100 - pet.getHunger()); // bring hunger to same scale as fun
+    if(pet.getHappiness() + happinessDecrease < 0){
       pet.setHappiness(0);
     }else if(happinessDecrease != 0){
-      pet.setHappiness(pet.getHappiness() - happinessDecrease);
+      pet.setHappiness(pet.getHappiness() + happinessDecrease);
     }
   }
 
   @Override
   public void increaseWellbeing(PetEntity pet, PetEvents event) {
+    if(pet == null) return;
     //TODO ballancing
     int wellbeingIncrease;
     switch (event){
@@ -48,7 +52,7 @@ public class UcPetStatusImpl implements UcPetStatus {
     }//switch
     if(pet.getWellbeing() + wellbeingIncrease > 100){
       pet.setWellbeing(100);
-      increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
+      increaseXP(pet, PetEvents.REACHED_MAX_STATUS); // will add more xp than normal event
     }else if(wellbeingIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setWellbeing(pet.getWellbeing() + wellbeingIncrease);
       //pet = increaseXP(pet, event); seperate call drom interactionsUC
@@ -57,25 +61,27 @@ public class UcPetStatusImpl implements UcPetStatus {
 
   @Override
   public void decreaseWellbeing(PetEntity pet) {
+    if(pet == null) return;
     int wellbeingDecrease = checkWellbeingLimits(pet.getHealth());
     wellbeingDecrease = wellbeingDecrease + checkWellbeingLimits(pet.getCleanliness());
-    if(pet.getWellbeing() - wellbeingDecrease < 0){
+    if(pet.getWellbeing() + wellbeingDecrease < 0){
       pet.setWellbeing(0);
     }else if(wellbeingDecrease != 0){
-      pet.setWellbeing(pet.getWellbeing() - wellbeingDecrease);
+      pet.setWellbeing(pet.getWellbeing() + wellbeingDecrease);
     }
   }
 
   @Override
   public void increaseXP(PetEntity pet, PetEvents event) {
+    if(pet == null) return;
     //TODO ballancing
     int xpIncrease;
     switch(event){
-      case FEED -> xpIncrease = 10;
-      case PLAY -> xpIncrease = 10; //duplicated due to possible reballancing
-      case CLEAN -> xpIncrease = 10;
-      case MEDICATE -> xpIncrease = 10;
-      case REACHED_MAX -> xpIncrease = 25;
+      case FEED -> xpIncrease = (pet.getHunger() == 0) ? 20 : 0;
+      case PLAY -> xpIncrease = (pet.getFun() == 100) ? 20 : 0; //duplicated due to possible reballancing
+      case CLEAN -> xpIncrease = (pet.getCleanliness() == 100) ? 20 : 0;
+      case MEDICATE -> xpIncrease = (pet.getHealth() == 100) ? 20 : 0;
+      case REACHED_MAX_STATUS -> xpIncrease = 40;
       default -> xpIncrease = 0;
     }
     pet.setXp(pet.getXp() + xpIncrease);

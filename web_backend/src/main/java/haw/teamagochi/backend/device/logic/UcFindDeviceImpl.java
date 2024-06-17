@@ -2,6 +2,7 @@ package haw.teamagochi.backend.device.logic;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
+import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -90,4 +91,5 @@ public class UcFindDeviceImpl implements UcFindDevice {
 
     return deviceRepository.findByOwner(user);
   }
+
 }

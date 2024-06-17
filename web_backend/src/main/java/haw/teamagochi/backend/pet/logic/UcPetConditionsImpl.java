@@ -1,10 +1,16 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+@ApplicationScoped
 public class UcPetConditionsImpl implements UcPetConditions{
+
   @Override
   public void decreaseHunger(PetEntity pet) {
+    if(pet == null) return;
     int decrease = 10;
     if(pet.getHunger() - decrease > 0){
       pet.setHunger(pet.getHunger() - decrease);
@@ -15,6 +21,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void increaseHunger(PetEntity pet) {
+    if(pet == null) return;
     int increase = 5;
     if(pet.getHunger() + increase < 100){
       pet.setHunger(pet.getHunger() + increase);
@@ -25,6 +32,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void increaseHealth(PetEntity pet) {
+    if(pet == null) return;
     int increase = 10;
     if(pet.getHealth() + increase < 100){
       pet.setHealth(pet.getHealth() + increase);
@@ -35,6 +43,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void decreaseHealth(PetEntity pet) {
+    if(pet == null) return;
     int decrease = 5;
     if(pet.getHealth() - decrease > 0){
       pet.setHealth(pet.getHealth() - decrease);
@@ -45,6 +54,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void increaseCleanliness(PetEntity pet) {
+    if(pet == null) return;
     int increase = 10;
     if(pet.getCleanliness() + increase < 100){
       pet.setCleanliness(pet.getCleanliness() + increase);
@@ -55,6 +65,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void decreaseCleanliness(PetEntity pet) {
+    if(pet == null) return;
     int decrease = 5;
     if(pet.getCleanliness() - decrease > 0){
       pet.setCleanliness(pet.getCleanliness() - decrease);
@@ -65,6 +76,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void increaseFun(PetEntity pet) {
+    if(pet == null) return;
     int increase = 10;
     if(pet.getFun() + increase < 100){
       pet.setFun(pet.getFun() + increase);
@@ -75,6 +87,7 @@ public class UcPetConditionsImpl implements UcPetConditions{
 
   @Override
   public void decreaseFun(PetEntity pet) {
+    if(pet == null) return;
     int decrease = 5;
     if(pet.getFun() - decrease > 0){
       pet.setFun(pet.getFun() - decrease);
