@@ -1,10 +1,10 @@
 package haw.teamagochi.backend.user.logic;
 
-import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.dataaccess.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,5 +30,13 @@ public class UcFindUserImpl implements UcFindUser {
   @Override
   public UserEntity find(String uuid) {
     return userRepository.findByExternalId(UUID.fromString(uuid));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<UserEntity> findAll() {
+    return userRepository.findAll().stream().toList();
   }
 }

@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.user.logic;
 
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import java.util.List;
 
 /**
  * Operations to find users.
@@ -22,4 +23,11 @@ public interface UcFindUser {
    * @return entity if found, otherwise null
    */
   UserEntity find(String uuid);
+
+  /**
+   * Find all users.
+   *
+   * @return entities if found, otherwise empty list
+   */
+  List<UserEntity> findAll();
 }

@@ -3,6 +3,8 @@ package haw.teamagochi.backend.device.logic;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
 import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
+import haw.teamagochi.backend.device.logic.registrationmanager.RegistrationManager;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -20,9 +22,11 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Inject
   UcFindUser ucFindUser;
 
-  // TODO uncomment if https://github.com/smartuni/teamagochi/pull/100 was merged
-  //@Inject
-  //RegistrationManager registrationManager;
+  @Inject
+  UcManageDevice ucManageDevice;
+
+  @Inject
+  RegistrationManager registrationManager;
 
   /**
    * {@inheritDoc}
@@ -40,23 +44,51 @@ public class UcManageDeviceImpl implements UcManageDevice {
    */
   @Override
   @Transactional
+  public DeviceEntity create(DeviceEntity entity) {
+    deviceRepository.persist(entity);
+    return entity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional
+  public boolean deleteById(long deviceId) {
+    return deviceRepository.deleteById(deviceId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional
   public void deleteAll() {
     deviceRepository.deleteAll();
   }
 
-  /*
-  public boolean registerDevice(long userID, String key) {
-    long deviceID = registrationManager.getDevice(key);
-    if (deviceID == -1) return false;
+  /**
+   * {@inheritDoc}
+   * TODO whe have no way to determine the device type here. Lets default to "FROG".
+   */
+  @Override
+  @Transactional
+  public DeviceEntity registerDevice(String registrationCode, String deviceName, String uuid) {
+    String endpoint = registrationManager.registerClient(registrationCode);
+    if (endpoint == null) {
+      return null;
+    }
 
-    UserEntity user = userRepository.findById(userID);
-    DeviceEntity device = deviceRepository.findById(deviceID);
+    UserEntity owner = ucFindUser.find(uuid);
+    if (owner == null) {
+      throw new IllegalArgumentException("User does not exist");
+    }
 
-    if (user == null) throw new NullPointerException("Tried to register device to user, but USER not found in database.");
-    if (device == null) throw new NullPointerException("Tried to register device to user, but DEVICE not found in database.");
+    DeviceEntity device = new DeviceEntity(deviceName, DeviceType.FROG);
+    device.setOwner(owner);
 
-    device.setOwner(user);
-    return true;
+    device.setIdentifier(endpoint); // Jessica
+
+    return ucManageDevice.create(device);
   }
-  */
 }

@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 /**
   * Default implementation for {@link UcFindPet}.
@@ -41,8 +42,38 @@ public class UcFindPetImpl implements UcFindPet {
    * {@inheritDoc}
    */
   @Override
-  public List<PetEntity> findByUserId(long userId) {
+  public Optional<PetEntity> findOptional(long id) {
+    return petRepository.findByIdOptional(id);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<PetEntity> findAll() {
+    return petRepository.findAll().stream().toList();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<PetEntity> findAllByUserId(long userId) {
     UserEntity user = ucFindUser.find(userId);
+
+    if (user == null) {
+      throw new NotFoundException("User not found in database.");
+    }
+
+    return petRepository.findByOwner(user);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<PetEntity> findAllByExternalUserId(String uuid) {
+    UserEntity user = ucFindUser.find(uuid);
 
     if (user == null) {
       throw new NotFoundException("User not found in database.");

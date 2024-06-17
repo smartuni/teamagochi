@@ -1,5 +1,7 @@
+@import url("https://fonts.cdnfonts.com/css/helvetica-neue-5");
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bs-font-sans-serif: "Helvetica Neue", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -28,6 +30,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: "Helvetica Neue";
 }
 
 h1 {

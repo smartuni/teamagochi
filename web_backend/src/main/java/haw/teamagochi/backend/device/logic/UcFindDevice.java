@@ -3,6 +3,7 @@ package haw.teamagochi.backend.device.logic;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Operations to find devices.
@@ -26,6 +27,21 @@ public interface UcFindDevice {
   DeviceEntity find(long id);
 
   /**
+   * Find device by id.
+   *
+   * @param id of the device
+   * @return the optional entity
+   */
+  Optional<DeviceEntity> findOptional(long id);
+
+  /**
+   * Find all devices.
+   *
+   * @return entities if found, otherwise empty list
+   */
+  List<DeviceEntity> findAll();
+
+  /**
    * Find devices by its owner.
    *
    * @param user who owns the device
@@ -40,4 +56,12 @@ public interface UcFindDevice {
     * @return entities if found, otherwise empty list
    */
   List<DeviceEntity> findAllByUserId(long userId);
+
+  /**
+   * Find devices by its owners system-wide id.
+   *
+   * @param uuid of the user who owns the device.
+   * @return entities if found, otherwise empty list
+   */
+  List<DeviceEntity> findAllByExternalUserId(String uuid);
 }

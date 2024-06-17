@@ -19,7 +19,33 @@ public interface UcManageDevice {
   DeviceEntity create(String name, DeviceType deviceType);
 
   /**
+   * Create a device.
+   *
+   * @param entity to create
+   * @return the created entity
+   */
+  DeviceEntity create(DeviceEntity entity);
+
+  /**
+   * Delete a device.
+   *
+   * @param deviceId of the device
+   * @return true if entity was deleted, otherwise false (not found)
+   */
+  boolean deleteById(long deviceId);
+
+  /**
    * Delete all devices.
    */
   void deleteAll();
+
+  /**
+   * Register a device.
+   *
+   * @param registrationCode displayed on the device
+   * @param deviceName for the created device
+   * @param uuid of the owner
+   * @return the created entity
+   */
+  public DeviceEntity registerDevice(String registrationCode, String deviceName, String uuid);
 }
