@@ -20,7 +20,7 @@ public class UcPetStatusImpl implements UcPetStatus {
       pet = increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
     }else if(happinessIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setHappiness(pet.getHappiness() + happinessIncrease);
-      pet = increaseXP(pet, event); //add the corresponding xp
+      //pet = increaseXP(pet, event); //seperate call from interactions UC
     }
     return pet;
   }//method
@@ -60,7 +60,7 @@ public class UcPetStatusImpl implements UcPetStatus {
       pet = increaseXP(pet, PetEvents.REACHED_MAX); // will add more xp than normal event
     }else if(wellbeingIncrease != 0){ //to check if xpIncrease is appropriate --> function call with right event
       pet.setWellbeing(pet.getWellbeing() + wellbeingIncrease);
-      pet = increaseXP(pet, event); //add the corresponding xp
+      //pet = increaseXP(pet, event); seperate call drom interactionsUC
     }
     return pet;
   }
