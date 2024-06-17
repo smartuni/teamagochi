@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Updated",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "registration": {
+      "$ref": "Registration.json"
+    },
+    "update": {
+      "$ref": "UpdatedUpdate.json"
+    }
+  },
+  "required": [
+    "registration",
+    "update"
+  ]
+}

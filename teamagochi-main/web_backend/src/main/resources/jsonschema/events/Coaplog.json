@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Coaplog",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timestamp": {
+      "type": "integer",
+      "format": "date-time"
+    },
+    "incoming": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "mId": {
+      "type": "integer"
+    },
+    "token": {
+      "type": "string"
+    },
+    "options": {
+      "type": "string"
+    },
+    "ep": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "ep",
+    "incoming",
+    "mId",
+    "timestamp",
+    "token",
+    "type"
+  ]
+}
