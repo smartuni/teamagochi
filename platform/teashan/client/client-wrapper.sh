@@ -19,8 +19,8 @@ fi
 if [ ! -d ./models ]; then
     mkdir models
     pushd models
-    wget https://raw.githubusercontent.com/smartuni/teamagochi/c0f6b2b52e554ed364e113952bdfb607f25bfa71/platform/data/objectmodels/32769.xml
-    wget https://raw.githubusercontent.com/smartuni/teamagochi/c0f6b2b52e554ed364e113952bdfb607f25bfa71/platform/data/objectmodels/32770.xml
+    wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32769.xml
+    wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32770.xml
     popd
 fi
 

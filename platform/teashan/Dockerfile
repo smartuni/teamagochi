@@ -9,8 +9,8 @@ WORKDIR /downloads
 # Version v2.x (master) with targeted LWM2M Version v1.1.x
 RUN wget https://ci.eclipse.org/leshan/job/leshan-ci/job/master/lastSuccessfulBuild/artifact/leshan-server-demo.jar
 RUN wget https://ci.eclipse.org/leshan/job/leshan-ci/job/master/lastSuccessfulBuild/artifact/leshan-bsserver-demo.jar
-RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/c0f6b2b52e554ed364e113952bdfb607f25bfa71/platform/data/objectmodels/32769.xml
-RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/c0f6b2b52e554ed364e113952bdfb607f25bfa71/platform/data/objectmodels/32770.xml
+RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32769.xml
+RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32770.xml
 
 #
 # Runnable stage
