@@ -39,7 +39,7 @@
 
 
 // /**
-//  * @brief Callback for writing the sensor value.
+//  * @brief Callback for writing the status value.
 //  *
 //  * @param[in]  EVENT_ID  ID of LWM2M Item
 //  *
@@ -49,7 +49,7 @@
 typedef void lwm2m_obj_device_write_cb_t(uint16_t EVENT_ID);
 
 /**
- * @brief Arguments for the creation of a pet object.
+ * @brief Arguments for the creation of a pet device object.
  */
 typedef struct lwm2m_obj_device_args {
     int32_t instance_id;                            /**< ID for the new instance. It must be between 0 and (UINT16_MAX - 1),

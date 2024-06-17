@@ -323,7 +323,7 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(instance);
     int64_t value = 0;
     switch (data->id) {
-        case LWM2M_PET_ID:
+    case LWM2M_PET_ID:
         lwm2m_data_decode_int(data, &value);
         instance->id = instance->id;
         break;
