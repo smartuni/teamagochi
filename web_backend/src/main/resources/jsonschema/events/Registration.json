@@ -53,6 +53,9 @@
     },
     "sleeping": {
       "type": "boolean"
+    },
+    "smsNumber": {
+      "type": "string"
     }
   },
   "required": [

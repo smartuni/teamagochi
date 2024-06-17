@@ -26,25 +26,25 @@ public interface LeshanClientRestclient {
 
   @GET
   @Path("/clients/{endpoint}/{object}")
-  ObjectResponseDto getClientObject(@PathParam("endpoint") String endpoint, @PathParam("object") Integer object);
+  ObjectResponseDto getClientObject(
+      @PathParam("endpoint") String endpoint, @PathParam("object") Integer object);
 
   @GET
   @Path("/clients/{endpoint}/{object}/{instance}")
-  ObjectInstanceResponseDto getClientObjectInstance(@PathParam("endpoint") String endpoint, @PathParam("object") Integer object, @PathParam("instance") Integer instance);
+  ObjectInstanceResponseDto getClientObjectInstance(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance);
 
   @GET
   @Path("/clients/{endpoint}/{object}/{instance}/{resource}")
-  ResourceResponseDto getClientResource(@PathParam("endpoint") String endpoint, @PathParam("object") Integer object, @PathParam("instance") Integer instance, @PathParam("resource") Integer resource);
+  ResourceResponseDto getClientResource(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance,
+      @PathParam("resource") Integer resource);
 
   @GET
   @Path("/objectspecs/{endpoint}")
   Set<ObjectspecDto> getClientObjectSpecifications(@PathParam("endpoint") String endpoint);
-
-//  @GET
-//  @Path("/{id}")
-//  ClientDto getById(@PathParam("id") String id);
-
-//  @GET
-//  @Path("/{id}/{objectId}/{objectInstanceId}/{resourceId}")
-//  ClientDto getById(@PathParam("id") String id, @PathParam("objectId") Integer objectId, @PathParam("objectInstanceId") Integer objectInstanceId,  @PathParam("resourceId") Integer resourceId);
 }
