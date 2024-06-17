@@ -86,10 +86,11 @@ public class UcPetStatusImpl implements UcPetStatus {
 
   @Override
   public PetEntity increaseXP(PetEntity pet, PetEvents event) {
+    //TODO ballancing
     int xpIncrease;
     switch(event){
       case FEED -> xpIncrease = 10;
-      case PLAY -> xpIncrease = 10;
+      case PLAY -> xpIncrease = 10; //duplicated due to possible reballancing
       case CLEAN -> xpIncrease = 10;
       case MEDICATE -> xpIncrease = 10;
       case REACHED_MAX -> xpIncrease = 25;
