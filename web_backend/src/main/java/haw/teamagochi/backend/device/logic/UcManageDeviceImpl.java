@@ -86,6 +86,9 @@ public class UcManageDeviceImpl implements UcManageDevice {
 
     DeviceEntity device = new DeviceEntity(deviceName, DeviceType.FROG);
     device.setOwner(owner);
+
+    device.setIdentifier(endpoint); // Jessica
+
     return ucManageDevice.create(device);
   }
 }
