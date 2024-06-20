@@ -14,6 +14,8 @@ services:
       service: proxy
     environment:
       BACKEND_WEB_URL: http://backend:8080/
+    volumes:
+      - "./proxy/includes/backend.include.template:/etc/nginx/templates/backend.include.template:ro"
     depends_on:
       keycloak:
         condition: service_healthy
