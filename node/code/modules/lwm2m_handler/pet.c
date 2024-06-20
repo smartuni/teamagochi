@@ -25,12 +25,12 @@
 /**
  * @brief Pet object implementation descriptor.
  */
-static lwm2m_obj_pet_t _device_object;
+static lwm2m_obj_pet_t _pet_object;
 
 /**
  * @brief Pool of object instances.
  */
-static lwm2m_obj_device_inst_t _instances[CONFIG_LWM2M_PET_INSTANCES_MAX];
+static lwm2m_obj_pet_inst_t _instances[CONFIG_LWM2M_PET_INSTANCES_MAX];
 
 lwm2m_object_t *lwm2m_object_pet_init(lwm2m_client_data_t *client_data)
 {

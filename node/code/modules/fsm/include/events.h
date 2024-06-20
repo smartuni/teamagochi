@@ -26,7 +26,6 @@ extern "C" {
 #include "event.h"
 #include "thread.h"
 
-
 /* Enum of all Events */
 typedef enum {
     UNDEFINED,
@@ -53,7 +52,35 @@ typedef enum {
     PET_BORED,
     PET_DIRTY,
     VIBRATE,
+    INIT,
+    REGISTER,
+    REGISTERED,
+    READY,
+    REGISTER_CODE,
 }EVENT_T;
+
+typedef struct{
+    int32_t id;                                  /**< id of pet */                
+    char name[10];   /**< name of pet */
+    int32_t color;                               /**< color of the pet */
+    int32_t happiness;                           /**< happiness of the pet*/
+    int32_t wellbeing;                           /**< wellbeing of the pet*/
+    int32_t health;                              /**< health of the pet*/
+    int32_t xp;                                  /**< XP of the pet*/
+    int32_t hunger;                              /**< Hunger of the pet*/
+    int32_t cleanliness;                         /**< Cleanliness of the pet*/
+    int32_t fun;                                 /**< Fun of the pet*/
+    int32_t feed;                                   /**< pet fed */
+    int32_t medicate;                               /**< pet medicated */
+    int32_t play;                                   /**< pet played */
+    int32_t clean;                                  /**< pet cleaned */
+    mutex_t mutex;
+}pet_stats_t;
+
+typedef struct{
+    char* code;
+    mutex_t mutex;
+}device_register_code;
 
 /* Enum of the fsm handler return values*/
 typedef enum
@@ -66,11 +93,32 @@ typedef enum
 
 
 /**
+ * @brief Writes the actual pet stats into the parameter pointer
+ * 
+ * 
+ * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
+ */
+void get_pet_stats(pet_stats_t* stats);
+
+/**
+ * @brief Writes the register code into the parameter pointer
+ * 
+ * 
+ * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
+ */
+void get_register_code(char* code);
+
+/**
  * @brief Triggers an Event for the FSM
  *
  * @param[in] event Event which should be send
  */
 void trigger_event(EVENT_T event);
+
+void trigger_event_pet_int(EVENT_T event, int32_t value);
+void trigger_event_pet_string(EVENT_T event, char* value);
+void trigger_event_pet_bool(EVENT_T event, bool value);
+void trigger_event_device(EVENT_T event,  char* value);
 
 /**
  * @brief Sets the Callback for the FSM and starts the event loop

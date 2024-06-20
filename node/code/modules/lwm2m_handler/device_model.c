@@ -38,7 +38,7 @@
  * @return COAP_205_CONTENT on success
  * @return COAP_404_NOT_FOUND if the value is not found
  */
-static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance);
+static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *instance);
 
 /**
  * @brief 'Read' callback for the pet device object.
@@ -65,7 +65,7 @@ static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data
  * @return COAP_205_CONTENT on success
  * @return COAP_404_NOT_FOUND if the value is not found
  */
-static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance);
+static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *instance);
 
 /**
  * @brief 'Write' callback for the LwM2M pet device implementation.
@@ -91,7 +91,7 @@ static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data
  * @return Instance if available, NULL otherwise
  */
 static lwm2m_obj_pet_device_inst_t *_get_instance_from_free_list(
-    lwm2m_obj_pet_t *object);
+    lwm2m_obj_pet_device_t *object);
 
 /**
  * @brief Add an instance to the free instance list.
@@ -99,11 +99,11 @@ static lwm2m_obj_pet_device_inst_t *_get_instance_from_free_list(
  * @param[out] object   Pet object
  * @param[in] instance  Instance to add to the free list
  */
-static void _put_instance_in_free_list(lwm2m_obj_device_t *object,
-                                       lwm2m_obj_device_inst_t *instance);
+static void _put_instance_in_free_list(lwm2m_obj_pet_device_t *object,
+                                       lwm2m_obj_pet_device_inst_t *instance);
 
-static void _put_instance_in_free_list(lwm2m_obj_device_t *object,
-                                       lwm2m_obj_device_inst_t *instance)
+static void _put_instance_in_free_list(lwm2m_obj_pet_device_t *object,
+                                       lwm2m_obj_pet_device_inst_t *instance)
 {
     assert(object);
     assert(instance);
@@ -111,34 +111,34 @@ static void _put_instance_in_free_list(lwm2m_obj_device_t *object,
     instance->list.id = UINT16_MAX;
     instance->list.next = NULL;
 
-    _FREE_INSTANCES(object) = (lwm2m_obj_device_inst_t *)LWM2M_LIST_ADD(
+    _FREE_INSTANCES(object) = (lwm2m_obj_pet_device_inst_t *)LWM2M_LIST_ADD(
         _FREE_INSTANCES(object), instance
         );
 }
 
-static lwm2m_obj_device_inst_t *_get_instance_from_free_list(lwm2m_obj_device_t *object)
+static lwm2m_obj_pet_device_inst_t *_get_instance_from_free_list(lwm2m_obj_pet_device_t *object)
 {
     assert(object);
-    lwm2m_obj_device_inst_t *instance = NULL;
+    lwm2m_obj_pet_device_inst_t *instance = NULL;
 
     /* try to allocate an instance, by popping a free node from the list */
-    _FREE_INSTANCES(object) = (lwm2m_obj_device_inst_t *)lwm2m_list_remove(
+    _FREE_INSTANCES(object) = (lwm2m_obj_pet_device_inst_t *)lwm2m_list_remove(
         (lwm2m_list_t *)_FREE_INSTANCES(object), UINT16_MAX, (lwm2m_list_t **)&instance
         );
 
     return instance;
 }
 
-int lwm2m_object_device_init_derived(lwm2m_client_data_t *client_data,
-                                  lwm2m_obj_device_t *object,
+int lwm2m_object_pet_device_init_derived(lwm2m_client_data_t *client_data,
+                                  lwm2m_obj_pet_device_t *object,
                                   uint16_t object_id,
-                                  lwm2m_obj_device_inst_t *instances,
+                                  lwm2m_obj_pet_device_inst_t *instances,
                                   size_t instance_count)
 {
     assert(object);
     assert(instances);
 
-    memset(object, 0, sizeof(lwm2m_obj_device_t));
+    memset(object, 0, sizeof(lwm2m_obj_pet_device_t));
 
     /* initialize the wakaama LwM2M object */
     object->object.objID = object_id;
@@ -153,20 +153,20 @@ int lwm2m_object_device_init_derived(lwm2m_client_data_t *client_data,
     return 0;
 }
 
-static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_device_inst_t *instance)
+static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *instance)
 {
     assert(data);
     assert(instance);
 
     switch (data->id) {
     case LWM2M_DEVICE_STATUS_ID:
-        lwm2m_data_encode_string(instance->id, data);
+        lwm2m_data_encode_string(instance->status, data);
         break;
     case LWM2M_DEVICE_REGISTER_ID:
-        lwm2m_data_encode_string(instance->id, data);
+        lwm2m_data_encode_string(instance->register_code, data);
         break;
     case LW2M_DEVICE_TIME_ID:
-        lwm2m_data_encode_string(instance->id, data);
+        lwm2m_data_encode_string(instance->time, data);
         break;
     default:
         return COAP_404_NOT_FOUND;
@@ -177,12 +177,12 @@ static uint8_t _get_value(lwm2m_data_t *data, lwm2m_obj_device_inst_t *instance)
 static uint8_t _read_cb(uint16_t instance_id, int *num_data, lwm2m_data_t **data_array,
                         lwm2m_object_t *object)
 {
-    lwm2m_obj_device_inst_t *instance;
+    lwm2m_obj_pet_device_inst_t *instance;
     uint8_t result;
     int i = 0;
     
     /* try to get the requested instance from the object list */
-    instance = (lwm2m_obj_device_inst_t *)lwm2m_list_find(object->instanceList,
+    instance = (lwm2m_obj_pet_device_inst_t *)lwm2m_list_find(object->instanceList,
                                                                     instance_id);
     if (!instance) {
         DEBUG("[lwm2m pet device:read]: can't find instance %d\n", instance_id);
@@ -230,35 +230,35 @@ out:
     return result;
 }
 
-static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_device_inst_t *instance){
+static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *instance){
     assert(data);
     assert(instance);
-    char[CONFIG_LWM2M_STRING_MAX_SIZE] value;
+    char *value;
     switch (data->id) {
         case LWM2M_DEVICE_STATUS_ID:
-            value = data->value;
-            break
-        case LWM2M_DEVICE_STATUS_ID:
-            value = data->value;
+            value = (char *) data->value.asBuffer.buffer;
             break;
-        case LWM2M_DEVICE_STATUS_ID:
-            value = data->value;
+        case LWM2M_DEVICE_REGISTER_ID:
+            value = (char *) data->value.asBuffer.buffer;
+            break;
+        case LW2M_DEVICE_TIME_ID:
+            value = (char *) data->value.asBuffer.buffer;
             break;
     default:
         return COAP_404_NOT_FOUND;
     }
-    instance->write_cb(value);
+    instance->write_cb(data->id,value);
     return COAP_204_CHANGED;
 }
 
 static uint8_t _write_cb(uint16_t instance_id, int num_data, lwm2m_data_t * data_array,
                          lwm2m_object_t * object)
 {
-    lwm2m_obj_pet_inst_t *instance;
+    lwm2m_obj_pet_device_inst_t *instance;
     uint8_t result;
     int i = 0;
     /* try to get the requested instance from the object list */
-    instance = (lwm2m_obj_device_inst_t *)lwm2m_list_find(object->instanceList,
+    instance = (lwm2m_obj_pet_device_inst_t *)lwm2m_list_find(object->instanceList,
                                                        instance_id);
     
     if (!instance) {
@@ -281,14 +281,14 @@ out:
     return result;
 }
 
- */
-int32_t lwm2m_object_device_instance_create_derived(lwm2m_obj_device_t *object,
-                                                    const lwm2m_obj_device_args_t *args)
+
+int32_t lwm2m_object_device_instance_create_derived(lwm2m_obj_pet_device_t *object,
+                                                    const lwm2m_obj_pet_device_args_t *args)
 {
     assert(object);
     assert(args);
     int32_t result = -ENOMEM;
-    lwm2m_obj_device_inst_t *instance = NULL;
+    lwm2m_obj_pet_device_inst_t *instance = NULL;
     uint16_t _instance_id;
     if (object->free_instances == NULL) {
         DEBUG("[lwm2m pet device:Pet]: object not initialized\n");
@@ -328,7 +328,7 @@ int32_t lwm2m_object_device_instance_create_derived(lwm2m_obj_device_t *object,
         goto free_out;
     }
 
-    memset(instance, 0, sizeof(lwm2m_obj_pet_inst_t));
+    memset(instance, 0, sizeof(lwm2m_obj_pet_device_inst_t));
 
     instance->list.id = _instance_id;
   

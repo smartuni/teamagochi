@@ -321,64 +321,79 @@ out:
 static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(data);
     assert(instance);
-    int64_t value = 0;
+    int64_t value;
+    callback_value cb_value;
+    char* name;
     switch (data->id) {
     case LWM2M_PET_ID:
         lwm2m_data_decode_int(data, &value);
         instance->id = instance->id;
         break;
-    // case LWM2M_PET_NAME_ID:
-    //     lwm2m_data_(data, &instance->name);
-    //     break;
+    case LWM2M_PET_NAME_ID:
+        name = (char*) data->value.asBuffer.buffer;
+        memcpy(&instance->name,name,sizeof(instance->name));
+        cb_value.str = name;
+        break;
     case LWM2M_PET_COLOR_ID:
         puts("color\n");
         lwm2m_data_decode_int(data,&value);
-        instance->color = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        
+        instance->color = (uint32_t)((uint64_t)value & 0xFFFFFFFF);   
+        cb_value.num =  instance->color;
         break;
     case LWM2M_PET_HAPPINESS_ID:
         lwm2m_data_decode_int(data, &value);
         instance->happiness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->happiness;
         break;
     case LWM2M_PET_WELLBEING_ID:
         lwm2m_data_decode_int(data, &value);
         instance->wellbeing = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->wellbeing;
         break;
     case LWM2M_PET_HEALTH_ID:
         lwm2m_data_decode_int(data, &value);
         instance->health = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->health;
         break;
     case LWM2M_PET_XP_ID:
         lwm2m_data_decode_int(data, &value);
         instance->xp = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->xp;
         break;
     case LWM2M_PET_HUNGER_ID:
         lwm2m_data_decode_int(data, &value);
         instance->hunger = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->hunger;
         break;
     case LWM2M_PET_CLEANLINESS_ID:
         lwm2m_data_decode_int(data, &value);
         instance->cleanliness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->cleanliness;
         break;
     case LWM2M_PET_FUN_ID:
         lwm2m_data_decode_int(data, &value);
         instance->fun = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->fun;
         break; 
     case LWM2M_PET_FEED_ID:
         lwm2m_data_decode_int(data, &value);
         instance->feed = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->feed;
         break;
     case LWM2M_PET_MEDICATE_ID:
         lwm2m_data_decode_int(data, &value);
         instance->medicate = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->medicate;
         break;
     case LWM2M_PET_PLAY_ID:
         lwm2m_data_decode_int(data, &value);
         instance->play = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->play;
         break;
     case LWM2M_PET_CLEAN_ID:
         lwm2m_data_decode_int(data, &value);
         instance->clean = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+        cb_value.num =  instance->clean;
         break;
     case LWM2M_PET_HUNGRY_ID:
         lwm2m_data_decode_bool(data, &instance->hungry);
@@ -395,7 +410,7 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     default:
         return COAP_404_NOT_FOUND;
     }
-    instance->write_cb(data->id);
+    instance->write_cb(data->id, cb_value);
     return COAP_204_CHANGED;
 }
 
@@ -499,8 +514,8 @@ int32_t lwm2m_object_pet_instance_create_derived(lwm2m_obj_pet_t *object,
     instance->write_cb = args->write_cb;
 
     /* copy name locally */
-    //memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
-    //strcpy(instance->name, "default");
+    memset(instance->name, 'c', CONFIG_LWM2M_PET_NAME_MAX_SIZE);
+    strcpy(instance->name, "default");
     DEBUG("[lwm2m:Pet]: new instance with ID %d\n", _instance_id);
 
     /* add the new instance to the list */
