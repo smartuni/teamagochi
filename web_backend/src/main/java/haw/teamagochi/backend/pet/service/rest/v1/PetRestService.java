@@ -21,7 +21,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
  * Rest interface for the pet component.
  */
 @Path("/v1/pets")
-@Tag(name = "pets", description = "Everything about pets.")
+@Tag(name = "b) pets", description = "Everything about pets.")
 @SecurityRequirement(name = "SecurityScheme")
 public class PetRestService {
 
