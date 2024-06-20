@@ -2,17 +2,20 @@ package haw.teamagochi.backend.device.service.rest.v1.mapper;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
+import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
 import java.util.List;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.ValueMapping;
 import org.mapstruct.factory.Mappers;
@@ -36,10 +39,15 @@ public interface DeviceMapper {
   @Mapping(source = "type", target = "deviceType")
   @Mapping(source = "ownerId", target = "owner.externalID")
   @Mapping(source = "petId", target = "pet.id")
-  DeviceEntity mapTransferObjectToEntity(DeviceDTO deviceDto, @Context UcFindUser ucFindUser, @Context UcFindPet ucFindPet);
+  @Mapping(constant = "", target = "identifier")
+  DeviceEntity mapTransferObjectToEntity(DeviceDTO deviceDto, @Context UcFindUser ucFindUser, @Context UcFindPet ucFindPet, @Context UcFindDevice ucFindDevice);
+
+  default DeviceEntity mapTransferObjectToEntity(DeviceDTO deviceDto, @Context UcFindUser ucFindUser, @Context UcFindPet ucFindPet) {
+    return mapTransferObjectToEntity(deviceDto, ucFindUser, ucFindPet, null);
+  }
 
   /**
-   * See {@link DeviceMapper#mapTransferObjectToEntity(DeviceDTO, UcFindUser, UcFindPet)}.
+   * See {@link //DeviceMapper#mapTransferObjectToEntity(DeviceDTO, UcFindUser, UcFindPet)}.
    */
   List<DeviceEntity> mapTransferObjectToEntity(List<DeviceDTO> deviceDtos, @Context UcFindUser ucFindUser, @Context UcFindPet ucFindPet);
 
@@ -78,13 +86,33 @@ public interface DeviceMapper {
   @InheritInverseConfiguration
   String mapDeviceTypeToString(DeviceType deviceType);
 
-  @ObjectFactory
-  default UserEntity lookup(String uuid, @Context UcFindUser ucFindUser) {
-    return ucFindUser.find(uuid);
+  @AfterMapping
+  default void findOwner(DeviceDTO dto, @MappingTarget DeviceEntity entity, @Context UcFindUser ucFindUser) {
+    if (dto.getOwnerId() == null || ucFindUser == null) return;
+
+    UserEntity dbEntity = ucFindUser.find(dto.getOwnerId());
+    if (dbEntity != null) {
+      entity.setOwner(dbEntity);
+    }
   }
 
-  @ObjectFactory
-  default PetEntity lookup(Long id, @Context UcFindPet ucFindPet) {
-    return ucFindPet.find(id);
+  @AfterMapping
+  default void findPet(DeviceDTO dto, @MappingTarget DeviceEntity entity, @Context UcFindPet ucFindPet) {
+    if (dto.getPetId() == null || ucFindPet == null) return;
+
+    PetEntity dbEntity = ucFindPet.find(dto.getPetId());
+    if (dbEntity != null) {
+      entity.setPet(dbEntity);
+    }
+  }
+
+  @AfterMapping
+  default void findDeviceIdentifier(@MappingTarget DeviceEntity entity, @Context UcFindDevice ucFindDevice) {
+    if (ucFindDevice == null) return;
+
+    DeviceEntity dbEntity = ucFindDevice.find(entity.getId());
+    if (dbEntity != null) {
+      entity.setIdentifier(dbEntity.getIdentifier());
+    }
   }
 }
