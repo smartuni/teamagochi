@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
@@ -27,6 +28,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
  */
 @Path("/v1/pets/self")
 @Tag(name = "pets/self", description = "Everything about a users pets.")
+@SecurityRequirement(name = "SecurityScheme")
 public class PetRestSelfService {
 
   @Inject

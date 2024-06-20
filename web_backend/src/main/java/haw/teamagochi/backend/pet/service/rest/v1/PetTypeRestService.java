@@ -10,6 +10,7 @@ import jakarta.ws.rs.Path;
 import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
@@ -17,6 +18,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
  */
 @Path("/v1/pets/types")
 @Tag(name = "pets/types", description = "Everything about pets.")
+@SecurityRequirement(name = "SecurityScheme")
 public class PetTypeRestService {
 
   @Inject
