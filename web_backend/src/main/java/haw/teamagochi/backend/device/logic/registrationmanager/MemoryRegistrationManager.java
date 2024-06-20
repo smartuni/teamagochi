@@ -17,7 +17,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
 
   private static final Logger LOGGER = Logger.getLogger(MemoryRegistrationManager.class);
 
-  private static final int DEFAULT_TIMEOUT_SECONDS = 120;
+  private static final int DEFAULT_TIMEOUT_SECONDS = 600;
 
   /** LwM2M clients (devices) which are waiting for registration. */
   private final HashMap<String, Date> clientMap;
