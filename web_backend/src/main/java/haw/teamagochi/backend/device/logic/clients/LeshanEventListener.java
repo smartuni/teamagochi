@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import haw.teamagochi.backend.device.logic.UcHandleLeshanEvents;
 import haw.teamagochi.backend.device.logic.clients.sse.LeshanEventClient;
-import haw.teamagochi.backend.device.logic.registrationmanager.MemoryRegistrationManager;
 import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
@@ -46,62 +45,67 @@ public class LeshanEventListener {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
               ucHandleLeshanEvents.handleRegistration(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   @Startup
   void receiveDeregistrationEvents() {
     sseClient
         .deregistration().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
               ucHandleLeshanEvents.handleDeregistration(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   @Startup
   void receiveUpdatedEvents() {
     sseClient
         .updated().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               UpdatedDto dto = objectMapper.readValue(event.data(), UpdatedDto.class);
               ucHandleLeshanEvents.handleUpdate(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   @Startup
   void receiveSleepingEvents() {
     sseClient
         .sleeping().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
               ucHandleLeshanEvents.handleSleeping(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   @Startup
   void receiveAwakeEvents() {
     sseClient
         .awake().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
               ucHandleLeshanEvents.handleAwake(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   @Startup
   void receiveCoapLogEvents() {
     sseClient
         .coaplog().onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               CoaplogDto dto = objectMapper.readValue(event.data(), CoaplogDto.class);
               ucHandleLeshanEvents.handleCoapLog(dto);
             }
-        ));
+        ), failure -> LOGGER.error(failure.getMessage()));
   }
 
   /**
