@@ -1,3 +1,8 @@
+#
+# Additions which are only relevant on the Raspberry Pi. Use with `-f` option,
+# e.g.: `docker compose -f compose.yml -f compose.raspi.yml up`
+#
+
 services:
   teashan:
     ports:

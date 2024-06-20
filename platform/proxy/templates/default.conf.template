@@ -4,6 +4,8 @@ server {
 
   server_name _;
 
+  include /etc/nginx/conf.d/*.include;
+
   #
   # Development Dashboard
   #
