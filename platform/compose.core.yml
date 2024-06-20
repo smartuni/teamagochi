@@ -1,0 +1,67 @@
+#
+# Provides all core services, volumes and networks. Can be used as a base
+# for more specialized compose files with the `includes` keyword.
+#
+
+services:
+
+  # Development Dashboard
+  devdash:
+    extends:
+      file: ./compose.common.yml
+      service: devdash
+    networks:
+      - private
+
+  # LwM2M Server and Bootstrap Server
+  teashan:
+    extends:
+      file: ./compose.common.yml
+      service: teashan
+    networks:
+      - private
+      - public
+
+  # Keycloak Identity Provider and Access Management
+  keycloak:
+    extends:
+      file: ./compose.common.yml
+      service: keycloak
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - private
+      - db
+
+  # Shared database management system
+  postgres:
+    extends:
+      file: ./compose.common.yml
+      service: postgres
+    volumes:
+      - "./postgres/initdb.d/init-backend-db.sh:/docker-entrypoint-initdb.d/init-backend-db.sh"
+    networks:
+      - db
+
+  # Email & SMTP testing tool
+  mailpit:
+    extends:
+      file: ./compose.common.yml
+      service: mailpit
+    networks:
+      - private
+
+volumes:
+  postgres:
+
+networks:
+  public:
+    internal: false
+    driver: bridge
+  private:
+    internal: true
+    driver: bridge
+  db:
+    internal: false
+    driver: bridge

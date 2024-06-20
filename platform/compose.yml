@@ -1,146 +1,37 @@
+#
+# Manages all our services and configures the proxy accordingly.
+#
+
 name: t8i
 
-x-common-healthcheck: &common-healthcheck
-  interval: 30s
-  timeout: 5s
-  retries: 3
-  start_period: 60s
-  start_interval: 3s
+include:
+  - ./compose.core.yml
 
 services:
-  # Reverse proxy for all web interfaces
   proxy:
-    image: nginx:1.25-alpine
-    ports:
-      - "127.0.0.1:${PROXY_PUBLIC_PORT}:80"
-      - "[::]:${PROXY_PUBLIC_PORT}:80"
-    volumes:
-      - "./proxy/proxy_params:/etc/nginx/proxy_params:ro"
-      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
-      - "./proxy/templates:/etc/nginx/templates:ro"
+    extends:
+      file: ./compose.common.yml
+      service: proxy
     environment:
-      PROXY_PUBLIC_PORT: ${PROXY_PUBLIC_PORT}
-      # NOTE: picky about trailing slash
-      DEVDASH_WEB_URL: http://devdash:8080/
-      TEASHAN_WEB_URL: http://teashan:8080/
-      TEASHAN_BS_WEB_URL: http://teashan:8081/
-      MAILPIT_WEB_URL: http://mailpit:8025/mailbox/
-      KEYCLOAK_WEB_URL: http://keycloak:8080/kc
+      BACKEND_WEB_URL: http://backend:8080/
     depends_on:
       keycloak:
         condition: service_healthy
+      backend:
+        condition: service_healthy
     networks:
       - public
-      - proxy
+      - private
 
-  # Development Dashboard
-  devdash:
-    build:
-      context: ./devdash
-    environment:
-      VITE_AUTHORITY: http://localhost:${PROXY_PUBLIC_PORT}/kc/realms/teamagochi
-      VITE_CLIENT_ID: teamagochi-webapp
-    networks:
-      - proxy
-
-  # LwM2M Server and Bootstrap Server
-  teashan:
-    build:
-      context: ./teashan
-    ports:
-      # Don't use a proxy, just map them to the host
-      - "127.0.0.1:5683:5683/udp" # [coap://]      CoAP over UDP (with experimental OSCORE)
-      - "127.0.0.1:5683:5683/tcp" # [coap+tcp://]  CoAP over TCP (experimental) 
-      - "127.0.0.1:5684:5684/udp" # [coaps://]     CoAP over DTLS
-      - "127.0.0.1:5684:5684/tcp" # [coaps+tcp://] CoAP over TLS (experimental)
-      - "127.0.0.1:5685:5685/udp" # [coap://]      CoAP over UDP
-      # Bootstrap
-      - "127.0.0.1:5783:5783/udp" # [coap://]      CoAP over UDP
-      - "127.0.0.1:5784:5784/udp" # [coaps://]     CoAP over DTLS
-    environment:
-      NGINX_ENABLE: "false"
-      # Overriding LESHAN_CMD and LESHAN_BS_CMD allows changing ports and more, see ./teashan/Dockerfile
-    networks:
-      - proxy
-      - public
-
-  # Keycloak Identity Provider and Access Management
-  keycloak:
-    build:
-      context: ./keycloak
-    command: ["start", "--optimized", "--import-realm"]
-    environment:
-      # NOTE: Uses a preconfigured Dockerfile, see ./keycloak/Dockerfile
-      KC_DB_PASSWORD: "${POSTGRES_KC_PASSWORD}"
-      KC_PROXY_HEADERS: xforwarded
-      KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME_URL: http://localhost:${PROXY_PUBLIC_PORT}/kc
-      KC_HOSTNAME_ADMIN_URL: http://localhost:${PROXY_PUBLIC_PORT}/kc
-      KC_HOSTNAME_STRICT: "false"
-      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
-      KC_HOSTNAME_DEBUG: "true"
-      #KC_LOG_LEVEL: debug
-    healthcheck:
-      test: [ "CMD-SHELL", "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"]
-      <<: *common-healthcheck
-    volumes:
-      - "./data/keycloak/import:/opt/keycloak/data/import"
+  backend:
+    extends:
+      file: ./compose.common.yml
+      service: backend
     depends_on:
       postgres:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
     networks:
-      - proxy
+      - private
       - db
-
-  # Shared database management system
-  postgres:
-    # Not the latest version, but recommended by Keycloak.
-    # See https://www.keycloak.org/server/db#_supported_databases
-    image: postgres:15.6-bookworm
-    environment:
-      TZ: "Europe/Berlin"
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
-      POSTGRES_INITDB_ARGS: --auth=scram-sha-256
-      # Vars for database init scripts
-      POSTGRES_KC_USER: keycloak
-      POSTGRES_KC_DB: keycloak
-      POSTGRES_KC_PASSWORD: ${POSTGRES_KC_PASSWORD}
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
-      <<: *common-healthcheck
-    volumes:
-      - postgres:/var/lib/postgresql/data
-      - "./postgres/initdb.d/init-keycloak-db.sh:/docker-entrypoint-initdb.d/init-keycloak-db.sh"
-      - "./data/db/import/keycloak-db.dump:/docker-entrypoint-initdb.d/keycloak-db.dump"
-    networks:
-      - db
-
-  # Email & SMTP testing tool
-  mailpit:
-    image: axllent/mailpit
-    environment:
-      TZ: "Europe/Berlin"
-      MP_WEBROOT: /mailbox/
-      MP_MAX_MESSAGES: 100
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
-      MP_QUIET: "true"
-    networks:
-      - proxy
-
-volumes:
-  postgres:
-
-networks:
-  public:
-    internal: false
-    driver: bridge
-  proxy:
-    internal: true
-    driver: bridge
-  db:
-    internal: true
-    driver: bridge
