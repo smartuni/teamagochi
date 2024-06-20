@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # Wrapper script for leshan-client-demo.jar
@@ -18,10 +18,10 @@ fi
 
 if [ ! -d ./models ]; then
     mkdir models
-    pushd models
+    pushd models || exit 1
     wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32769.xml
     wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32770.xml
-    popd
+    popd || exit 1
 fi
 
 USE_BOOTSTRAP=true
@@ -31,7 +31,8 @@ ENDPOINT_NAME=teamagochi-java-client-0
 if [ "$USE_BOOTSTRAP" = true ]; then
     # With bootstrap server
     SERVER_URL=coap://localhost:5683
-    java -jar ./leshan-client-demo.jar \
+    { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
+        | java -jar ./leshan-client-demo.jar \
         --models-folder="$MODELS_FOLDER" \
         --server-url="$SERVER_URL" \
         --endpoint-name="$ENDPOINT_NAME" \
@@ -39,7 +40,8 @@ if [ "$USE_BOOTSTRAP" = true ]; then
 else
     # Without bootstrap server
     SERVER_URL=coap://localhost:5783
-    java -jar ./leshan-client-demo.jar \
+    { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
+        | java -jar ./leshan-client-demo.jar \
         --models-folder="$MODELS_FOLDER" \
         --server-url="$SERVER_URL" \
         --endpoint-name="$ENDPOINT_NAME" \
