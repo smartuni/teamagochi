@@ -18,8 +18,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class GameCycleImpl implements GameCycle{
 
   @Inject
-  PetRepository petRepository;
-  @Inject
   UcFindDeviceImpl findDevice;
 
   @Inject

@@ -5,6 +5,9 @@ import haw.teamagochi.backend.pet.logic.Events.PetEvents;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 @ApplicationScoped
 public class UcPetConditionsImpl implements UcPetConditions{
 
@@ -12,87 +15,55 @@ public class UcPetConditionsImpl implements UcPetConditions{
   public void decreaseHunger(PetEntity pet) {
     if(pet == null) return;
     int decrease = 10;
-    if(pet.getHunger() - decrease > 0){
-      pet.setHunger(pet.getHunger() - decrease);
-    }else{
-      pet.setHunger(0);
-    }
+    pet.setHunger(max(0, pet.getHunger() - decrease));
   }
 
   @Override
   public void increaseHunger(PetEntity pet) {
     if(pet == null) return;
     int increase = 5;
-    if(pet.getHunger() + increase < 100){
-      pet.setHunger(pet.getHunger() + increase);
-    }else{
-      pet.setHunger(100);
-    }
+    pet.setHunger(min(100, pet.getHunger() + increase));
   }
 
   @Override
   public void increaseHealth(PetEntity pet) {
     if(pet == null) return;
     int increase = 10;
-    if(pet.getHealth() + increase < 100){
-      pet.setHealth(pet.getHealth() + increase);
-    }else{
-      pet.setHealth(100);
-    }
+    pet.setHealth(min(100, pet.getHealth() + increase));
   }
 
   @Override
   public void decreaseHealth(PetEntity pet) {
     if(pet == null) return;
     int decrease = 5;
-    if(pet.getHealth() - decrease > 0){
-      pet.setHealth(pet.getHealth() - decrease);
-    }else{
-      pet.setHealth(0);
-    }
+    pet.setHealth(max(0, pet.getHealth() - decrease));
   }
 
   @Override
   public void increaseCleanliness(PetEntity pet) {
     if(pet == null) return;
     int increase = 10;
-    if(pet.getCleanliness() + increase < 100){
-      pet.setCleanliness(pet.getCleanliness() + increase);
-    }else{
-      pet.setCleanliness(100);
-    }
+    pet.setCleanliness(min(100, pet.getCleanliness() + increase));
   }
 
   @Override
   public void decreaseCleanliness(PetEntity pet) {
     if(pet == null) return;
     int decrease = 5;
-    if(pet.getCleanliness() - decrease > 0){
-      pet.setCleanliness(pet.getCleanliness() - decrease);
-    }else{
-      pet.setCleanliness(0);
-    }
+    pet.setCleanliness(max(0, pet.getCleanliness() - decrease ));
   }
 
   @Override
   public void increaseFun(PetEntity pet) {
     if(pet == null) return;
     int increase = 10;
-    if(pet.getFun() + increase < 100){
-      pet.setFun(pet.getFun() + increase);
-    }else{
-      pet.setFun(100);
-    }
+    pet.setFun(min(100, pet.getFun() + increase));
   }
 
   @Override
   public void decreaseFun(PetEntity pet) {
     if(pet == null) return;
     int decrease = 5;
-    if(pet.getFun() - decrease > 0){
-      pet.setFun(pet.getFun() - decrease);
-    }else{
-      pet.setFun(0);
-    }
+    pet.setFun(max(0, pet.getFun() - decrease));
   }
 }
