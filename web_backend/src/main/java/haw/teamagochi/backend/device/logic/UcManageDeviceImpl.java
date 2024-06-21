@@ -27,9 +27,6 @@ public class UcManageDeviceImpl implements UcManageDevice {
   UcManageUser ucManageUser;
 
   @Inject
-  UcManageDevice ucManageDevice;
-
-  @Inject
   RegistrationManager registrationManager;
 
   /**
@@ -59,6 +56,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Override
   @Transactional
   public boolean deleteById(long deviceId) {
+    registrationManager.clearCache();
     return deviceRepository.deleteById(deviceId);
   }
 
@@ -68,6 +66,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Override
   @Transactional
   public void deleteAll() {
+    registrationManager.clearCache();
     deviceRepository.deleteAll();
   }
 
@@ -85,15 +84,13 @@ public class UcManageDeviceImpl implements UcManageDevice {
 
     UserEntity owner = ucFindUser.find(uuid);
     if (owner == null) {
-      ucManageUser.create(uuid); // create userId in database
-      owner = ucFindUser.find(uuid);
+      owner = ucManageUser.create(uuid); // create userId in database
     }
 
     DeviceEntity device = new DeviceEntity(deviceName, DeviceType.FROG);
     device.setOwner(owner);
-
     device.setIdentifier(endpoint); // Jessica
 
-    return ucManageDevice.create(device);
+    return create(device);
   }
 }
