@@ -13,4 +13,8 @@ public class DeviceRepository implements PanacheRepository<DeviceEntity> {
   public List<DeviceEntity> findByOwner(UserEntity user) {
     return list("owner", user);
   }
+
+  public DeviceEntity findByIdentifier(String identifier) {
+    return find("identifier", identifier).firstResult();
+  }
 }
