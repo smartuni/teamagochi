@@ -14,6 +14,7 @@ import java.util.Random;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+@ApplicationScoped
 public class GameCycleImpl implements GameCycle{
 
   @Inject
@@ -41,7 +42,6 @@ public class GameCycleImpl implements GameCycle{
           }//if
           status.decreaseWellbeing(pet);
           status.decreaseHappiness(pet);
-          // petRepository.persist(pet);
         }//if
 
       }//method
