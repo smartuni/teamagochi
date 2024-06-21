@@ -27,7 +27,7 @@ public class GameCycleImpl implements GameCycle{
   UcPetConditionsImpl conditions;
 
   @Override
-  @Scheduled(every = "{GameCycleImpl.interval}")
+  @Scheduled(every = "{GameCycle.interval}")
   @Transactional // One game cycle iteration is one transaction. After a transaction all changes to entities are saved automatically.
   public void petGameCycle() {
     Random randomNum = new Random();
