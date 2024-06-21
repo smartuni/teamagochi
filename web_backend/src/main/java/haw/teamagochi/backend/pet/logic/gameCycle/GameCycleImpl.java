@@ -10,6 +10,8 @@ import haw.teamagochi.backend.pet.logic.UcPetStatusImpl;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.inject.Inject;
 import java.util.Random;
+
+import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
@@ -28,7 +30,8 @@ public class GameCycleImpl implements GameCycle{
 
   @Override
   @Scheduled(every = "{GameCycleImpl.interval}")
-  public void petGameCylce() {
+  @Transactional // One game cycle iteration is one transaction. After a transaction all changes to entities are saved automatically.
+  public void petGameCycle() {
     Random randomNum = new Random();
       for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
         PetEntity pet = device.getPet();
@@ -41,7 +44,6 @@ public class GameCycleImpl implements GameCycle{
           }//if
           status.decreaseWellbeing(pet);
           status.decreaseHappiness(pet);
-          petRepository.persist(pet);
         }//if
 
       }//method
