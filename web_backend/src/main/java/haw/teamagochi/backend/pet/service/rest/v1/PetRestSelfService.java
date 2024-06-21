@@ -11,6 +11,7 @@ import haw.teamagochi.backend.user.logic.UcFindUser;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
@@ -72,6 +73,7 @@ public class PetRestSelfService {
   @POST
   @Operation(summary = "Create a pet")
   @APIResponse(responseCode = "200")
+  @Transactional
   public PetDTO createPet(PetDTO dto) {
     String uuid = SecurityUtil.getExternalUserId(identity);
     UserEntity owner = ucFindUser.find(uuid);
@@ -79,7 +81,7 @@ public class PetRestSelfService {
       ucManageUser.create(uuid); // create userId in database
     }
     dto.setOwnerId(uuid);
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, null, null); // TODO
     ucManagePet.create(entity);
     return petMapper.mapEntityToTransferObject(entity);
   }

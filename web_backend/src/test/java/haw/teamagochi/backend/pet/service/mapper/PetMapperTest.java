@@ -114,7 +114,7 @@ public class PetMapperTest {
         petStateDto);
 
     // When
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, null, null);  // TODO
 
     // Then
     assertEquals(dto.getId(), entity.getId());

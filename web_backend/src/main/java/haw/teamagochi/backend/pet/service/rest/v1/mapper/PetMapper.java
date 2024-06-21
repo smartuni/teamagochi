@@ -40,10 +40,10 @@ public interface PetMapper {
   @Mapping(source = "state.cleanliness", target = "cleanliness")
   @Mapping(source = "state.fun", target = "fun")
   @Mapping(source = "state.xp", target = "xp")
-  PetEntity mapTransferObjectToEntity(PetDTO petDto);
+  PetEntity mapTransferObjectToEntity(PetDTO petDto, @Context UcFindUser ucFindUser, @Context UcFindPetType ucFindPetType);
 
   /**
-   * See {@link PetMapper#mapTransferObjectToEntity(PetDTO)}.
+   * See {@link PetMapper#mapTransferObjectToEntity(PetDTO, UcFindUser, UcFindPetType)}.
    */
   List<PetEntity> mapTransferObjectToEntity(List<PetDTO> petDtos);
 

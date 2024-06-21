@@ -4,6 +4,7 @@ import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -36,7 +37,7 @@ public class PetEntity {
   public PetEntity() {}
 
   @NonNull
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   private UserEntity owner;
 
 
@@ -66,7 +67,7 @@ public class PetEntity {
   private Date lastTimeOnDevice;
 
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @NonNull
   private PetTypeEntity petType;
 
