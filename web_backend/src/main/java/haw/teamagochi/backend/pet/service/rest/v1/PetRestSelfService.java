@@ -6,6 +6,9 @@ import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
+import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.user.logic.UcFindUser;
+import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -17,13 +20,15 @@ import java.util.List;
 import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
  * Rest interface for the pet component.
  */
 @Path("/v1/pets/self")
-@Tag(name = "pets/self", description = "Everything about a users pets.")
+@Tag(name = "2) pets/self", description = "Everything about the pets of a user whose ID is read from the JWT token.")
+@SecurityRequirement(name = "SecurityScheme")
 public class PetRestSelfService {
 
   @Inject
@@ -37,6 +42,12 @@ public class PetRestSelfService {
 
   @Inject
   protected UcManagePet ucManagePet;
+
+  @Inject
+  protected UcFindUser ucFindUser;
+
+  @Inject
+  protected UcManageUser ucManageUser;
 
   /**
    * Get all pets.
@@ -63,6 +74,10 @@ public class PetRestSelfService {
   @APIResponse(responseCode = "200")
   public PetDTO createPet(PetDTO dto) {
     String uuid = SecurityUtil.getExternalUserId(identity);
+    UserEntity owner = ucFindUser.find(uuid);
+    if (owner == null) {
+      ucManageUser.create(uuid); // create userId in database
+    }
     dto.setOwnerId(uuid);
     PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
     ucManagePet.create(entity);

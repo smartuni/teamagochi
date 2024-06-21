@@ -1,0 +1,20 @@
+#
+# Same as `compose.yml` but without the backend service.
+#
+
+name: t8i-no-backend
+
+include:
+  - ./compose.core.yml
+
+services:
+  proxy:
+    extends:
+      file: ./compose.common.yml
+      service: proxy
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    networks:
+      - public
+      - private

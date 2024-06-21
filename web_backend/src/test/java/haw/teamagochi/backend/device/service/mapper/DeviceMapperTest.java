@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.dataaccess.model.DeviceType;
+import haw.teamagochi.backend.device.logic.UcFindDevice;
+import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
@@ -30,6 +32,12 @@ import org.junit.jupiter.api.Test;
  */
 @QuarkusTest
 public class DeviceMapperTest {
+
+  @Inject
+  UcFindDevice ucFindDevice;
+
+  @Inject
+  UcManageDevice ucManageDevice;
 
   @Inject
   UcFindUser ucFindUser;
@@ -62,10 +70,11 @@ public class DeviceMapperTest {
     pet = ucManagePet.create(owner.getId(), "Fifi", petType.getId());
 
     deviceEntities = new HashMap<>();
-    DeviceEntity device1 = new DeviceEntity("device-0", DeviceType.FROG);
-    device1.setOwner(owner);
-    device1.setPet(pet);
-    deviceEntities.put(device1.getName(), device1);
+    DeviceEntity device0 = new DeviceEntity("device-0", DeviceType.FROG);
+    device0.setOwner(owner);
+    device0.setPet(pet);
+    device0.setIdentifier("dev0-lwm2m-endpoint-id");
+    deviceEntities.put(device0.getName(), device0);
     deviceEntities.put("device-1", new DeviceEntity("device-1", DeviceType.FROG));
     deviceEntities.put("device-2", new DeviceEntity("device-2", DeviceType.FROG));
   }
@@ -73,7 +82,10 @@ public class DeviceMapperTest {
   @AfterEach
   @Transactional
   public void afterEach() {
+    owner = null;
+    pet = null;
     deviceEntities = null;
+    ucManageDevice.deleteAll();
     ucManagePet.deleteAll();
     ucManagePetType.deleteAll();
     ucManageUser.deleteAll();
@@ -119,15 +131,19 @@ public class DeviceMapperTest {
   @Transactional
   public void testMapTransferObjectToEntity() {
     // Given
-    UserEntity owner = ucManageUser.create(UUID.randomUUID());
-    PetTypeEntity petType = ucManagePetType.createPetType("Frog");
-    PetEntity pet = ucManagePet.create(owner.getId(), "Fifi", petType.getId());
+    String deviceName = "device-0";
+    DeviceEntity device0 = deviceEntities.get(deviceName);
+    ucManageDevice.create(device0);
 
-    DeviceDTO dto = new DeviceDTO(1L, "device-0", "frog",
-        String.valueOf(owner.getExternalID()), pet.getId());
+    assert device0.getOwner() != null;
+    assert device0.getPet() != null;
+
+    DeviceDTO dto = new DeviceDTO(device0.getId(), deviceName, "frog",
+        String.valueOf(device0.getOwner().getExternalID()), device0.getPet().getId());
 
     // When
-    DeviceEntity entity = deviceMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPet);
+    DeviceEntity entity =
+        deviceMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPet, ucFindDevice);
 
     // Then
     assert entity.getOwner() != null;
@@ -136,10 +152,10 @@ public class DeviceMapperTest {
     assertEquals(dto.getId(), entity.getId());
     assertEquals(dto.getName(), entity.getName());
     assertEquals(DeviceType.FROG, entity.getDeviceType());
-    assertEquals(owner.getExternalID(), entity.getOwner().getExternalID());
-    // TODO why does this fail?
-    //assertEquals(owner.getId(), entity.getOwner().getId());
-    assertEquals(pet.getId(), entity.getPet().getId());
+    assertEquals(device0.getOwner().getExternalID(), entity.getOwner().getExternalID());
+    assertEquals(device0.getIdentifier(), entity.getIdentifier());
+    assertEquals(device0.getOwner().getId(), entity.getOwner().getId());
+    assertEquals(device0.getPet().getId(), entity.getPet().getId());
   }
 
   @Test
