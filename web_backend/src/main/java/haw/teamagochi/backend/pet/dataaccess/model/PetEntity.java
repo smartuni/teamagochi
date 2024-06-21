@@ -53,9 +53,9 @@ public class PetEntity {
 
   private int happiness = 0;
   private int wellbeing = 0;
-  private int health = 0;
+  private int health = 100;
   private int hunger = 0;
-  private int cleanliness = 0;
+  private int cleanliness = 100;
   private int fun = 0;
 
   @PositiveOrZero
