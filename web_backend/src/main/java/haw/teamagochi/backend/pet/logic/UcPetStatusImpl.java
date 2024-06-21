@@ -10,14 +10,18 @@ public class UcPetStatusImpl implements UcPetStatus {
   public void increaseHappiness(PetEntity pet, PetEvents event) {
     if(pet == null) return;
     //TODO ballancing
-    int happinessIncrease;
-    switch (event){
-      case FEED -> happinessIncrease = 15;
-      case PLAY -> happinessIncrease = 15;
-      case CLEAN -> happinessIncrease = 5;
-      case MEDICATE -> happinessIncrease = 5;
-      default -> happinessIncrease = 0;
-    }//switch
+
+    /*
+      If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
+     */
+    int happinessIncrease = switch (event) { // TODO: Merlin approval?
+      case FEED -> pet.getHunger() > 0 ? 15:0;
+      case PLAY -> pet.getFun() < 100 ? 15:0;
+      case CLEAN -> pet.getCleanliness() < 100 ? 5:0;
+      case MEDICATE -> pet.getHealth() < 100? 5:0;
+      default -> 0;
+    }; //switch
+
     if(pet.getHappiness() + happinessIncrease > 100){
       pet.setHappiness(100);
       increaseXP(pet, PetEvents.REACHED_MAX_STATUS); // will add more xp than normal event
@@ -42,14 +46,18 @@ public class UcPetStatusImpl implements UcPetStatus {
   public void increaseWellbeing(PetEntity pet, PetEvents event) {
     if(pet == null) return;
     //TODO ballancing
-    int wellbeingIncrease;
-    switch (event){
-      case FEED -> wellbeingIncrease = 5;
-      case PLAY -> wellbeingIncrease = 5;
-      case CLEAN -> wellbeingIncrease = 15;
-      case MEDICATE -> wellbeingIncrease = 15;
-      default -> wellbeingIncrease = 0;
-    }//switch
+
+    /*
+      If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
+     */
+    int wellbeingIncrease = switch (event) { // TODO: Merlin approval?
+      case FEED -> pet.getHunger() > 0 ? 5:0;
+      case PLAY -> pet.getFun() < 100 ? 5:0;
+      case CLEAN -> pet.getCleanliness() < 100 ? 15:0;
+      case MEDICATE -> pet.getHealth() < 100? 15:0;
+      default -> 0;
+    }; //switch
+
     if(pet.getWellbeing() + wellbeingIncrease > 100){
       pet.setWellbeing(100);
       increaseXP(pet, PetEvents.REACHED_MAX_STATUS); // will add more xp than normal event
