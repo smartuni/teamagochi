@@ -35,6 +35,14 @@ public interface UcFindDevice {
   Optional<DeviceEntity> findOptional(long id);
 
   /**
+   * Find device by LwM2M identifier.
+   *
+   * @param identifier of the device
+   * @return entity if found, otherwise null
+   */
+  DeviceEntity findByIdentifier(String identifier);
+
+  /**
    * Find all devices.
    *
    * @return entities if found, otherwise empty list

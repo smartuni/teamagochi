@@ -51,6 +51,14 @@ public class UcFindDeviceImpl implements UcFindDevice {
    * {@inheritDoc}
    */
   @Override
+  public DeviceEntity findByIdentifier(String identifier) {
+    return deviceRepository.findByIdentifier(identifier);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public List<DeviceEntity> findAll() {
     return deviceRepository.findAll().stream().toList();
   }
