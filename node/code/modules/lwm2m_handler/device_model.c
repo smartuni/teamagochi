@@ -239,6 +239,19 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *insta
     value[sizeof(value)-1] = 0;
     // strcpy(value,(char*) data->value.asBuffer.buffer);
     instance->write_cb(data->id,value);
+    switch (data->id) {
+    case LWM2M_DEVICE_STATUS_ID:
+        strcpy(instance->status,value);
+        break;
+    case LWM2M_DEVICE_REGISTER_ID:
+        strcpy(instance->register_code,value);
+        break;
+    case LW2M_DEVICE_TIME_ID:
+        strcpy(instance->time,value);
+        break;
+    default:
+        return COAP_404_NOT_FOUND;
+    }
     return COAP_204_CHANGED;
 }
 

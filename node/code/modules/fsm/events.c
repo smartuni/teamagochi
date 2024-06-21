@@ -13,21 +13,13 @@ static msg_t rcv_queue[RCV_QUEUE_SIZE];
 pet_stats_t pet_stats;
 device_register_code register_code;
 
-void get_pet_stats(pet_stats_t* stats){
-    mutex_lock(&pet_stats.mutex);
-    if (!memcpy(stats,&pet_stats,sizeof(pet_stats))){
-        DEBUG("Error setting pet_stats memory");
-    }
-    mutex_unlock(&pet_stats.mutex);
+pet_stats_t*  get_pet_stats(void){
+    return &pet_stats;
 }
 
-void get_register_code(char *code){
-    mutex_lock(&register_code.mutex);
-    if (!strcpy(code,register_code.code)){
-        DEBUG("Error setting device_register_code memory");
-    }
-    printf("code in get: %s\n",code);
-    mutex_unlock(&register_code.mutex);
+char* get_register_code(void){
+    printf("code in get: %s\n",register_code.code);
+    return register_code.code;
 }
 
 void set_t_events_pid(kernel_pid_t pid){
@@ -78,18 +70,14 @@ void trigger_event_string(EVENT_T event, char* value){
         if (!value){
             DEBUG("[events:string] no value given");
         }
-        mutex_lock(&register_code.mutex);
-        char code[8];
-        register_code.code = (char *) &code;
         strcpy(register_code.code,value);
-        mutex_unlock(&register_code.mutex);
         trigger_event(REGISTER_CODE);
     }else if(event == NAME){
         if (!value){
             DEBUG("[events:string] no value given");
         }
         mutex_lock(&pet_stats.mutex);
-        memcpy(pet_stats.name,value,sizeof(*value));
+        strcpy(pet_stats.name,value);
         mutex_unlock(&pet_stats.mutex);
     }
 }
