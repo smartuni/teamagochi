@@ -323,92 +323,93 @@ static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_inst_t *instance){
     assert(instance);
     int64_t value;
     callback_value cb_value;
-    char* name;
+    cb_value.num = 0;
+    char str[data->value.asBuffer.length];
     switch (data->id) {
-    case LWM2M_PET_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->id = instance->id;
-        break;
-    case LWM2M_PET_NAME_ID:
-        name = (char*) data->value.asBuffer.buffer;
-        memcpy(&instance->name,name,sizeof(instance->name));
-        cb_value.str = name;
-        break;
-    case LWM2M_PET_COLOR_ID:
-        puts("color\n");
-        lwm2m_data_decode_int(data,&value);
-        instance->color = (uint32_t)((uint64_t)value & 0xFFFFFFFF);   
-        cb_value.num =  instance->color;
-        break;
-    case LWM2M_PET_HAPPINESS_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->happiness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->happiness;
-        break;
-    case LWM2M_PET_WELLBEING_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->wellbeing = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->wellbeing;
-        break;
-    case LWM2M_PET_HEALTH_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->health = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->health;
-        break;
-    case LWM2M_PET_XP_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->xp = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->xp;
-        break;
-    case LWM2M_PET_HUNGER_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->hunger = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->hunger;
-        break;
-    case LWM2M_PET_CLEANLINESS_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->cleanliness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->cleanliness;
-        break;
-    case LWM2M_PET_FUN_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->fun = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->fun;
-        break; 
-    case LWM2M_PET_FEED_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->feed = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->feed;
-        break;
-    case LWM2M_PET_MEDICATE_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->medicate = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->medicate;
-        break;
-    case LWM2M_PET_PLAY_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->play = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->play;
-        break;
-    case LWM2M_PET_CLEAN_ID:
-        lwm2m_data_decode_int(data, &value);
-        instance->clean = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
-        cb_value.num =  instance->clean;
-        break;
-    case LWM2M_PET_HUNGRY_ID:
-        lwm2m_data_decode_bool(data, &instance->hungry);
-        break;
-    case LwM2M_PET_ILL_ID:
-        lwm2m_data_decode_bool(data, &instance->ill);
-        break;
-    case LwM2M_PET_BORED_ID:
-        lwm2m_data_decode_bool(data, &instance->bored);
-        break;
-    case LwM2M_PET_DIRTY_ID:
-        lwm2m_data_decode_bool(data, &instance->dirty);
-        break;
-    default:
-        return COAP_404_NOT_FOUND;
+        case LWM2M_PET_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->id = instance->id;
+            break;
+        case LWM2M_PET_NAME_ID:
+            memcpy(str,(char*) data->value.asBuffer.buffer,data->value.asBuffer.length);
+            memcpy(&instance->name,data->value.asBuffer.buffer,data->value.asBuffer.length);
+            cb_value.str = str;
+            break;
+        case LWM2M_PET_COLOR_ID:
+            puts("color\n");
+            lwm2m_data_decode_int(data,&value);
+            instance->color = (uint32_t)((uint64_t)value & 0xFFFFFFFF);   
+            cb_value.num =  instance->color;
+            break;
+        case LWM2M_PET_HAPPINESS_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->happiness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->happiness;
+            break;
+        case LWM2M_PET_WELLBEING_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->wellbeing = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->wellbeing;
+            break;
+        case LWM2M_PET_HEALTH_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->health = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->health;
+            break;
+        case LWM2M_PET_XP_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->xp = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->xp;
+            break;
+        case LWM2M_PET_HUNGER_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->hunger = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->hunger;
+            break;
+        case LWM2M_PET_CLEANLINESS_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->cleanliness = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->cleanliness;
+            break;
+        case LWM2M_PET_FUN_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->fun = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->fun;
+            break; 
+        case LWM2M_PET_FEED_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->feed = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->feed;
+            break;
+        case LWM2M_PET_MEDICATE_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->medicate = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->medicate;
+            break;
+        case LWM2M_PET_PLAY_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->play = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->play;
+            break;
+        case LWM2M_PET_CLEAN_ID:
+            lwm2m_data_decode_int(data, &value);
+            instance->clean = (uint32_t)((uint64_t)value & 0xFFFFFFFF);
+            cb_value.num =  instance->clean;
+            break;
+        case LWM2M_PET_HUNGRY_ID:
+            lwm2m_data_decode_bool(data, &instance->hungry);
+            break;
+        case LwM2M_PET_ILL_ID:
+            lwm2m_data_decode_bool(data, &instance->ill);
+            break;
+        case LwM2M_PET_BORED_ID:
+            lwm2m_data_decode_bool(data, &instance->bored);
+            break;
+        case LwM2M_PET_DIRTY_ID:
+            lwm2m_data_decode_bool(data, &instance->dirty);
+            break;
+        default:
+            return COAP_404_NOT_FOUND;
     }
     instance->write_cb(data->id, cb_value);
     return COAP_204_CHANGED;

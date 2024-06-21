@@ -57,6 +57,15 @@ typedef enum {
     REGISTERED,
     READY,
     REGISTER_CODE,
+    NAME,
+    COLOR,
+    HAPPINESS,
+    WELLBEING,
+    HEALTH,
+    XP,
+    HUNGER,
+    CLEANLINESS,
+    FUN
 }EVENT_T;
 
 typedef struct{
@@ -78,7 +87,7 @@ typedef struct{
 }pet_stats_t;
 
 typedef struct{
-    char* code;
+    char *code;
     mutex_t mutex;
 }device_register_code;
 
@@ -106,7 +115,7 @@ void get_pet_stats(pet_stats_t* stats);
  * 
  * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
  */
-void get_register_code(char* code);
+void get_register_code(char *code);
 
 /**
  * @brief Triggers an Event for the FSM
@@ -115,10 +124,9 @@ void get_register_code(char* code);
  */
 void trigger_event(EVENT_T event);
 
-void trigger_event_pet_int(EVENT_T event, int32_t value);
-void trigger_event_pet_string(EVENT_T event, char* value);
-void trigger_event_pet_bool(EVENT_T event, bool value);
-void trigger_event_device(EVENT_T event,  char* value);
+void trigger_event_int(EVENT_T event, int32_t value);
+void trigger_event_string(EVENT_T event, char* value);
+void trigger_event_bool(EVENT_T event, bool value);
 
 /**
  * @brief Sets the Callback for the FSM and starts the event loop

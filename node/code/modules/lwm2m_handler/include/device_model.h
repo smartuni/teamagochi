@@ -30,7 +30,7 @@
 #include "lwm2m_client.h"
 
 #ifndef CONFIG_LWM2M_STRING_MAX_SIZE
-#define CONFIG_LWM2M_STRING_MAX_SIZE 10
+#define CONFIG_LWM2M_STRING_MAX_SIZE 8
 #endif
 
 #define LWM2M_DEVICE_STATUS_ID 0

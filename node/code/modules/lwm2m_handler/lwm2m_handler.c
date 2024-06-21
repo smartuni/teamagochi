@@ -41,21 +41,48 @@ static void lwm2m_write_callback(uint16_t event_id, callback_value value){
     // msg_t message;
     (void) value;
     switch (event_id) {
-        // case LWM2M_PET_HUNGRY_ID:
-        //     message.type = EVENTS::PET_HUNGRY;
-        //     break;
-        // case LwM2M_PET_ILL_ID:
-        //     message.type = EVENTS::PET_ILL;
-        //     break;
-        // case LwM2M_PET_BORED_ID:
-        //     message.type = EVENTS::PET_BORED;
-        //     break;
-        // case LwM2M_PET_DIRTY_ID:
-        //     message.type = EVENTS::PET_DIRTY;
-        //     break;
-        // default:
-        //     DEBUG("[Lwm2mHandler:write_callback]: Id not found\n");
-        //     return;
+        case LWM2M_PET_NAME_ID:
+            trigger_event_string(NAME,value.str);
+            break;
+        case LWM2M_PET_COLOR_ID:
+            trigger_event_int(COLOR,value.num);
+            break;
+        case LWM2M_PET_HAPPINESS_ID:
+            trigger_event_int(HAPPINESS,value.num);
+            break;
+        case LWM2M_PET_WELLBEING_ID:
+            trigger_event_int(WELLBEING,value.num);
+            break;
+        case LWM2M_PET_HEALTH_ID:
+            trigger_event_int(HEALTH,value.num);
+            break;
+        case LWM2M_PET_XP_ID:
+            trigger_event_int(XP,value.num);
+            break;
+        case LWM2M_PET_HUNGER_ID:
+            trigger_event_int(HUNGER,value.num);
+            break;
+        case LWM2M_PET_CLEANLINESS_ID:
+            trigger_event_int(CLEANLINESS,value.num);
+            break;
+        case LWM2M_PET_FUN_ID: 
+            trigger_event_int(FUN,value.num);
+            break;
+        case LWM2M_PET_HUNGRY_ID:
+            trigger_event(PET_HUNGRY);
+            break;
+        case LwM2M_PET_ILL_ID:
+            trigger_event(PET_ILL);
+            break;
+        case LwM2M_PET_BORED_ID:
+            trigger_event(PET_BORED);
+            break;
+        case LwM2M_PET_DIRTY_ID:
+            trigger_event(PET_DIRTY);
+            break;
+        default:
+            DEBUG("[Lwm2mHandler:write_callback]: Id not found\n");
+            return;
     }
 }
 
@@ -73,7 +100,8 @@ static void lwm2m_pet_device_write_callback(uint16_t event_id, char* value){
             }       
             break;           
         case LWM2M_DEVICE_REGISTER_ID:
-            trigger_event_device(REGISTER_CODE,value);
+            printf("Value of device cb: %s\n",value);
+            trigger_event_string(REGISTER_CODE,value);
             break;
         case LW2M_DEVICE_TIME_ID:
             break;

@@ -233,20 +233,11 @@ out:
 static uint8_t _set_value(lwm2m_data_t *data, lwm2m_obj_pet_device_inst_t *instance){
     assert(data);
     assert(instance);
-    char *value;
-    switch (data->id) {
-        case LWM2M_DEVICE_STATUS_ID:
-            value = (char *) data->value.asBuffer.buffer;
-            break;
-        case LWM2M_DEVICE_REGISTER_ID:
-            value = (char *) data->value.asBuffer.buffer;
-            break;
-        case LW2M_DEVICE_TIME_ID:
-            value = (char *) data->value.asBuffer.buffer;
-            break;
-    default:
-        return COAP_404_NOT_FOUND;
-    }
+    char value[data->value.asBuffer.length+1];
+    printf("length buffer : %d\n",data->value.asBuffer.length);
+    memcpy(&value,(char*) data->value.asBuffer.buffer,data->value.asBuffer.length);
+    value[sizeof(value)-1] = 0;
+    // strcpy(value,(char*) data->value.asBuffer.buffer);
     instance->write_cb(data->id,value);
     return COAP_204_CHANGED;
 }

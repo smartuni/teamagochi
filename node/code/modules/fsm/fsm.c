@@ -162,6 +162,11 @@ void *fsm_thread(void *arg) {
 
 void fsm_handle(EVENT_T event) {
     DEBUG("[FSM:fsm_handle]: handle\n");
+    if (event == REGISTER_CODE){
+        char code[8];
+        get_register_code((char*)&code);
+        printf("code: %s\n",code);
+    }
     handler_result_t result = currentState->Handler(event);
     if (result != EVENT_HANDLED) {
         const state_t *pState = currentState;
