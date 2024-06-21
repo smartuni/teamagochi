@@ -14,11 +14,8 @@ import java.util.Random;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@ApplicationScoped
 public class GameCycleImpl implements GameCycle{
 
-  @Inject
-  PetRepository petRepository;
   @Inject
   UcFindDevice findDevice;
 
@@ -29,10 +26,9 @@ public class GameCycleImpl implements GameCycle{
   UcPetConditions conditions;
 
   @Override
-  @Scheduled(every = "{GameCycleImpl.interval}")
-  @Transactional
-  public void petGameCylce() {
-    System.out.println("Gamecycling!");
+  @Scheduled(every = "{GameCycle.interval}")
+  @Transactional // One game cycle iteration is one transaction. After a transaction all changes to entities are saved automatically.
+  public void petGameCycle() {
     Random randomNum = new Random();
       for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
         PetEntity pet = device.getPet();
@@ -49,8 +45,6 @@ public class GameCycleImpl implements GameCycle{
         }//if
 
       }//method
-
-
   }
 
 

@@ -1,0 +1,4 @@
+models/
+**/*.jar
+Californium3.client.properties
+
