@@ -19,7 +19,7 @@
                 <Type>String</Type>
                 <RangeEnumeration></RangeEnumeration>
                 <Units></Units>
-                <Description>Current status of the device.</Description>
+                <Description>Current status of the device, either REGISTER, REGISTERED or READY</Description>
             </Item>
             <Item ID="1">
                 <Name>Registration Code</Name>
