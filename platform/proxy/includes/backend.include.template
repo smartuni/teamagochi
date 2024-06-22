@@ -1,0 +1,8 @@
+location = /backend {
+  rewrite ^ $scheme://$http_host/backend/ permanent;
+}
+
+location /backend/ {
+  proxy_pass ${BACKEND_WEB_URL};
+  include proxy_params;
+}

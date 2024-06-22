@@ -6,8 +6,11 @@ FROM eclipse-temurin:21 AS downloader
 RUN mkdir /downloads
 WORKDIR /downloads
 
+# Version v2.x (master) with targeted LWM2M Version v1.1.x
 RUN wget https://ci.eclipse.org/leshan/job/leshan-ci/job/master/lastSuccessfulBuild/artifact/leshan-server-demo.jar
 RUN wget https://ci.eclipse.org/leshan/job/leshan-ci/job/master/lastSuccessfulBuild/artifact/leshan-bsserver-demo.jar
+RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32769.xml
+RUN wget https://raw.githubusercontent.com/smartuni/teamagochi/main/platform/data/objectmodels/32770.xml
 
 #
 # Runnable stage
@@ -26,7 +29,7 @@ RUN apt-get update && apt-get install --no-install-recommends -yq \
 
 # Create a designated leshan user and directory
 RUN useradd -r -s /bin/false leshan
-RUN install -o leshan -d /leshan
+RUN install -o leshan -d /leshan && install -o leshan -d /leshan/models
 WORKDIR /leshan
 
 # Copy all packages, scripts and configuration files
@@ -39,9 +42,11 @@ COPY etc/nginx.conf /etc/nginx/nginx.conf
 COPY etc/nginx.d/* /etc/nginx/conf.d/
 
 COPY --from=downloader /downloads/leshan-*.jar /leshan
+COPY --from=downloader /downloads/*.xml /leshan/models
 
 # Define Leshan Server command
 ENV LESHAN_CMD /opt/java/openjdk/bin/java -jar /leshan/leshan-server-demo.jar \
+    --models-folder /leshan/models \
     --web-port=8080
 
 # Define Leshan Bootstrap Server command

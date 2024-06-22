@@ -41,4 +41,9 @@ public interface RegistrationManager {
    * @return the amount of clients
    */
   int size();
+
+  /**
+   * Clear all caches.
+   */
+  void clearCache();
 }
