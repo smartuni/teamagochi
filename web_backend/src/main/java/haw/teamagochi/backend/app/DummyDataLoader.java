@@ -8,14 +8,21 @@ import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.logic.UcManagePetType;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.user.logic.UcFindUser;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.UUID;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class DummyDataLoader {
+
+  private static final Logger LOGGER = Logger.getLogger(DummyDataLoader.class);
+
+  @Inject
+  UcFindUser ucFindUser;
 
   @Inject
   UcManageUser ucManageUser;
@@ -33,8 +40,10 @@ public class DummyDataLoader {
   boolean load;
 
   void load() {
-    if (load) {
-      System.out.println("Loading dummy data NEW ...");
+    int userCount = ucFindUser.findAll().size();
+
+    if (load && userCount == 0) {
+      LOGGER.info("Loading dummy data...");
 
       /*
        * Create users

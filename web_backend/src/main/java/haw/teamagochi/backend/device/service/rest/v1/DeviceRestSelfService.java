@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
@@ -25,7 +26,8 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
  * @apiNote all 'self' endpoints read the user id of the JWT token
  */
 @Path("/v1/devices/self")
-@Tag(name = "devices/self", description = "Everything about a users devices.")
+@Tag(name = "1) devices/self", description = "Everything about the devices of a user whose ID is read from the JWT token.")
+@SecurityRequirement(name = "SecurityScheme")
 public class DeviceRestSelfService {
 
   @Inject

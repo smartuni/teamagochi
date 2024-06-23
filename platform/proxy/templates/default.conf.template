@@ -4,11 +4,25 @@ server {
 
   server_name _;
 
+  include /etc/nginx/conf.d/*.include;
+
   #
   # Development Dashboard
   #
   location / {
     proxy_pass ${DEVDASH_WEB_URL};
+    include proxy_params;
+  }
+
+  #
+  # Leshan Bootstrap Server
+  #
+  location = /leshan/bs {
+    rewrite ^ $scheme://$http_host/leshan/bs/ permanent;
+  }
+
+  location /leshan/bs/ {
+    proxy_pass ${TEASHAN_BS_WEB_URL};
     include proxy_params;
   }
 
@@ -22,18 +36,14 @@ server {
   location /leshan/ {
     proxy_pass ${TEASHAN_WEB_URL};
     include proxy_params;
-  }
 
-  #
-  # Leshan Bootstrap Server
-  #
-  location = /leshan/bs {
-    rewrite ^ $scheme://$http_host/leshan/bs/ permanent;
-  }
-
-  location /leshan/bs/ {
-    proxy_pass ${TEASHAN_WEB_URL};
-    include proxy_params;
+    # Proxy server-sent events
+    # https://stackoverflow.com/questions/13672743/eventsource-server-sent-events-through-nginx
+    proxy_set_header Connection '';
+    proxy_http_version 1.1;
+    chunked_transfer_encoding off;
+    proxy_buffering off;
+    proxy_cache off;
   }
 
   #

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import profile_pic1 from '../Misc/8-bit-dog-nobg.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import LinkDevice from "../Components/LinkDevice";
 
 interface SettingsProps {
   username: string; 
@@ -8,6 +9,7 @@ interface SettingsProps {
 
 function Settings({ username }: SettingsProps) {
   const [items, setItems] = useState(['Device 1', 'Device 2', 'Device 3']);
+  const [showLinkDevice, setShowLinkDevice] = useState<boolean>(true);
 
   const removeItem = (index: number) => {
     setItems(items.filter((_, i) => i !== index));
@@ -30,7 +32,7 @@ function Settings({ username }: SettingsProps) {
             <input type="text" className="form-control text-black" placeholder={username} disabled style={{ fontSize: "1.5rem", height: "60px" }}></input>
           </div>
           <div className='d-flex justify-content-center pt-2'>
-            <button type="button" className="btn btn-outline-danger btn-block w-100" style={{ fontSize: "1.5rem", height: "60px" }} >Logout</button>
+            <button type="button" className="btn btn-success btn-block w-100" style={{ fontSize: "1.5rem", height: "60px" }} onClick={() => setShowLinkDevice(false)} >Link Device</button>
           </div>
           <div className='pt-4' style={{ width: "100%" }}>
             <ul className="list-group" style={{ fontSize: "1.2rem" }}>
@@ -46,6 +48,9 @@ function Settings({ username }: SettingsProps) {
           </div>
         </div>
       </div>
+      {showLinkDevice==false && (
+        <LinkDevice onClose={() => setShowLinkDevice(true)} />
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import haw.teamagochi.backend.device.dataaccess.repository.DeviceRepository;
 import haw.teamagochi.backend.device.logic.registrationmanager.RegistrationManager;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
+import haw.teamagochi.backend.user.logic.UcManageUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,7 +24,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   UcFindUser ucFindUser;
 
   @Inject
-  UcManageDevice ucManageDevice;
+  UcManageUser ucManageUser;
 
   @Inject
   RegistrationManager registrationManager;
@@ -55,6 +56,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Override
   @Transactional
   public boolean deleteById(long deviceId) {
+    registrationManager.clearCache();
     return deviceRepository.deleteById(deviceId);
   }
 
@@ -64,6 +66,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Override
   @Transactional
   public void deleteAll() {
+    registrationManager.clearCache();
     deviceRepository.deleteAll();
   }
 
@@ -81,11 +84,13 @@ public class UcManageDeviceImpl implements UcManageDevice {
 
     UserEntity owner = ucFindUser.find(uuid);
     if (owner == null) {
-      throw new IllegalArgumentException("User does not exist");
+      owner = ucManageUser.create(uuid); // create userId in database
     }
 
     DeviceEntity device = new DeviceEntity(deviceName, DeviceType.FROG);
     device.setOwner(owner);
-    return ucManageDevice.create(device);
+    device.setIdentifier(endpoint); // Jessica
+
+    return create(device);
   }
 }

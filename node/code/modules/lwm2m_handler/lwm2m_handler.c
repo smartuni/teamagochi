@@ -16,9 +16,13 @@
  * @}
  */
 
+#include <string.h>
 #include "lwm2m_handler.h"
 #include "pet.h"
 #include "pet_model.h"
+#include "device.h"
+#include "device_model.h"
+#include "events.h"
 #include "lwm2m_client.h"
 #include "lwm2m_client_objects.h"
 #include "objects/device.h"
@@ -28,29 +32,82 @@
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
-# define OBJ_COUNT (4)
+# define OBJ_COUNT (5)
 
 lwm2m_object_t *obj_list[OBJ_COUNT];
 lwm2m_client_data_t client_data;
 
-static void lwm2m_write_callback(uint16_t event_id){
+static void lwm2m_write_callback(uint16_t event_id, callback_value value){
     // msg_t message;
+    (void) value;
     switch (event_id) {
-        // case LWM2M_PET_HUNGRY_ID:
-        //     message.type = EVENTS::PET_HUNGRY;
-        //     break;
-        // case LwM2M_PET_ILL_ID:
-        //     message.type = EVENTS::PET_ILL;
-        //     break;
-        // case LwM2M_PET_BORED_ID:
-        //     message.type = EVENTS::PET_BORED;
-        //     break;
-        // case LwM2M_PET_DIRTY_ID:
-        //     message.type = EVENTS::PET_DIRTY;
-        //     break;
-        // default:
-        //     DEBUG("[Lwm2mHandler:write_callback]: Id not found\n");
-        //     return;
+        case LWM2M_PET_NAME_ID:
+            trigger_event_string(NAME,value.str);
+            break;
+        case LWM2M_PET_COLOR_ID:
+            trigger_event_int(COLOR,value.num);
+            break;
+        case LWM2M_PET_HAPPINESS_ID:
+            trigger_event_int(HAPPINESS,value.num);
+            break;
+        case LWM2M_PET_WELLBEING_ID:
+            trigger_event_int(WELLBEING,value.num);
+            break;
+        case LWM2M_PET_HEALTH_ID:
+            trigger_event_int(HEALTH,value.num);
+            break;
+        case LWM2M_PET_XP_ID:
+            trigger_event_int(XP,value.num);
+            break;
+        case LWM2M_PET_HUNGER_ID:
+            trigger_event_int(HUNGER,value.num);
+            break;
+        case LWM2M_PET_CLEANLINESS_ID:
+            trigger_event_int(CLEANLINESS,value.num);
+            break;
+        case LWM2M_PET_FUN_ID: 
+            trigger_event_int(FUN,value.num);
+            break;
+        case LWM2M_PET_HUNGRY_ID:
+            trigger_event(PET_HUNGRY);
+            break;
+        case LwM2M_PET_ILL_ID:
+            trigger_event(PET_ILL);
+            break;
+        case LwM2M_PET_BORED_ID:
+            trigger_event(PET_BORED);
+            break;
+        case LwM2M_PET_DIRTY_ID:
+            trigger_event(PET_DIRTY);
+            break;
+        default:
+            DEBUG("[Lwm2mHandler:write_callback]: Id not found\n");
+            return;
+    }
+}
+
+
+static void lwm2m_pet_device_write_callback(uint16_t event_id, char* value){
+    switch (event_id) {
+        case LWM2M_DEVICE_STATUS_ID:
+            if (strcmp(value,"INIT")){
+                trigger_event(INIT);
+            }else if(strcmp(value,"REGISTER")){
+            }else if(strcmp(value,"REGISTERED")){
+                trigger_event(REGISTERED);
+            }else if(strcmp(value,"READY")){
+                trigger_event(READY);
+            }       
+            break;           
+        case LWM2M_DEVICE_REGISTER_ID:
+            printf("Value of device cb: %s\n",value);
+            trigger_event_string(REGISTER_CODE,value);
+            break;
+        case LW2M_DEVICE_TIME_ID:
+            break;
+        default:
+            DEBUG("[Lwm2mHandler:write_callback]: Id not found\n");
+            return;
     }
 }
 
@@ -65,6 +122,7 @@ void lwm2m_handler_init(void)
     obj_list[1] = lwm2m_client_get_server_object(&client_data, CONFIG_LWM2M_SERVER_SHORT_ID);
     obj_list[2] = lwm2m_object_device_init(&client_data);
     obj_list[3] = lwm2m_object_pet_init(&client_data);
+    obj_list[4] = lwm2m_object_pet_device_init(&client_data);
     // /* create security object instance */
     /* create security object instance */
     lwm2m_obj_security_args_t security_args = {
@@ -98,7 +156,16 @@ void lwm2m_handler_init(void)
         DEBUG("Error instantiating pet\n");
     }
 
-    if (!obj_list[1] || !obj_list[2] || !obj_list[3]) {
+    lwm2m_obj_pet_device_args_t pet_device_args = {
+        .instance_id = 0,
+        .write_cb = lwm2m_pet_device_write_callback
+    };
+    res = lwm2m_object_pet_device_instance_create(&pet_device_args);
+    if (res<0) {
+        DEBUG("Error instantiating pet_device\n");
+    }
+
+    if (!obj_list[1] || !obj_list[2] || !obj_list[3] || !obj_list[4]) {
         DEBUG("Could not create mandatory objects\n");
     }
 }
