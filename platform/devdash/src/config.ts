@@ -20,6 +20,14 @@ export const mainMenu: Page[] = [
 ];
 
 export const services: Service[] = [
+    {
+    name: 'Web-Backend',
+    description: 'The Teamagochi backend service.',
+    links: [
+      {title: 'Swagger UI', url: '/backend/q/swagger-ui/'},
+      {title: 'openapi.json', url: '/backend/q/openapi.json'}
+    ],
+  },
   {
     name: 'Tea:shan',
     description: 'Eclipse Leshan Server demo including a Bootstrap Server.',

@@ -1,13 +1,13 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
-import { useState } from 'react'
-import './App.css'
-import LinkDevice from './Components/LinkDevice'
-import Footer from './Components/Footer';
-import Navbar from './Components/Navbar/Navbar'
-import Settings from './Components/Settings'
-import Pet from "./Components/PetPage";
-import LandingPage from "./Components/LandingPage";
+import { useState } from "react";
+import "./App.css";
+import LinkDevice from "./Components/LinkDevice";
+import Footer from "./Components/Footer";
+import Navbar from "./Components/Navbar/Navbar";
+import Settings from "./Components/Settings";
+import CreatePetModal from "./Components/CreatePetModal";
+import PetPage from "./Components/PetPage";
 
 function App() {
   const auth = useAuth();
@@ -31,38 +31,21 @@ function App() {
 
   if (auth.isAuthenticated) {
     return (
-      
-      <div style={{ backgroundColor: '#F5F5DC'}}>
+      <div style={{ backgroundColor: "#FFFFFF" }}>
         <div>
-        <div><Navbar /> </div>
-{/*         
-        <h1 >WELCOME TO TEAMAGOCHI GANG</h1>
-          <h1 className='font-extrabold text-9xl' >
-             <a href="https://www.youtube.com/watch?v=sf0PJsknZiM">CARTI </a>
-          </h1>
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   
-          <img src={"./android-chrome-384x384.png"} alt="Logo" style={{ width: '384px', height: '384px', marginLeft: '5px' }} />   */}
+          <div>
+            <Navbar />{" "}
+            <LinkDevice />
+          </div>
         </div>
-       
-        <div>Hello USERNAME: {auth.user?.profile?.preferred_username || 'User'}</div>
-        <Footer/ >,
-
+        {/* <div>
+          Hello USERNAME: {auth.user?.profile?.preferred_username || "User"}
+        </div> */}
+        <Footer />,
       </div>
     );
   }
-
-  return[
-   // <Navbar/>,
-    // <Pet />,
-   // <LinkDevice />,
-   //  <Settings username={auth.user?.profile?.preferred_username || 'User'}/>,
-   <LandingPage/>,
-    <Footer/>,
-  ];
+  return [<Navbar />, <Footer />];
 }
 
 export default App;

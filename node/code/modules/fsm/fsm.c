@@ -156,7 +156,6 @@ void *fsm_thread(void *arg) {
     DEBUG("[FSM:thread]: start\n");
     currentState->Entry();
     events_start(fsm_handle);
-
     return NULL;
 }
 

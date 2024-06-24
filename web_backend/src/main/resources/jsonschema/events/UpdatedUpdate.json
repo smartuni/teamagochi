@@ -10,14 +10,20 @@
     "address": {
       "type": "string"
     },
+    "alternatePath": {
+      "type": "string"
+    },
+    "objectLinks": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/ObjectLink.json"
+      }
+    },
     "secure": {
       "type": "boolean"
     },
     "lifetime": {
       "type": "integer"
-    },
-    "alternatePath": {
-      "type": "string"
     },
     "additionalAttributes": {
       "$ref": "../common/AdditionalAttributes.json"
