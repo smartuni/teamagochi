@@ -237,11 +237,9 @@ void off_exit(void) {
 
 handler_result_t unregistered_handler(EVENT_T event) {
     switch (event) {
-        case REGISTERED:
+        case REGISTER_CODE:
             displayHandler_handleEvent(REGISTERED);
             traverse_state(&On_Level[1]);
-            return HANDLED;
-        case REGISTER_CODE:
             displayHandler_handleEvent(REGISTER_CODE);
             return HANDLED;
         default:
