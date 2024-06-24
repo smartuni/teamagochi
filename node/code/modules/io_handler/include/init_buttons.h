@@ -27,6 +27,8 @@ void button_down_callback (void *arg);
 void button_right_callback (void *arg);
 void button_ok_callback (void *arg);
 
+void timer_long_pressed_cb(void *arg);
+
 //Vibration functions prototypes:
 void vibrate(uint16_t msec);
 

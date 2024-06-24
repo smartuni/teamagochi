@@ -13,8 +13,9 @@ static msg_t rcv_queue[RCV_QUEUE_SIZE];
 pet_stats_t pet_stats;
 device_register_code register_code;
 
-pet_stats_t*  get_pet_stats(void){
-    return &pet_stats;
+void get_pet_stats(char *buf){
+    sprintf(buf,"Happiness: %ld%%\n Wellbeing: %ld%%\n Health: %ld%%\n XP: %ld%%\n Hunger: %ld%%\n Cleanliness: %ld%%\n Fun: %ld%%\n",
+            pet_stats.happiness, pet_stats.wellbeing, pet_stats.health, pet_stats.xp,pet_stats.hunger, pet_stats.cleanliness, pet_stats.fun);
 }
 
 char* get_register_code(void){
@@ -27,6 +28,7 @@ void set_t_events_pid(kernel_pid_t pid){
 }
 
 void trigger_event(EVENT_T _event){
+    //DEBUG("event input \n");
     msg_t msg;
     msg.type = _event;
     if (msg_try_send(&msg, t_events_pid) == 0) {

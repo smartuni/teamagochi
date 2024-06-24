@@ -3,6 +3,7 @@ package haw.teamagochi.backend.pet.service.rest.v1;
 import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
+import haw.teamagochi.backend.pet.logic.UcFindPetType;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
@@ -11,6 +12,7 @@ import haw.teamagochi.backend.user.logic.UcFindUser;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
@@ -49,6 +51,9 @@ public class PetRestSelfService {
   @Inject
   protected UcManageUser ucManageUser;
 
+  @Inject
+  protected UcFindPetType ucFindPetType;
+
   /**
    * Get all pets.
    *
@@ -72,6 +77,7 @@ public class PetRestSelfService {
   @POST
   @Operation(summary = "Create a pet")
   @APIResponse(responseCode = "200")
+  @Transactional
   public PetDTO createPet(PetDTO dto) {
     String uuid = SecurityUtil.getExternalUserId(identity);
     UserEntity owner = ucFindUser.find(uuid);
@@ -79,7 +85,7 @@ public class PetRestSelfService {
       ucManageUser.create(uuid); // create userId in database
     }
     dto.setOwnerId(uuid);
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto);
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPetType);
     ucManagePet.create(entity);
     return petMapper.mapEntityToTransferObject(entity);
   }

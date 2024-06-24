@@ -32,6 +32,7 @@
 #include "disp_dev.h"
 #include "init_lvgl.h"
 #include "events.h"
+#include "debug.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -94,6 +95,7 @@ void init_menu(void);
 static void menu_cb(lv_event_t * e){
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_KEY) {
+        
         uint32_t key = lv_event_get_key(e);
         if(key == LV_KEY_LEFT || key == LV_KEY_RIGHT) {
             lv_obj_set_style_bg_opa(img_index_pairs[current_img_index].img,LV_OPA_TRANSP,LV_PART_MAIN);
@@ -107,13 +109,9 @@ static void menu_cb(lv_event_t * e){
             }
             // Zeige das neue aktuelle Bild an
             lv_obj_set_style_bg_opa(img_index_pairs[current_img_index].img,LV_OPA_70,LV_PART_MAIN);
-        }else if (key == LV_KEY_ENTER && (img_index_pairs[current_img_index].event == PET_FEED || 
-                                          img_index_pairs[current_img_index].event == PET_PLAY ||
-                                          img_index_pairs[current_img_index].event == PET_MEDICATE ||
-                                          img_index_pairs[current_img_index].event == PET_CLEAN)){
-            // msg_t message;
-            // message.type = img_index_pairs[current_img_index].event ;
-            // msg_try_send(&message, dispatcher_pid_lvgl);
+        }else if (key == LV_KEY_ENTER){
+            DEBUG("Enter pressed\n");
+            trigger_event(img_index_pairs[current_img_index].event);
         }
     }
 }
@@ -282,7 +280,7 @@ static void timer_cb(lv_timer_t *param){
 
 void init_not_registered(void){
 
-    // /* Style of the align bar*/
+    /* Style of the align bar*/
     static lv_style_t style_align;
     lv_style_init(&style_align);
     lv_style_set_border_width(&style_align,0);
@@ -290,18 +288,18 @@ void init_not_registered(void){
     lv_style_set_bg_opa(&style_align,LV_OPA_TRANSP);
     lv_style_set_width(&style_align,240);
     lv_style_set_height(&style_align,70);
-    // //  /*Create a container for align*/
+    /*Create a container for align*/
     lv_obj_t *align = lv_obj_create(center);
     lv_obj_center(align);
     lv_obj_clear_flag(align,LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_add_style(align,&style_align,LV_PART_MAIN);
     lv_obj_align(align, LV_ALIGN_CENTER,0,0);
 
-    // // // // /*Create a spinner*/
+    /*Create a spinner*/
     lv_obj_t * spinner = lv_spinner_create(align,10000,100);
     lv_obj_set_size(spinner, 50, 50);
     lv_obj_align(spinner, LV_ALIGN_RIGHT_MID,0,0);
-    // // /* Create registering label*/
+    /* Create registering label*/
     lv_obj_t * registering_label = lv_label_create(align);
     lv_label_set_text(registering_label,"connecting");
     lv_obj_set_style_text_color(registering_label, lv_color_hex(0x000000), LV_PART_MAIN);
@@ -316,7 +314,7 @@ void init_not_registered(void){
 void init_not_registered_code(char *code){
     // timer_deactivate();
     lv_obj_clean(center);
-    // /* Style of the align bar*/
+    /* Style of the align bar*/
     static lv_style_t style_align;
     lv_style_init(&style_align);
     lv_style_set_border_width(&style_align,0);
@@ -324,14 +322,14 @@ void init_not_registered_code(char *code){
     lv_style_set_bg_opa(&style_align,LV_OPA_TRANSP);
     lv_style_set_width(&style_align,240);
     lv_style_set_height(&style_align,70);
-    // //  /*Create a container for align*/
+    /*Create a container for align*/
     lv_obj_t *align = lv_obj_create(center);
     lv_obj_center(align);
     lv_obj_clear_flag(align,LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_add_style(align,&style_align,LV_PART_MAIN);
     lv_obj_align(align, LV_ALIGN_CENTER,0,0);
 
-    // // /* Create registering label*/
+    /* Create registering label*/
     lv_obj_t * registering_label = lv_label_create(align);
     lv_label_set_text(registering_label,code);
     lv_obj_set_style_text_color(registering_label, lv_color_hex(0x000000), LV_PART_MAIN);
@@ -347,7 +345,7 @@ void init_registered_pet(void){
     // timer_deactivate();
     lv_obj_clean(center);
 
-    // /* Style of the align */
+    /* Style of the align */
     static lv_style_t style_align;
     lv_style_init(&style_align);
     lv_style_set_border_width(&style_align,0);
@@ -355,7 +353,7 @@ void init_registered_pet(void){
     lv_style_set_bg_opa(&style_align,LV_OPA_TRANSP);
     lv_style_set_width(&style_align,240);
     lv_style_set_height(&style_align,160);
-    // //  /*Create a container for align*/
+    /*Create a container for align*/
     lv_obj_t *align = lv_obj_create(center);
     lv_obj_center(align);
     lv_obj_clear_flag(align,LV_OBJ_FLAG_SCROLLABLE);
@@ -367,6 +365,39 @@ void init_registered_pet(void){
     lv_obj_t * pet = lv_img_create(align);
     lv_img_set_src(pet, &frog);
     lv_obj_align(pet, LV_ALIGN_CENTER, 0, 0);
+}
+
+void init_pet_stats(char* stats){
+    // timer_deactivate();
+    lv_obj_clean(center);
+
+    /* Style of the align */
+    static lv_style_t style_align;
+    lv_style_init(&style_align);
+    lv_style_set_border_width(&style_align,0);
+    lv_style_set_radius(&style_align,0);
+    lv_style_set_bg_opa(&style_align,LV_OPA_TRANSP);
+    lv_style_set_width(&style_align,240);
+    lv_style_set_height(&style_align,120);
+    /*Create a container for align*/
+    lv_obj_t *align = lv_obj_create(center);
+    lv_obj_center(align);
+    lv_obj_clear_flag(align,LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_style(align,&style_align,LV_PART_MAIN);
+    lv_obj_align(align, LV_ALIGN_CENTER,0,0);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_bg_opa(&style,LV_OPA_50);
+    lv_style_set_bg_color(&style,lv_color_hex(0x0));
+    lv_obj_add_style(align,&style,LV_PART_MAIN);
+    /* Pet stats*/
+    lv_obj_t * stats_label = lv_label_create(align);
+    lv_label_set_text(stats_label,stats);
+    
+    lv_obj_set_style_text_color(stats_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_text_font(stats_label,&lv_font_montserrat_12, LV_PART_MAIN);
+    lv_obj_align(stats_label, LV_ALIGN_LEFT_MID,0,8);
 }
 
 void init_menu(void){
@@ -410,41 +441,10 @@ void init_menu(void){
     img_index_pairs[3].event = PET_MEDICATE;  
     img_index_pairs[4].img = info_ico;
     img_index_pairs[4].index = 4;
-    img_index_pairs[4].event = 0;
+    img_index_pairs[4].event = INFO_PRESSED;
 
     lv_obj_add_event_cb(bottom_bar,menu_cb,LV_EVENT_ALL,NULL);
     lv_group_add_obj(group1,bottom_bar);
-    // // /* Style of the align */
-    // static lv_style_t style_align;
-    // lv_style_init(&style_align);
-    // lv_style_set_border_width(&style_align,0);
-    // // lv_style_set_radius(&style_align,0);
-    // lv_style_set_bg_opa(&style_align,LV_OPA_TRANSP);;
-    // // //  /*Create a container for align*/
-    // lv_obj_t *align = lv_obj_create(center);
-    // lv_obj_center(align);
-    // lv_obj_clear_flag(align,LV_OBJ_FLAG_SCROLLABLE);
-    // lv_obj_add_style(align,&style_align,LV_PART_MAIN);
-    // lv_obj_align(align, LV_ALIGN_LEFT_MID,-12,0);
-    // lv_obj_set_size(align,80,140);
-
-    // roller1 = lv_roller_create(align);
-    // lv_roller_set_options(roller1,
-    //                       "Exit\n"
-    //                       "Feed\n"
-    //                       "Medicate\n"
-    //                       "Play\n"
-    //                       "Pet\n"
-    //                       "Wash",
-    //                       LV_ROLLER_MODE_INFINITE);
-
-    // lv_roller_set_visible_row_count(roller1, 4);
-    // lv_obj_set_size(roller1,79,139);
-    // lv_obj_align(roller1, LV_ALIGN_CENTER, 0, 0);
-    // lv_obj_add_event_cb(roller1,menu_cb,LV_EVENT_ALL,NULL);
-    // lv_group_add_obj(group1,roller1);
-    // //lv_obj_add_event_cb(roller1, event_handler, LV_EVENT_KEY, NULL);
-
 }
 
 int init_lvgl(void)
