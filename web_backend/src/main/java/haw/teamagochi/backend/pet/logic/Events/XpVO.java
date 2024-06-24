@@ -24,7 +24,8 @@ public class XpVO extends PetStatusVO {
         super(0, 5000);
     }
 
-    public int dispatch(int xp, PetEvents event, PetStateDTO pet) {
+    public int dispatch(PetEvents event, PetStateDTO pet) {
+        int xp = pet.getXp();
         int increase = 0;
         if (
                 (event == PetEvents.FEED && pet.getHunger() == hungerVO.getMin()) ||

@@ -24,10 +24,11 @@ public class WellbeingVO extends PetStatusVO {
     }
 
 
-    public int dispatch(int wellbeing, PetEvents event, PetStateDTO pet) {
+    public int dispatch(PetEvents event, PetStateDTO pet) {
         /*
             If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
         */
+        int wellbeing = pet.getWellbeing();
         int increase = 0;
         if (
                 (event == PetEvents.FEED && pet.getHunger() > hungerVO.getMin()) ||
@@ -44,7 +45,8 @@ public class WellbeingVO extends PetStatusVO {
     }
 
 
-    public int deteriorate(int wellbeing, PetStateDTO pet) {
+    public int deteriorate(PetStateDTO pet) {
+        int wellbeing = pet.getWellbeing();
         int decrease = checkHappinessLimits(pet.getHealth());
         decrease += checkHappinessLimits(pet.getCleanliness());
         return boundaryCheck(wellbeing + decrease);

@@ -76,10 +76,10 @@ public class GameCycleImpl implements GameCycle{
     // Deteriorate attributes dependent on other attributes
     PetStateDTO dto = petMapper.mapEntityToTransferObject(pet).getState();
 
-    int newWellbeing = wellbeingVO.deteriorate(pet.getWellbeing(), dto);
+    int newWellbeing = wellbeingVO.deteriorate(dto);
     pet.setWellbeing(newWellbeing);
 
-    int newHappiness = happinessVO.deteriorate(pet.getHappiness(), dto);
+    int newHappiness = happinessVO.deteriorate(dto);
     pet.setHappiness(newHappiness);
   }
 
