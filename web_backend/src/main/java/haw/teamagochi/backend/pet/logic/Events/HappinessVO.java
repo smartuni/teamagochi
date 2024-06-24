@@ -27,11 +27,14 @@ public class HappinessVO extends PetStatusVO {
     public int dispatch(PetEvents event, PetStateDTO pet) {
         int happiness = pet.getHappiness();
         int increase = 0;
+        /*
+            If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
+        */
         if (
-            (event == PetEvents.FEED && pet.getHunger() == hungerVO.getMin()) ||
-            (event == PetEvents.PLAY && pet.getFun() == funVO.getMax()) ||
-            (event == PetEvents.CLEAN && pet.getCleanliness() == cleanlinessVO.getMax()) ||
-            (event == PetEvents.MEDICATE && pet.getHealth() == healthVO.getMax())
+            (event == PetEvents.FEED && pet.getHunger() > hungerVO.getMin()) ||
+            (event == PetEvents.PLAY && pet.getFun() <  funVO.getMax()) ||
+            (event == PetEvents.CLEAN && pet.getCleanliness() <  cleanlinessVO.getMax()) ||
+            (event == PetEvents.MEDICATE && pet.getHealth() < healthVO.getMax())
         ) {
             increase = 20;
         } else if (event == PetEvents.REACHED_MAX_STATUS) {
