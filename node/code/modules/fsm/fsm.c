@@ -16,13 +16,6 @@ char fsm_thread_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 void *fsm_thread(void * arg);
 void fsm_handle(EVENT_T event);
 
-handler_result_t default_handler(EVENT_T event);
-void default_entry_handler(void);
-void default_exit_handler(void);
-
-handler_result_t firstStart_handler(EVENT_T event);
-void firstStart_entry(void);
-void firstStart_exit(void);
 handler_result_t on_handler(EVENT_T event);
 void on_entry(void);
 void on_exit(void);
@@ -60,22 +53,15 @@ struct hierarchical_state {
   uint32_t Level;               //!< Hierarchy level from the top state.
 };
 
+static bool firstStart = true;
 static bool registered = false;
 static bool userLinked = false;
 
-static const state_t Top_Level[3];
+static const state_t Top_Level[2];
 static const state_t On_Level[3];
 static const state_t Pet_Level[3];
 
 static const state_t Top_Level[] = {
-    {//first start
-        firstStart_handler,                   // state handler
-        firstStart_entry,             // Entry action handler
-        firstStart_exit,                               // Exit action handler
-        NULL,                               // Parent state
-        NULL,                       // Child state
-        1                                   // Hierarchical state level
-    },
     {//on
         on_handler,                   // state handler
         on_entry,             // Entry action handler
@@ -148,7 +134,7 @@ static const state_t Pet_Level[] = {
     }
 };
 
-static const state_t *currentState = &Top_Level[0];
+static const state_t *currentState = &Top_Level[1];
 
 void fsm_start_thread(void){
     set_t_events_pid(thread_create(fsm_thread_stack, sizeof(fsm_thread_stack),
@@ -177,6 +163,7 @@ void fsm_handle(EVENT_T event) {
             DEBUG("[FSM:fsm_handle]: Fatal error, terminating.\n");
             // This is a fatal error. terminate state machine.
             return;
+            //TODO
         }
 
         pState = pState->Parent;  // traverse to parent state
@@ -206,41 +193,6 @@ void traverse_state(const state_t *target_state) {
     if (currentState->Entry) currentState->Entry();
 }
 
-handler_result_t default_handler(EVENT_T event) {
-    DEBUG("[FSM:default_handler]: called\n");
-    lwm2m_handleEvent(event);
-    ioHandler_handleEvent(event);
-    displayHandler_handleEvent(event);
-    return HANDLED;
-}
-
-handler_result_t firstStart_handler(EVENT_T event) {
-    switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
-            DEBUG("[FSM:firstStart_handler]: OK_BUTTON_PRESSED\n");
-            traverse_state(&Top_Level[1]); //transition to on
-            return HANDLED;
-            break;
-        default:
-            DEBUG("[FSM:firstStart_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
-            break;
-    }
-}
-
-void firstStart_entry(void) {
-    DEBUG("[FSM:firstStart_entry_handler]: called\n");
-    lwm2m_handler_init();
-    lwm2m_handler_start();
-    io_init();
-    display_init();
-    startDisplayThread();
-}
-
-void firstStart_exit(void) {
-
-}
-
 handler_result_t on_handler(EVENT_T event) {
     switch (event) {
         case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
@@ -251,7 +203,7 @@ handler_result_t on_handler(EVENT_T event) {
             break;
         default:
             DEBUG("[FSM:on_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED 
+            return HANDLED; //TODO Error detection
             break;
     }
 }
@@ -270,19 +222,25 @@ handler_result_t off_handler(EVENT_T event) {
     switch (event) {
         case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
             DEBUG("[FSM:off_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            traverse_state(&Top_Level[1]); //transition to on
+            traverse_state(&Top_Level[0]); //transition to on
             return HANDLED;
             break;
         default:
             DEBUG("[FSM:off_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return HANDLED; //TODO Error detection
             break;
     }
 }
 
 void off_entry(void) {
-
+    if (firstStart) {
+        firstStart = false;
+        lwm2m_handler_init();
+        lwm2m_handler_start();
+        io_init();
+        display_init();
+        startDisplayThread();
+    }
 }
 
 void off_exit(void) {
@@ -292,19 +250,13 @@ void off_exit(void) {
 handler_result_t unregistered_handler(EVENT_T event) {
     DEBUG("[FSM:unregistered_state_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LINKED
-            DEBUG("[FSM:unregistered_state_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            traverse_state(&On_Level[1]);
-            return HANDLED;
-            break;
         case REGISTERED:
             traverse_state(&On_Level[1]);
             return HANDLED;
             break;
         default:
             DEBUG("[FSM:unregistered_state_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
@@ -322,18 +274,13 @@ void unregistered_exit(void) {
 handler_result_t userLinked_handler(EVENT_T event) {
     DEBUG("[FSM:userLinked_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in AUTHORIZED
-            DEBUG("[FSM:userLinked_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            return HANDLED;
-            break;
         case READY:
             traverse_state(&On_Level[2]);
             return HANDLED;
             break;
         default:
             DEBUG("[FSM:userLinked_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
@@ -351,15 +298,9 @@ void userLinked_exit(void) {
 handler_result_t pet_handler(EVENT_T event) {
     DEBUG("[FSM:pet_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
-            DEBUG("[FSM:pet_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            return HANDLED;
-            break;
-
         default:
             DEBUG("[FSM:pet_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
@@ -375,15 +316,23 @@ void pet_exit(void) {
 handler_result_t mainView_handler(EVENT_T event) {
     DEBUG("[FSM:mainView_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
-            DEBUG("[FSM:mainView_handler]: OK_BUTTON_PRESSED\n");
+        case BUTTON_UP_PRESSED:
+        case BUTTON_DOWN_PRESSED:
+        case BUTTON_LEFT_PRESSED:
+        case BUTTON_RIGHT_PRESSED:
             displayHandler_handleEvent(event);
-            traverse_state(&On_Level[0]);
+        case PET_FEED:
+            DEBUG("[FSM:mainView_handler]: PET_FEED\n");
+            lwm2m_handleEvent(PET_FEED);
             return HANDLED;
             break;
+        case PET_PLAY:
+            DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
+            lwm2m_handleEvent(PET_PLAY);
+            return HANDLED;
         default:
             DEBUG("[FSM:mainView_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
@@ -399,15 +348,9 @@ void mainView_exit(void) {
 handler_result_t gameView_handler(EVENT_T event) {
     DEBUG("[FSM:gameView_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
-            DEBUG("[FSM:gameView_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            traverse_state(&On_Level[0]);
-            return HANDLED;
-            break;
         default:
             DEBUG("[FSM:gameView_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
@@ -423,15 +366,9 @@ void gameView_exit(void) {
 handler_result_t StatView_handler(EVENT_T event) {
     DEBUG("[FSM:StatView_handler]: called\n");
     switch (event) {
-        case BUTTON_OK_PRESSED: //TODO: change in LONG_PRESSED
-            DEBUG("[FSM:StatView_handler]: OK_BUTTON_PRESSED\n");
-            displayHandler_handleEvent(event);
-            traverse_state(&On_Level[0]);
-            return HANDLED;
-            break;
         default:
             DEBUG("[FSM:StatView_handler]: UNHANDLED\n");
-            return HANDLED; //TODO: change in UNHANDLED
+            return UNHANDLED;
             break;
     }
 }
