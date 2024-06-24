@@ -37,10 +37,6 @@ void mainView_exit(void);
 handler_result_t gameView_handler(EVENT_T event);
 void gameView_entry(void);
 void gameView_exit(void);
-handler_result_t StatView_handler(EVENT_T event);
-void StatView_entry(void);
-void StatView_exit(void);
-
 
 typedef struct hierarchical_state state_t;
 struct hierarchical_state {
@@ -59,7 +55,7 @@ static bool userLinked = false;
 
 static const state_t Top_Level[2];
 static const state_t On_Level[3];
-static const state_t Pet_Level[3];
+static const state_t Pet_Level[2];
 
 static const state_t Top_Level[] = {
     {//on
@@ -120,14 +116,6 @@ static const state_t Pet_Level[] = {
         gameView_handler,              // state handler
         gameView_entry,                     // Entry action handler
         gameView_exit,                     // Exit action handler
-        &On_Level[2],             // Parent state
-        NULL,                     // Child state
-        3                         // Hierarchical state level
-    },
-    {//Stat_View
-        StatView_handler,              // state handler
-        StatView_entry,                     // Entry action handler
-        StatView_exit,                     // Exit action handler
         &On_Level[2],             // Parent state
         NULL,                     // Child state
         3                         // Hierarchical state level
@@ -308,6 +296,11 @@ handler_result_t mainView_handler(EVENT_T event) {
         case BUTTON_OK_LONG:
             DEBUG("[FSM:mainView_handler]: langer Button nach oben\n");
             return UNHANDLED;
+        case BUTTON_OK_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_OK_PRESSED\n");
+            displayHandler_handleEvent(BUTTON_OK_PRESSED);
+            return HANDLED;
+        case BUTTON_OK_RELEASED:
         case BUTTON_UP_PRESSED:
         case BUTTON_UP_RELEASED:
         case BUTTON_DOWN_PRESSED:
@@ -334,6 +327,10 @@ handler_result_t mainView_handler(EVENT_T event) {
         case PET_CLEAN:
             DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
             lwm2m_handleEvent(PET_CLEAN);
+            return HANDLED;
+        case INFO_PRESSED:
+        DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
+            displayHandler_handleEvent(INFO_PRESSED);
             return HANDLED;
         default:
             DEBUG("[FSM:mainView_handler]: UNHANDLED\n");
@@ -363,23 +360,6 @@ void gameView_entry(void) {
 }
 
 void gameView_exit(void) {
-
-}
-
-handler_result_t StatView_handler(EVENT_T event) {
-    switch (event) {
-        default:
-            DEBUG("[FSM:StatView_handler]: UNHANDLED\n");
-            return UNHANDLED;
-            break;
-    }
-}
-
-void StatView_entry(void) {
-    //displayHandler_handleEvent(STAT_VIEW);
-}
-
-void StatView_exit(void) {
 
 }
 //EOF

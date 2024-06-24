@@ -58,7 +58,6 @@ typedef enum {
     REGISTER,
     REGISTERED,
     READY,
-    INFO,
     REGISTER_CODE,
     NAME,
     COLOR,

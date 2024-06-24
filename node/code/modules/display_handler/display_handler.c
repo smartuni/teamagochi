@@ -73,7 +73,7 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case READY:
             init_registered_pet();
             break;
-        case INFO:
+        case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
         default:

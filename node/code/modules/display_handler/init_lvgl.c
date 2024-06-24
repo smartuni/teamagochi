@@ -32,6 +32,7 @@
 #include "disp_dev.h"
 #include "init_lvgl.h"
 #include "events.h"
+#include "debug.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -94,6 +95,7 @@ void init_menu(void);
 static void menu_cb(lv_event_t * e){
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_KEY) {
+        
         uint32_t key = lv_event_get_key(e);
         if(key == LV_KEY_LEFT || key == LV_KEY_RIGHT) {
             lv_obj_set_style_bg_opa(img_index_pairs[current_img_index].img,LV_OPA_TRANSP,LV_PART_MAIN);
@@ -108,6 +110,7 @@ static void menu_cb(lv_event_t * e){
             // Zeige das neue aktuelle Bild an
             lv_obj_set_style_bg_opa(img_index_pairs[current_img_index].img,LV_OPA_70,LV_PART_MAIN);
         }else if (key == LV_KEY_ENTER){
+            DEBUG("Enter pressed\n");
             trigger_event(img_index_pairs[current_img_index].event);
         }
     }
@@ -438,7 +441,7 @@ void init_menu(void){
     img_index_pairs[3].event = PET_MEDICATE;  
     img_index_pairs[4].img = info_ico;
     img_index_pairs[4].index = 4;
-    img_index_pairs[4].event = INFO;
+    img_index_pairs[4].event = INFO_PRESSED;
 
     lv_obj_add_event_cb(bottom_bar,menu_cb,LV_EVENT_ALL,NULL);
     lv_group_add_obj(group1,bottom_bar);
