@@ -7,7 +7,9 @@ interface SettingsProps {
   username: string; 
 }
 
-function Settings({ username }: SettingsProps) {
+function Settings(
+     { username }: SettingsProps
+) {
   const [items, setItems] = useState(['Device 1', 'Device 2', 'Device 3']);
   const [showLinkDevice, setShowLinkDevice] = useState<boolean>(true);
 
