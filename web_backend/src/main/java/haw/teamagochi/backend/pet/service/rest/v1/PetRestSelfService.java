@@ -20,13 +20,15 @@ import java.util.List;
 import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
  * Rest interface for the pet component.
  */
 @Path("/v1/pets/self")
-@Tag(name = "pets/self", description = "Everything about a users pets.")
+@Tag(name = "2) pets/self", description = "Everything about the pets of a user whose ID is read from the JWT token.")
+@SecurityRequirement(name = "SecurityScheme")
 public class PetRestSelfService {
 
   @Inject

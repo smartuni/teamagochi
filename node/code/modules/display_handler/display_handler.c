@@ -61,6 +61,12 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case BUTTON_RIGHT_RELEASED:
             right_released();
         break;
+        case REGISTER_CODE:
+            init_not_registered_code(get_register_code());
+            break;
+        case REGISTERED:
+            init_registered_pet();
+            break;
         default:
         break;
      }
