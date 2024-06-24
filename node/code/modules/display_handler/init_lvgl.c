@@ -86,11 +86,7 @@ static uint32_t keypad_get_key(void);
 
 void init_not_registered(void);
 void init_registered_no_pet(void);
-void init_not_registered_code(void);
-void init_registered_pet(void);
 void init_menu(void);
-
-static void timer_deactivate(void);
 
 //main here
 
@@ -247,9 +243,6 @@ void enter_released(void){
 }
 
 void up_pressed(void){
-    init_default_screen("Kevin the Frog | Lvl 2 | 89/100 | Disconnected");
-    init_menu();
-    init_registered_pet();
     buttons[1].state = true;
 }
 
@@ -258,9 +251,6 @@ void up_released(void){
 }
 
 void down_pressed(void){
-    init_default_screen("Registering ...");
-    init_menu();
-    init_not_registered();
     buttons[2].state = true;
 }
 
@@ -289,9 +279,6 @@ static void timer_cb(lv_timer_t *param){
     lvgl_wakeup();
 }
 
-static void timer_deactivate(void){
-    lv_timer_del(wakeup_task);
-}
 
 void init_not_registered(void){
 
@@ -316,7 +303,7 @@ void init_not_registered(void){
     lv_obj_align(spinner, LV_ALIGN_RIGHT_MID,0,0);
     // // /* Create registering label*/
     lv_obj_t * registering_label = lv_label_create(align);
-    lv_label_set_text(registering_label,"registering");
+    lv_label_set_text(registering_label,"connecting");
     lv_obj_set_style_text_color(registering_label, lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_text_font(registering_label,&lv_font_montserrat_24, LV_PART_MAIN);
     lv_obj_align(registering_label, LV_ALIGN_LEFT_MID,0,0);
@@ -326,10 +313,9 @@ void init_not_registered(void){
 
 
 
-void init_not_registered_code(void){
-    timer_deactivate();
+void init_not_registered_code(char *code){
+    // timer_deactivate();
     lv_obj_clean(center);
-
     // /* Style of the align bar*/
     static lv_style_t style_align;
     lv_style_init(&style_align);
@@ -347,11 +333,10 @@ void init_not_registered_code(void){
 
     // // /* Create registering label*/
     lv_obj_t * registering_label = lv_label_create(align);
-    lv_label_set_text(registering_label,"code placeholder");
+    lv_label_set_text(registering_label,code);
     lv_obj_set_style_text_color(registering_label, lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_text_font(registering_label,&lv_font_montserrat_24, LV_PART_MAIN);
     lv_obj_align(registering_label, LV_ALIGN_LEFT_MID,0,0);
-
 }
 
 void init_registered_no_pet(void){
@@ -359,7 +344,7 @@ void init_registered_no_pet(void){
 }
 
 void init_registered_pet(void){
-    timer_deactivate();
+    // timer_deactivate();
     lv_obj_clean(center);
 
     // /* Style of the align */
@@ -485,5 +470,6 @@ int init_lvgl(void)
     lv_indev_set_group(indev,group1);
     init_default_screen("Initializing ...");
     init_menu();
+    init_not_registered();
     return 0;
 }
