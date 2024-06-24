@@ -34,6 +34,8 @@ gpio_t vibr_gpio = GPIO_PIN(1, 9);
 gpio_mode_t vibr_gpio_mode = GPIO_OUT; //Define the vibr. GPIO as Output GPIO
 
 bool long_pressed = false;
+ztimer_t timeout = { .callback=timer_long_pressed_cb };
+
 
 int init_buttons(void)
 {
@@ -57,7 +59,7 @@ int init_buttons(void)
 void timer_long_pressed_cb(void *arg) {
     (void) arg;
     long_pressed = true;
-    DEBUG("Hallo vom Timer");
+    DEBUG("Hallo vom Timer\n");
 }
 
 //Vibrate for msec milliseconds:
@@ -125,8 +127,8 @@ void button_ok_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_ok)) {
         long_pressed = false;
-        ztimer_t timeout = { .callback=timer_long_pressed_cb };
-        ztimer_set(ZTIMER_SEC, &timeout, 2);
+        //ztimer_t timeout = { .callback=timer_long_pressed_cb };
+        ztimer_set(ZTIMER_SEC, &timeout, 1);
     }
     else {
         if (long_pressed) {
@@ -141,6 +143,7 @@ void button_ok_callback (void *arg)
         }
         DEBUG("Button ok released!\n");
         trigger_event(BUTTON_OK_RELEASED);
+        ztimer_remove(ZTIMER_SEC, &timeout);
     }
 }
 //EOF
