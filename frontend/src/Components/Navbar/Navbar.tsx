@@ -58,10 +58,7 @@ const Navbar = () => {
             <ul className="navbar-nav">
               {auth.isAuthenticated ? (
                 <>
-                      
-                  <li
-                    
-                  >
+                  <li>
                     <Link
                       className="nav-link"
                       to="/PetPage"
@@ -140,7 +137,14 @@ const Navbar = () => {
         </nav>
         <Routes>
           <Route path="/inventory" element={<Inventory />} />
-          <Route path="/Settings" element={<Settings />} />
+          <Route
+            path="/Settings"
+            element={
+              <Settings
+                username={auth.user?.profile?.preferred_username || "User"}
+              />
+            }
+          />
           <Route path="/Friends" element={<Friends />} />
           <Route path="/PetPage" element={<PetPage />} />
         </Routes>
