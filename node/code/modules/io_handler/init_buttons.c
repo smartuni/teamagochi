@@ -120,16 +120,14 @@ void button_ok_callback (void *arg)
         long_pressed = false;
         //ztimer_t timeout = { .callback=timer_long_pressed_cb };
         ztimer_set(ZTIMER_SEC, &timeout, 1);
+        trigger_event(BUTTON_OK_PRESSED);
     }
     else {
         if (long_pressed) {
             long_pressed = false;
             trigger_event(BUTTON_OK_LONG);
         }
-        else {
-            //ztimer_remove(&timeout);
-            trigger_event(BUTTON_OK_PRESSED);
-        }
+
         trigger_event(BUTTON_OK_RELEASED);
         ztimer_remove(ZTIMER_SEC, &timeout);
     }

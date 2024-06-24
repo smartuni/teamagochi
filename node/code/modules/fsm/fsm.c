@@ -298,9 +298,12 @@ handler_result_t mainView_handler(EVENT_T event) {
             return UNHANDLED;
         case BUTTON_OK_PRESSED:
             DEBUG("[FSM:mainView_handler]: BUTTON_OK_PRESSED\n");
-            displayHandler_handleEvent(BUTTON_OK_PRESSED);
+            displayHandler_handleEvent(event);
             return HANDLED;
         case BUTTON_OK_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_OK_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
         case BUTTON_UP_PRESSED:
         case BUTTON_UP_RELEASED:
         case BUTTON_DOWN_PRESSED:
