@@ -20,6 +20,10 @@ void left_pressed(void);
 void left_released(void);
 void right_pressed(void);
 void right_released(void);
+void init_not_registered_code(char* code);
+void init_registered_no_pet(void);
+void init_registered_pet(void);
+void init_pet_stats(char* stats);
 
 #ifdef __cplusplus
 }
