@@ -44,6 +44,7 @@ typedef enum {
     BUTTON_RIGHT_PRESSED,
     BUTTON_RIGHT_RELEASED,
     BUTTON_OK_LONG,
+    INFO_PRESSED,
     PET_FEED,
     PET_PLAY,
     PET_CLEAN,
@@ -57,6 +58,7 @@ typedef enum {
     REGISTER,
     REGISTERED,
     READY,
+    INFO,
     REGISTER_CODE,
     NAME,
     COLOR,
@@ -105,10 +107,8 @@ typedef enum
 /**
  * @brief Writes the actual pet stats into the parameter pointer
  * 
- * 
- * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
  */
-pet_stats_t* get_pet_stats(void);
+void get_pet_stats(char *buf);
 
 /**
  * @brief Writes the register code into the parameter pointer

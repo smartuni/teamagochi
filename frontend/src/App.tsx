@@ -11,15 +11,15 @@ import PetPage from "./Components/PetPage";
 
 function App() {
   const auth = useAuth();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   switch (auth.activeNavigator) {
-    case "signinSilent":
+    case 'signinSilent':
       return <div>Signing you in...</div>;
-    case "signoutRedirect":
+    case 'signoutRedirect':
       return <div>Signing you out...</div>;
   }
-
+  
   if (auth.isLoading) {
     return <div>Loading...</div>;
   }
