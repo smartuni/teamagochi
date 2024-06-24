@@ -36,6 +36,14 @@ handler_result_t ioHandler_handleEvent(EVENT_T event){
             DEBUG("[IoHandler:handleEvent]: vibrate\n");
             vibrate(VIBRATE_FOR_MSEC);
         break;
+        case SCREEN_OFF:
+            DEBUG("[IoHandler:handleEvent]: screen_off\n");
+            screen_off();
+        break;
+        case SCREEN_ON:
+            DEBUG("[IoHandler:handleEvent]: screen_on\n");
+            screen_on();
+        break;
         default:
         break;
     }

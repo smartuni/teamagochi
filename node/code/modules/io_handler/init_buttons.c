@@ -28,6 +28,10 @@ gpio_t button_up = GPIO_PIN(0, 28); //PIN A3
 gpio_t button_down = GPIO_PIN(0, 2); //PIN A4
 gpio_t button_left = GPIO_PIN(0, 3); //PIN A5
 
+//For turning screen on and off:
+gpio_t screen_gpio = GPIO_PIN(0, 7); //PIN 6
+gpio_mode_t screen_gpio_mode = GPIO_OUT; //Define the screen GPIO as Output GPIO
+
 //Define the vibration module GPIO: 
 gpio_t vibr_gpio = GPIO_PIN(1, 9);
 gpio_mode_t vibr_gpio_mode = GPIO_OUT; //Define the vibr. GPIO as Output GPIO
@@ -45,10 +49,22 @@ int init_buttons(void)
     
     puts("Vibration Module initialization...");
     
+    //Initialize screen gpio
+    gpio_init(screen_gpio, screen_gpio_mode);
+    gpio_set(screen_gpio);
+
     //Initialize vibration module
     gpio_init(vibr_gpio, vibr_gpio_mode);
     gpio_clear(vibr_gpio);
     return 0;
+}
+
+void screen_off(void) {
+    gpio_clear(screen_gpio);
+}
+
+void screen_on(void) {
+    gpio_set(screen_gpio);
 }
 
 //Vibrate for msec milliseconds:
@@ -104,6 +120,7 @@ void button_right_callback (void *arg)
     if (!gpio_read(button_right)) {
         DEBUG("Button right pressed!\n");
         trigger_event(BUTTON_RIGHT_PRESSED);
+        trigger_event(SCREEN_ON);
     }
     else {
         DEBUG("Button right released!\n");
@@ -117,6 +134,7 @@ void button_ok_callback (void *arg)
     if (!gpio_read(button_ok)) {
         DEBUG("Button ok pressed!\n");
         trigger_event(BUTTON_OK_PRESSED);
+        trigger_event(SCREEN_OFF);
     }
     else {
         DEBUG("Button ok released!\n");
