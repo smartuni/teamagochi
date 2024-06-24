@@ -158,6 +158,7 @@ public class PetMapperTest {
 
     assertEquals(dto.getName(), entity.getName());
     assertEquals(dto.getType(), entity.getPetType().getId());
+    assertEquals("Frog", entity.getPetType().getName());
     assertEquals(dto.getOwnerId(), String.valueOf(entity.getOwner().getExternalID()));
   }
 }
