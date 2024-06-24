@@ -1,52 +1,50 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
-import haw.teamagochi.backend.pet.logic.Events.PetEvents;
-import haw.teamagochi.backend.pet.logic.UcPetConditionsImpl;
+import haw.teamagochi.backend.pet.logic.Events.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class UcPetInteractionsImpl implements UcPetInteractions{
 
-  @Inject
-  UcPetConditionsImpl conditions;
-  @Inject
-  UcPetStatusImpl status;
+    @Inject
+    HungerVO hungerVO;
 
-  @Override
-  public PetEntity feedPet(PetEntity pet) {
-    conditions.decreaseHunger(pet);
-    status.increaseHappiness(pet, PetEvents.FEED);
-    status.increaseWellbeing(pet, PetEvents.FEED);
-    status.increaseXP(pet, PetEvents.FEED);
-    return pet;
-  }
+    @Inject
+    HealthVO healthVO;
 
-  @Override
-  public PetEntity cleanPet(PetEntity pet) {
-    conditions.increaseCleanliness(pet);
-    status.increaseHappiness(pet, PetEvents.CLEAN);
-    status.increaseWellbeing(pet, PetEvents.CLEAN);
-    status.increaseXP(pet, PetEvents.CLEAN);
-    return pet;
-  }
+    @Inject
+    FunVO funVO;
 
-  @Override
-  public PetEntity medicatePet(PetEntity pet) {
-    conditions.increaseHealth(pet);
-    status.increaseHappiness(pet, PetEvents.MEDICATE);
-    status.increaseWellbeing(pet, PetEvents.MEDICATE);
-    status.increaseXP(pet, PetEvents.MEDICATE);
-    return pet;
-  }
+    @Inject
+    CleanlinessVO cleanlinessVO;
 
-  @Override
-  public PetEntity playWithPet(PetEntity pet) {
-    conditions.increaseFun(pet);
-    status.increaseHappiness(pet, PetEvents.PLAY);
-    status.increaseWellbeing(pet, PetEvents.PLAY);
-    status.increaseXP(pet, PetEvents.PLAY);
-    return pet;
-  }
+
+    @Override
+    public void feedPet(PetEntity pet) {
+        handlePetEvent(pet, PetEvents.FEED);
+    }
+
+    @Override
+    public void cleanPet(PetEntity pet) {
+        handlePetEvent(pet, PetEvents.CLEAN);
+    }
+
+    @Override
+    public void medicatePet(PetEntity pet) {
+        handlePetEvent(pet, PetEvents.MEDICATE);
+    }
+
+    @Override
+    public void playWithPet(PetEntity pet) {
+        handlePetEvent(pet, PetEvents.PLAY);
+    }
+
+    private void handlePetEvent(PetEntity pet, PetEvents event) {
+        pet.setHunger(hungerVO.dispatch(pet.getHunger(), event));
+        pet.setHealth(healthVO.dispatch(pet.getHealth(), event));
+        pet.setCleanliness(cleanlinessVO.dispatch(pet.getCleanliness(), event));
+        pet.setFun(funVO.dispatch(pet.getFun(), event));
+    }
 }

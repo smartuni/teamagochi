@@ -9,7 +9,6 @@ public class UcPetStatusImpl implements UcPetStatus {
   @Override
   public void increaseHappiness(PetEntity pet, PetEvents event) {
     if(pet == null) return;
-    //TODO ballancing
 
     /*
       If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
@@ -45,8 +44,6 @@ public class UcPetStatusImpl implements UcPetStatus {
   @Override
   public void increaseWellbeing(PetEntity pet, PetEvents event) {
     if(pet == null) return;
-    //TODO ballancing
-
     /*
       If e.g. pet is fed, but pet was not hungry, then status (happiness etc.) should not be improved.
      */
@@ -84,7 +81,7 @@ public class UcPetStatusImpl implements UcPetStatus {
     if(pet == null) return;
     //TODO ballancing
     int xpIncrease;
-    switch(event){
+    switch(event){ // TODO: XP can be increased even if pet is starving. Is that intentional?
       case FEED -> xpIncrease = (pet.getHunger() == 0) ? 20 : 0;
       case PLAY -> xpIncrease = (pet.getFun() == 100) ? 20 : 0; //duplicated due to possible reballancing
       case CLEAN -> xpIncrease = (pet.getCleanliness() == 100) ? 20 : 0;

@@ -16,30 +16,28 @@ public interface UcPetInteractions {
   /**
    * Feeds the pet
    * @param pet the pet to be fed
-   * @return the pet that was fed
    */
-  PetEntity feedPet(PetEntity pet);
+  void feedPet(PetEntity pet);
 
   /**
    * Clean a pet
    * @param pet the pet to be cleaned
-   * @return the cleaned pet
    */
-  PetEntity cleanPet(PetEntity pet);
+  void cleanPet(PetEntity pet);
 
   /**
    * medicate a pet
    * @param pet the pet to be medicated
    * @return the pet that was medicated
    */
-  PetEntity medicatePet(PetEntity pet);
+  void medicatePet(PetEntity pet);
 
   /**
    * play with a pet
    * @param pet the pet to be played with
    * @return the pet that has been played with
    */
-  PetEntity playWithPet(PetEntity pet);
+  void playWithPet(PetEntity pet);
 
 
 }
