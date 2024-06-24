@@ -59,7 +59,6 @@ int init_buttons(void)
 void timer_long_pressed_cb(void *arg) {
     (void) arg;
     long_pressed = true;
-    DEBUG("Hallo vom Timer\n");
 }
 
 //Vibrate for msec milliseconds:
@@ -74,11 +73,9 @@ void button_up_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_up)) {
-        //DEBUG("Button up pressed!\n");
         trigger_event(BUTTON_UP_PRESSED);
     }
     else {
-        //DEBUG("Button up released!\n");
         trigger_event(BUTTON_UP_RELEASED);
     }
 }
@@ -87,11 +84,9 @@ void button_left_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_left)) {
-        //DEBUG("Button left pressed!\n");
         trigger_event(BUTTON_LEFT_PRESSED);
     }
     else {
-        //DEBUG("Button left released!\n");
         trigger_event(BUTTON_LEFT_RELEASED);
     }
 }
@@ -100,11 +95,9 @@ void button_down_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_down)) {
-        //DEBUG("Button down pressed!\n");
         trigger_event(BUTTON_DOWN_PRESSED);
     }
     else {
-        //DEBUG("Button down released!\n");
         trigger_event(BUTTON_DOWN_RELEASED);
     }
 }
@@ -113,11 +106,9 @@ void button_right_callback (void *arg)
 {
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_right)) {
-        //DEBUG("Button right pressed!\n");
         trigger_event(BUTTON_RIGHT_PRESSED);
     }
     else {
-        //DEBUG("Button right released!\n");
         trigger_event(BUTTON_RIGHT_RELEASED);
     }
 }
@@ -133,15 +124,12 @@ void button_ok_callback (void *arg)
     else {
         if (long_pressed) {
             long_pressed = false;
-            DEBUG("Button ok long pressed!\n");
             trigger_event(BUTTON_OK_LONG);
         }
         else {
-            DEBUG("Button ok pressed!\n");
             //ztimer_remove(&timeout);
             trigger_event(BUTTON_OK_PRESSED);
         }
-        DEBUG("Button ok released!\n");
         trigger_event(BUTTON_OK_RELEASED);
         ztimer_remove(ZTIMER_SEC, &timeout);
     }
