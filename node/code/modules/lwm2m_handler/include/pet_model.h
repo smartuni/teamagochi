@@ -84,17 +84,21 @@ extern "C" {
 #define LWM2M_PET_PLAY_ID 42
 #define LWM2M_PET_CLEAN_ID 43
 
+typedef union  {
+    char* str;
+    bool flag;
+    int32_t num;
+}callback_value;
 
-
-// /**
-//  * @brief Callback for writing the sensor value.
-//  *
-//  * @param[in]  EVENT_ID  ID of LWM2M Item
-//  *
-//  * @return 0 on success
-//  * @return <0 otherwise
-//  */
-typedef void lwm2m_obj_pet_write_cb_t(uint16_t EVENT_ID);
+/**
+ * @brief Callback for writing the sensor value.
+ *
+ * @param[in]  EVENT_ID  ID of LWM2M Item
+ *
+ * @return 0 on success
+ * @return <0 otherwise
+ */
+typedef void lwm2m_obj_pet_write_cb_t(uint16_t EVENT_ID, callback_value value);
 
 /**
  * @brief Arguments for the creation of a pet object.

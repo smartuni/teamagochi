@@ -14,13 +14,15 @@ import jakarta.ws.rs.PathParam;
 import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 /**
  * Rest interface for the device component.
  */
 @Path("/v1/devices")
-@Tag(name = "devices", description = "Everything about devices.")
+@Tag(name = "a) devices", description = "Everything about devices.")
+@SecurityRequirement(name = "SecurityScheme")
 public class DeviceRestService {
 
   @Inject
