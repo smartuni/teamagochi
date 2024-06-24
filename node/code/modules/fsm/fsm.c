@@ -236,7 +236,9 @@ void off_exit(void) {
 }
 
 handler_result_t unregistered_handler(EVENT_T event) {
+    printf("[FSM:unregistered_state_handler]: event: %d \n",event);
     switch (event) {
+        
         case REGISTER_CODE:
             displayHandler_handleEvent(REGISTERED);
             displayHandler_handleEvent(REGISTER_CODE);
