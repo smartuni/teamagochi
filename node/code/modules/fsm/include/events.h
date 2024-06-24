@@ -43,6 +43,7 @@ typedef enum {
     BUTTON_DOWN_RELEASED,
     BUTTON_RIGHT_PRESSED,
     BUTTON_RIGHT_RELEASED,
+    BUTTON_OK_LONG,
     INFO_PRESSED,
     PET_FEED,
     PET_PLAY,
@@ -57,7 +58,6 @@ typedef enum {
     REGISTER,
     REGISTERED,
     READY,
-    INFO,
     REGISTER_CODE,
     NAME,
     COLOR,
@@ -96,11 +96,11 @@ typedef struct{
 /* Enum of the fsm handler return values*/
 typedef enum
 {
-  EVENT_HANDLED,      //!< Event handled successfully.
-  EVENT_UN_HANDLED,    //!< Event could not be handled.
+  HANDLED,      //!< Event handled successfully.
+  UNHANDLED,    //!< Event could not be handled.
   //!< Handler handled the Event successfully and posted new event to itself.
   TRIGGERED_TO_SELF,
-}handler_result_t;
+} handler_result_t;
 
 
 /**
