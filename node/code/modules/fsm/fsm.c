@@ -239,8 +239,10 @@ handler_result_t unregistered_handler(EVENT_T event) {
     switch (event) {
         case REGISTER_CODE:
             displayHandler_handleEvent(REGISTERED);
-            traverse_state(&On_Level[1]);
             displayHandler_handleEvent(REGISTER_CODE);
+            return HANDLED;
+        case REGISTERED:
+            traverse_state(&On_Level[1]);
             return HANDLED;
         default:
             DEBUG("[FSM:unregistered_state_handler]: UNHANDLED\n");
