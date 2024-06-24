@@ -71,3 +71,15 @@ echo $PERSONAL_ACCESS_TOKEN | docker login ghcr.io -u <USERNAME> --password-stdi
 [gh-docs-registry]: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
 [quarkus-container-image]: https://quarkus.io/guides/container-image
 [maven-lifecycle]: https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+
+---
+
+./mvnw install -DskipTests -Dquarkus.profile=prod
+echo $GH_TOK_TEAMAGOCHI | docker login ghcr.io -u ozfox --password-stdin
+
+```shell
+# Standalone
+docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/smartuni/teamagochi/web-backend:snapshot
+
+does not work cause keycloak is not available on http://keycloak:8080/kc/realms/teamagochi
+```

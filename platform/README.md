@@ -26,6 +26,17 @@ For a fresh start, just delete the volumes with `-v`.
 docker compose down -v
 ```
 
+### TODO
+
+```
+docker compose -f compose.no-backend.yml up --build
+docker compose -f compose.no-backend.yml down
+```
+
+quarkus dev -Dquarkus.profile=keycloak
+quarkus dev -Dquarkus.profile=dev,keycloak,teashan
+quarkus dev -Dquarkus.profile=dev,teashan
+
 ### Requirements
 
 Unknown.  BuildKit is required. Your need a recent Docker version, I guess. It is tested with:
@@ -59,6 +70,8 @@ a `/etc/docker/daemon.json` like the following example.
   ]
 }
 ```
+
+TODO: `[fd00:dead:beef::1]:5685`
 
 See https://docs.docker.com/config/daemon/ipv6
 
