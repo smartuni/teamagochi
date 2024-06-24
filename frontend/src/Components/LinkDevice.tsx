@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
+
 interface LinkDeviceProps {
   onClose: () => void; // onClose prop should be a function that closes the popup
 }
@@ -24,6 +25,9 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
       return;
     }
     // TODO: Save the device ID or perform any action with the input value
+    (async () => {
+        
+      })();
     console.log("Device ID:", deviceKey, " Device Name:", deviceName);
     onClose(); // Close the popup after submission
   };

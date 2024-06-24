@@ -10,10 +10,15 @@ import CreatePetModal from "./Components/CreatePetModal";
 import PetPage from "./Components/PetPage";
 import type { paths } from "./web-backend-api";
 import createClient, { type Middleware } from "openapi-fetch";
+import LandingPage from "./Components/LandingPage";
 
+ const client = createClient<paths>({
+    baseUrl: "http://localhost:4000/backend",
+  });
 function App() {
   const auth = useAuth();
   const [count, setCount] = useState(0);
+
 
   switch (auth.activeNavigator) {
     case "signinSilent":
@@ -44,9 +49,6 @@ function App() {
       },
     };
 
-    const client = createClient<paths>({
-      baseUrl: "http://localhost:4000/backend",
-    });
     client.use(authMiddleware);
 
     // https://github.com/openapi-ts/openapi-typescript/tree/main/packages/openapi-fetch
@@ -72,7 +74,8 @@ function App() {
       </div>
     );
   }
-  return [<Navbar />, <Footer />];
+  return [<Navbar />,<Footer />];
 }
 
 export default App;
+export {client};

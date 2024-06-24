@@ -37,7 +37,7 @@ const CreatePetModal = () => {
   return (
         <>
             <div className='container-fluid d-flex justify-content-center align-items-center' style={{ height: '100vh' }}>
-                <button className="btn btn-success" onClick={() => setOpen(true)}>Create Teamagochi</button>
+                <button className="btn btn-success" onClick={() => setOpen(true)}>New Pet</button>
             </div>
             <Popup
                 open={open}
@@ -100,7 +100,28 @@ const CreatePetModal = () => {
                                 checked={petType === "Water"} onChange={handleInputPetType}></input>
                             <label className="btn btn-secondary" htmlFor='option3'>Water</label>
                         </div>
+                       {/* 
+                        <div className= "btn-group btn-group-toggle pt-2" data-toggle="buttons">
+                            <input type="radio" className="btn-check" name="optionsColor" id="1Color" value="Green" autoComplete="off" 
+                                ></input>
+                            <label className="btn btn-secondary" htmlFor="1Color">Green</label>
 
+                            <input type="radio" className="btn-check" name="optionsColor" id="2Color" value="Pink" autoComplete="off" 
+                                ></input>
+                            <label className="btn btn-secondary" htmlFor="2Color">Pink</label>
+
+                            <input type="radio" className="btn-check" name="optionsColor" id="3Color" value="Yellow" autoComplete="off" 
+                                ></input>
+                            <label className="btn btn-secondary" htmlFor="3Color">Yellow</label>
+                            <input type="radio" className="btn-check" name="optionsColor" id="4Color" value="Brown" autoComplete="off" 
+                                ></input>
+                            <label className="btn btn-secondary" htmlFor="4Color">Brown</label>
+                            
+                            <input type="radio" className="btn-check" name="optionsColor" id="5Color" value="Blue" autoComplete="off" 
+                                ></input>
+                            <label className="btn btn-secondary" htmlFor="5Color">Blue</label>
+                        </div>
+                    */}
                         <button type='submit' className='btn btn-success mt-2 mb-2'>
                             Create
                         </button>
