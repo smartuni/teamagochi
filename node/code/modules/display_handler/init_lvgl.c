@@ -114,6 +114,7 @@ static void menu_cb(lv_event_t * e){
             // msg_t message;
             // message.type = img_index_pairs[current_img_index].event ;
             // msg_try_send(&message, dispatcher_pid_lvgl);
+            trigger_event(img_index_pairs[current_img_index].event);
         }
     }
 }
