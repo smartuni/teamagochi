@@ -3,6 +3,7 @@ package haw.teamagochi.backend.pet.service.rest.v1;
 import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
+import haw.teamagochi.backend.pet.logic.UcFindPetType;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
@@ -50,6 +51,9 @@ public class PetRestSelfService {
   @Inject
   protected UcManageUser ucManageUser;
 
+  @Inject
+  protected UcFindPetType ucFindPetType;
+
   /**
    * Get all pets.
    *
@@ -81,7 +85,7 @@ public class PetRestSelfService {
       ucManageUser.create(uuid); // create userId in database
     }
     dto.setOwnerId(uuid);
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, null, null); // TODO
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPetType);
     ucManagePet.create(entity);
     return petMapper.mapEntityToTransferObject(entity);
   }

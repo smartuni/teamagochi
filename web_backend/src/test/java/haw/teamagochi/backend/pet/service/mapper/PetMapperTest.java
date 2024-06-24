@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
+import haw.teamagochi.backend.pet.logic.UcFindPetType;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.logic.UcManagePetType;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
@@ -11,6 +12,7 @@ import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetStateDTO;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetTypeDTO;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
+import haw.teamagochi.backend.user.logic.UcFindUser;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -37,6 +39,12 @@ public class PetMapperTest {
 
   @Inject
   UcManagePetType ucManagePetType;
+
+  @Inject
+  UcFindUser ucFindUser;
+
+  @Inject
+  UcFindPetType ucFindPetType;
 
   PetMapper petMapper = PetMapper.MAPPER;
 
@@ -114,7 +122,7 @@ public class PetMapperTest {
         petStateDto);
 
     // When
-    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, null, null);  // TODO
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPetType);
 
     // Then
     assertEquals(dto.getId(), entity.getId());
@@ -130,5 +138,26 @@ public class PetMapperTest {
     assertEquals(dto.getState().getCleanliness(), entity.getCleanliness());
     assertEquals(dto.getState().getFun(), entity.getFun());
     assertEquals(dto.getState().getXp(), entity.getXp());
+  }
+  @Test
+  public void testMapTransferObjectToEntity_JustWithNameAndType() {
+    // Given
+    PetEntity sourceEntity = petEntities.get("pet1");
+    PetTypeDTO petTypeDto =
+        new PetTypeDTO(sourceEntity.getPetType().getId(), sourceEntity.getPetType().getName());
+    PetDTO dto = new PetDTO(
+        null,
+        sourceEntity.getName(),
+        petTypeDto.getId(),
+        String.valueOf(owner.getExternalID()),
+        null,
+        null);
+
+    // When
+    PetEntity entity = petMapper.mapTransferObjectToEntity(dto, ucFindUser, ucFindPetType);
+
+    assertEquals(dto.getName(), entity.getName());
+    assertEquals(dto.getType(), entity.getPetType().getId());
+    assertEquals(dto.getOwnerId(), String.valueOf(entity.getOwner().getExternalID()));
   }
 }
