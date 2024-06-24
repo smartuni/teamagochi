@@ -123,7 +123,6 @@ void button_right_callback (void *arg)
     (void) arg; /* the argument is not used */
     if (!gpio_read(button_right)) {
         trigger_event(BUTTON_RIGHT_PRESSED);
-        trigger_event(SCREEN_ON);
     }
     else {
         trigger_event(BUTTON_RIGHT_RELEASED);
@@ -138,7 +137,6 @@ void button_ok_callback (void *arg)
         //ztimer_t timeout = { .callback=timer_long_pressed_cb };
         ztimer_set(ZTIMER_SEC, &timeout, 1);
         trigger_event(BUTTON_OK_PRESSED);
-        trigger_event(SCREEN_OFF);
     }
     else {
         if (long_pressed) {
