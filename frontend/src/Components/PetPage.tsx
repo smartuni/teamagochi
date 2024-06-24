@@ -1,15 +1,36 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import petImage from "../assets/pet_frog.png";
 import { ProgressBar } from "react-progressbar-fancy";
-
+import type { paths } from "../../src/web-backend-api";
+import { useAuth } from "react-oidc-context";
+import CreatePetModal from "./CreatePetModal";
 
 // https://github.com/RavinRau/react-progressbar-fancy?tab=readme-ov-file
 
-const Pet = () => {
+const PetPage = (client) => {
+  const [petData, setPetData] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const { response, error } = await client.GET("/api/v1/devices/self", {});
+    if (error != null) {
+      setPetData(await client.GET(`/api/v1/pets/self/${response.petId}`));
+    }
+  };
+
   return (
     <div className="container-fluid row p-5">
       <div className="col-6">
-        <img className="img-fluid" src={petImage} alt="pet name" />
+        {petData != null ? (
+          <img className="img-fluid" src={petImage} alt="pet name" />
+        ) : (
+          <div>
+            <CreatePetModal />
+          </div>
+        )}
       </div>
       <div className="col-6">
         <div className="h2 px-3 py-4">( Pet name )</div>
@@ -45,4 +66,4 @@ const Pet = () => {
   );
 };
 
-export default Pet;
+export default PetPage;
