@@ -30,7 +30,6 @@ void io_init(void){
 }
 
 handler_result_t ioHandler_handleEvent(EVENT_T event){
-    DEBUG("[IoHandler:handleEvent]\n");
     switch(event){
         case VIBRATE:
             DEBUG("[IoHandler:handleEvent]: vibrate\n");
@@ -47,5 +46,5 @@ handler_result_t ioHandler_handleEvent(EVENT_T event){
         default:
         break;
     }
-    return EVENT_HANDLED;
+    return HANDLED;
 }

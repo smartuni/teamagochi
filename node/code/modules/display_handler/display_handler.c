@@ -64,19 +64,23 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
             right_released();
         break;
         case REGISTER_CODE:
-            init_not_registered_code(get_register_code());
+            //init_not_registered_code(get_register_code());
+            init_not_registered_code("Hallo Tom");
             break;
         case REGISTERED:
+            init_registered_no_pet();
+            break;
+        case READY:
             init_registered_pet();
             break;
-        case INFO:
+        case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
         default:
         break;
      }
     lvgl_wakeup();
-    return EVENT_HANDLED;
+    return HANDLED;
 }
 
 void *display_run(void * arg){
