@@ -24,7 +24,8 @@ public class HappinessVO extends PetStatusVO {
     }
 
 
-    public int dispatch(int happiness, PetEvents event, PetStateDTO pet) {
+    public int dispatch(PetEvents event, PetStateDTO pet) {
+        int happiness = pet.getHappiness();
         int increase = 0;
         if (
             (event == PetEvents.FEED && pet.getHunger() == hungerVO.getMin()) ||
@@ -40,7 +41,8 @@ public class HappinessVO extends PetStatusVO {
         return boundaryCheck(happiness + increase);
     }
 
-    public int deteriorate(int happiness, PetStateDTO pet) {
+    public int deteriorate(PetStateDTO pet) {
+        int happiness = pet.getHappiness();
         int decrease = checkHappinessLimits(pet.getFun());
         decrease += checkHappinessLimits(hungerVO.getMax() - pet.getHunger()); // bring hunger to same scale as fun
         return boundaryCheck(happiness + decrease);

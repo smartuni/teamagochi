@@ -2,6 +2,8 @@ package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.Events.*;
+import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
+import haw.teamagochi.backend.pet.service.rest.v1.model.PetStateDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -19,6 +21,18 @@ public class UcPetInteractionsImpl implements UcPetInteractions{
 
     @Inject
     CleanlinessVO cleanlinessVO;
+
+    @Inject
+    PetMapper petMapper;
+
+    @Inject
+    WellbeingVO wellbeingVO;
+
+    @Inject
+    HappinessVO happinessVO;
+
+    @Inject
+    XpVO xpVO;
 
 
     @Override
@@ -42,9 +56,18 @@ public class UcPetInteractionsImpl implements UcPetInteractions{
     }
 
     private void handlePetEvent(PetEntity pet, PetEvents event) {
-        pet.setHunger(hungerVO.dispatch(pet.getHunger(), event));
-        pet.setHealth(healthVO.dispatch(pet.getHealth(), event));
-        pet.setCleanliness(cleanlinessVO.dispatch(pet.getCleanliness(), event));
-        pet.setFun(funVO.dispatch(pet.getFun(), event));
+        PetStateDTO dto = petMapper.mapEntityToTransferObject(pet).getState();
+
+        // Independent attributes
+        pet.setHunger(hungerVO.dispatch(dto.getHunger(), event));
+        pet.setHealth(healthVO.dispatch(dto.getHealth(), event));
+        pet.setCleanliness(cleanlinessVO.dispatch(dto.getCleanliness(), event));
+        pet.setFun(funVO.dispatch(dto.getFun(), event));
+
+        // Attributes dependent on other attributes
+        pet.setXp(xpVO.dispatch(event, dto));
+        pet.setHappiness(happinessVO.dispatch(event, dto));
+        pet.setWellbeing(wellbeingVO.dispatch(event, dto));
+
     }
 }

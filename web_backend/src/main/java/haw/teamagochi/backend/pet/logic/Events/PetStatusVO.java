@@ -21,5 +21,5 @@ public abstract class PetStatusVO extends PetAttributeVO {
         }
     }
 
-    abstract int dispatch(int attributeValue, PetEvents event, PetStateDTO pet);
+    abstract int dispatch(PetEvents event, PetStateDTO pet);
 }
