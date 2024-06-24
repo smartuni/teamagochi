@@ -37,7 +37,7 @@ public class PetEntity {
   public PetEntity() {}
 
   @NonNull
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   private UserEntity owner;
 
 
@@ -67,7 +67,7 @@ public class PetEntity {
   private Date lastTimeOnDevice;
 
 
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   @NonNull
   private PetTypeEntity petType;
 
