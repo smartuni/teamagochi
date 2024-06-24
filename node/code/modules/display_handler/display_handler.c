@@ -29,6 +29,7 @@
 char display_thread_stack [DISPLAY_STACKSIZE];
 
 handler_result_t displayHandler_handleEvent(EVENT_T event){
+    char buf[100];
     DEBUG("[DisplayHandler:handleEvent]\n");
      switch(event){
         case BUTTON_OK_PRESSED:
@@ -48,6 +49,7 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
+            init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -67,6 +69,9 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case REGISTERED:
             init_registered_pet();
             break;
+        case INFO:
+            get_pet_stats((char*)&buf);
+            init_pet_stats((char*)&buf);
         default:
         break;
      }
