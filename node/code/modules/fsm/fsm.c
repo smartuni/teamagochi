@@ -169,15 +169,17 @@ void fsm_handle(EVENT_T event) {
             DEBUG("[FSM:fsm_handle]: result: %d\n", result);
         }
         while (pState->Handler ==
-                NULL && result == UNHANDLED);  // repeat again if parent state doesn't have handler
+                NULL || result == UNHANDLED);  // repeat again if parent state doesn't have handler
+        DEBUG("[FSM:fsm_handle]: State machine traversed to parent state\n");
     }
+
 }
 
 void traverse_state(const state_t *target_state) {
     while (target_state->Level < currentState->Level) {
         if (currentState->Exit) currentState->Exit();
         currentState = currentState->Parent;
-        if (currentState->Entry) currentState->Entry();
+        //if (currentState->Entry) currentState->Entry();
     } 
     while (target_state->Level > currentState->Level) {
         currentState = currentState->Child;
@@ -195,6 +197,7 @@ handler_result_t on_handler(EVENT_T event) {
         case BUTTON_OK_LONG:
             DEBUG("[FSM:on_handler]: BUTTON_OK_LONG\n");
             traverse_state(&Top_Level[1]); //transition to off
+            DEBUG("[FSM:on_handler]: transition to off\n");
             return HANDLED;
         default:
             DEBUG("[FSM:on_handler]: UNHANDLED\n");
@@ -257,9 +260,6 @@ handler_result_t unregistered_handler(EVENT_T event) {
 void unregistered_entry(void) {
     DEBUG("[FSM:unregistered_entry]: called\n");
     displayHandler_handleEvent(REGISTER_CODE);
-    ztimer_sleep(ZTIMER_MSEC, 5000);
-    DEBUG("[FSM:unregistered_entry]: code entered\n");
-    trigger_event(REGISTERED);
 }
 
 void unregistered_exit(void) {
@@ -280,9 +280,6 @@ handler_result_t userLinked_handler(EVENT_T event) {
 
 void userLinked_entry(void) {
     registered = true;
-    ztimer_sleep(ZTIMER_MSEC, 5000);
-    DEBUG("[FSM:userLinked_entry]: user linked\n");
-    trigger_event(READY);
 }
 
 void userLinked_exit(void) {
@@ -291,9 +288,6 @@ void userLinked_exit(void) {
 
 handler_result_t pet_handler(EVENT_T event) {
     switch (event) {
-        case BUTTON_OK_LONG:
-            DEBUG("[FSM:pet_handler]: langer Button nach oben\n");
-            return UNHANDLED;
         default:
             DEBUG("[FSM:pet_handler]: UNHANDLED\n");
             return UNHANDLED;
@@ -302,7 +296,6 @@ handler_result_t pet_handler(EVENT_T event) {
 
 void pet_entry(void) {
     userLinked = true;
-    ztimer_sleep(ZTIMER_MSEC, 5000);
     traverse_state(&Pet_Level[0]);
 }
 
