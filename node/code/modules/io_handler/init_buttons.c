@@ -29,6 +29,10 @@ gpio_t button_up = GPIO_PIN(0, 28); //PIN A3
 gpio_t button_down = GPIO_PIN(0, 2); //PIN A4
 gpio_t button_left = GPIO_PIN(0, 3); //PIN A5
 
+//For turning screen on and off:
+gpio_t screen_gpio = GPIO_PIN(0, 7); //PIN 6
+gpio_mode_t screen_gpio_mode = GPIO_OUT; //Define the screen GPIO as Output GPIO
+
 //Define the vibration module GPIO: 
 gpio_t vibr_gpio = GPIO_PIN(1, 9);
 gpio_mode_t vibr_gpio_mode = GPIO_OUT; //Define the vibr. GPIO as Output GPIO
@@ -50,10 +54,22 @@ int init_buttons(void)
     
     puts("Vibration Module initialization...");
     
+    //Initialize screen gpio
+    gpio_init(screen_gpio, screen_gpio_mode);
+    gpio_set(screen_gpio);
+
     //Initialize vibration module
     gpio_init(vibr_gpio, vibr_gpio_mode);
     gpio_clear(vibr_gpio);
     return 0;
+}
+
+void screen_off(void) {
+    gpio_clear(screen_gpio);
+}
+
+void screen_on(void) {
+    gpio_set(screen_gpio);
 }
 
 void timer_long_pressed_cb(void *arg) {

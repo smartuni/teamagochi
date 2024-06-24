@@ -64,8 +64,8 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
             right_released();
         break;
         case REGISTER_CODE:
-            //init_not_registered_code(get_register_code());
-            init_not_registered_code("Hallo Tom");
+            init_not_registered_code(get_register_code());
+            //init_not_registered_code("Hallo Tom");
             break;
         case REGISTERED:
             init_registered_no_pet();

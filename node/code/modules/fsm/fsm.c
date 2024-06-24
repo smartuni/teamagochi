@@ -196,6 +196,7 @@ handler_result_t on_handler(EVENT_T event) {
 void on_entry(void) {
     DEBUG("[FSM:on_entry_handler]: called\n");
     ioHandler_handleEvent(VIBRATE);
+    ioHandler_handleEvent(SCREEN_ON);
     traverse_state(&On_Level[0]); //wie gehe ich in den Child State
 }
 
@@ -226,6 +227,8 @@ void off_entry(void) {
         display_init();
         startDisplayThread();
     }
+    ioHandler_handleEvent(SCREEN_OFF);
+    ioHandler_handleEvent(VIBRATE);
 }
 
 void off_exit(void) {
@@ -234,8 +237,11 @@ void off_exit(void) {
 
 handler_result_t unregistered_handler(EVENT_T event) {
     switch (event) {
-        case REGISTERED:
+        case REGISTER_CODE:
             displayHandler_handleEvent(REGISTERED);
+            displayHandler_handleEvent(REGISTER_CODE);
+            return HANDLED;
+        case REGISTERED:
             traverse_state(&On_Level[1]);
             return HANDLED;
         default:

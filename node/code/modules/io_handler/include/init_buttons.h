@@ -27,6 +27,9 @@ void button_down_callback (void *arg);
 void button_right_callback (void *arg);
 void button_ok_callback (void *arg);
 
+//Screen functions:
+void screen_off(void);
+void screen_on(void);
 void timer_long_pressed_cb(void *arg);
 
 //Vibration functions prototypes:
