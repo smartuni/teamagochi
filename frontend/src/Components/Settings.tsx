@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import profile_pic1 from '../Misc/8-bit-dog-nobg.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LinkDevice from "../Components/LinkDevice";
@@ -17,9 +17,9 @@ function Settings(
     setItems(items.filter((_, i) => i !== index));
   };
 
-  const resetItem = (index: number) => {
-    setItems(items.map((item, i) => (i === index ? `Item ${index + 1}` : item)));
-  };
+  // const resetItem = (index: number) => {
+  //   setItems(items.map((item, i) => (i === index ? `Item ${index + 1}` : item)));
+  // };
 
   return (
     <div className='d-flex justify-content-center pt-4 pb-2'>

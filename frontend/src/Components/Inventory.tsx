@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Inventory = () => (
   <div>
     <h1>Inventory Page</h1>

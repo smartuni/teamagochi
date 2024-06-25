@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import petImage from "../assets/pet_frog.png";
 import { ProgressBar } from "react-progressbar-fancy";
-import type { paths } from "../../src/web-backend-api";
-import { useAuth } from "react-oidc-context";
 import CreatePetModal from "./CreatePetModal";
 
 // https://github.com/RavinRau/react-progressbar-fancy?tab=readme-ov-file
 
-const PetPage = (client) => {
+const PetPage = (client: any) => {
   const [petData, setPetData] = useState([]);
 
   useEffect(() => {
