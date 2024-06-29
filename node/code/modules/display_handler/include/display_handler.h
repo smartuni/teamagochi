@@ -37,4 +37,7 @@ void startDisplayThread(void);
  */
 void display_init(void);
 
+
+void direction_handler(EVENT_T event);
+
 #endif /* DISPLAY_HANDLER_T */

@@ -69,7 +69,9 @@ typedef enum {
     XP,
     HUNGER,
     CLEANLINESS,
-    FUN
+    FUN,
+    GAME_START,
+    GAME_FINISHED,
 }EVENT_T;
 
 typedef struct{

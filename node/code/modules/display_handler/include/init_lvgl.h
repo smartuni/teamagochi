@@ -25,6 +25,16 @@ void init_registered_no_pet(void);
 void init_registered_pet(void);
 void init_pet_stats(char* stats);
 
+typedef enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+} Direction;
+static Direction direction;
+
+void game_loop(void);
+
 #ifdef __cplusplus
 }
 #endif

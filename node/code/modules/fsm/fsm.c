@@ -27,7 +27,9 @@ void userLinked_entry(void);
 handler_result_t pet_handler(EVENT_T event);
 void pet_entry(void);
 handler_result_t mainView_handler(EVENT_T event);
+void mainView_entry(void);
 handler_result_t gameView_handler(EVENT_T event);
+void gameView_entry(void);
 
 //Our definition of an hierachical state
 typedef struct hierarchical_state state_t;
@@ -98,7 +100,7 @@ static const state_t On_Level[] = {
 static const state_t Pet_Level[] = {
     {//Main_View
         mainView_handler,              // state handler
-        NULL,                     // Entry action handler
+        mainView_entry,                     // Entry action handler
         NULL,                     // Exit action handler
         &On_Level[2],             // Parent state
         NULL,                     // Child state
@@ -106,7 +108,7 @@ static const state_t Pet_Level[] = {
     },
     {//Game_View TODO: not used yet
         gameView_handler,              // state handler
-        NULL,                     // Entry action handler
+        gameView_entry,                     // Entry action handler
         NULL,                     // Exit action handler
         &On_Level[2],             // Parent state
         NULL,                     // Child state
@@ -266,7 +268,6 @@ handler_result_t pet_handler(EVENT_T event) {
 }
 
 void pet_entry(void) {
-    displayHandler_handleEvent(READY); //to draw the pet
     userLinked = true;
     traverse_state(&Pet_Level[0]); //transition to main_view
 }
@@ -322,7 +323,7 @@ handler_result_t mainView_handler(EVENT_T event) {
             return HANDLED;
         case PET_PLAY:
             DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
-            lwm2m_handleEvent(PET_PLAY);
+            traverse_state(&Pet_Level[1]); //transition to game_view
             return HANDLED;
         case PET_MEDICATE:
             DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
@@ -342,11 +343,36 @@ handler_result_t mainView_handler(EVENT_T event) {
     }
 }
 
+void mainView_entry(void) {
+    displayHandler_handleEvent(READY); //to draw the pet
+}
+
 handler_result_t gameView_handler(EVENT_T event) {
     switch (event) {
+        case BUTTON_UP_PRESSED:
+            direction_handler(BUTTON_UP_PRESSED);
+            return HANDLED;
+        case BUTTON_DOWN_PRESSED:
+            direction_handler(BUTTON_DOWN_PRESSED);
+            return HANDLED;
+        case BUTTON_LEFT_PRESSED:
+            direction_handler(BUTTON_LEFT_PRESSED);
+            return HANDLED;
+        case BUTTON_RIGHT_PRESSED:
+            direction_handler(BUTTON_RIGHT_PRESSED);
+            return HANDLED;
+        case GAME_FINISHED:
+            DEBUG("[FSM:gameView_handler]: GAME_FINISHED\n");
+            traverse_state(&Pet_Level[0]); //transition to main_view
+            lwm2m_handleEvent(PET_PLAY);     
+            return HANDLED;
         default:
             DEBUG("[FSM:gameView_handler]: UNHANDLED\n");
             return UNHANDLED;
     }
+}
+
+void gameView_entry(void) {
+    displayHandler_handleEvent(GAME_START);
 }
 //EOF

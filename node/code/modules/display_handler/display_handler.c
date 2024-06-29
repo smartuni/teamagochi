@@ -76,11 +76,42 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
+            break;
+        case GAME_START:
+            game_loop();
+            break;
         default:
         break;
      }
     lvgl_wakeup();
     return HANDLED;
+}
+
+void direction_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_UP_PRESSED:
+            if (direction != DOWN) {
+                direction = UP;
+            }
+            break;
+        case BUTTON_DOWN_PRESSED:
+            if (direction != UP) {
+                direction = DOWN;
+            }
+            break;
+        case BUTTON_LEFT_PRESSED:
+            if (direction != RIGHT) {
+                direction = LEFT;
+            }
+            break;
+        case BUTTON_RIGHT_PRESSED:
+            if (direction != LEFT) {
+                direction = RIGHT;
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 void *display_run(void * arg){
