@@ -34,7 +34,7 @@
 #include "events.h"
 #include "debug.h"
 
-#include "xtimer.h"
+#include "ztimer.h"
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -174,7 +174,7 @@ void init_default_screen(char* top_bar_text){
     lv_obj_t * screen = lv_obj_create(lv_scr_act());
     lv_obj_clear_flag(screen,LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_size(screen, 320, 240);
-    lv_obj_add_style(screen,&style_base, LV_PART_MAIN);
+    lv_obj_add_style(screen, &style_base, LV_PART_MAIN);
 
     /* Style for top bar */
     static lv_style_t style_top_bar;
@@ -504,28 +504,31 @@ static lv_obj_t *snake_objs[SNAKE_MAX_LENGTH];
 static lv_obj_t *food_obj;
 
 void game_won(void) {
-    // Display a "You Win" message
-    lv_obj_t *label = lv_label_create(lv_scr_act(), NULL);
+    lv_obj_t *label = lv_label_create(lv_scr_act());
     lv_label_set_text(label, "You Win!");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-    
 
     trigger_event(GAME_FINISHED);
-
-
-
-    // Optionally, reset the game or provide options to the player
-    // init_game();
 }
 
 void init_game(void) {
     snake_length = SNAKE_START_LENGTH;
+
+    static lv_style_t snake_style;
+    lv_style_init(&snake_style);
+    lv_style_set_bg_color(&snake_style, lv_color_hex(0x00FF00)); // Grün für die Schlange
+
+    static lv_style_t food_style;
+    lv_style_init(&food_style);
+    lv_style_set_bg_color(&food_style, lv_color_hex(0xFF0000)); // Rot für das Essen
+
+
     for (int i = 0; i < snake_length; i++) {
         snake[i].x = GRID_WIDTH / 2 - i;
         snake[i].y = GRID_HEIGHT / 2;
         snake_objs[i] = lv_obj_create(lv_scr_act());
         lv_obj_set_size(snake_objs[i], GRID_SIZE, GRID_SIZE);
-        lv_obj_set_style_local_bg_color(snake_objs[i], LV_PART_MAIN , LV_STATE_DEFAULT, lv_color_hex(0x00FF00));
+        lv_obj_add_style(snake_objs[i], &snake_style, LV_PART_MAIN);
         lv_obj_set_pos(snake_objs[i], snake[i].x * GRID_SIZE, snake[i].y * GRID_SIZE);
     }
     direction = RIGHT;
@@ -535,7 +538,7 @@ void init_game(void) {
     food.y = lv_rand(0, GRID_HEIGHT);
     food_obj = lv_obj_create(lv_scr_act());
     lv_obj_set_size(food_obj, GRID_SIZE, GRID_SIZE);
-    lv_obj_set_style_local_bg_color(food_obj, LV_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xFF0000));
+    lv_obj_add_style(food_obj, &food_style, LV_PART_MAIN);
     lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
 }
 
@@ -571,8 +574,8 @@ void update_game(void) {
             snake_objs[snake_length - 1] = new_body_part;
         }
 
-        food.x = rand() % GRID_WIDTH;
-        food.y = rand() % GRID_HEIGHT;
+        food.x = lv_rand(0, GRID_WIDTH);
+        food.y = lv_rand(0, GRID_HEIGHT);
         lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
     }
 
@@ -608,15 +611,15 @@ void game_loop(void) {
     init_game();
 
     // Create a periodic timer to update LVGL
-    xtimer_t lv_timer;
-    xtimer_set_cb(&lv_timer, lv_tick_task, NULL);
-    xtimer_set(&lv_timer, 1000);
+    ztimer_t lv_timer;
+    ztimer_clock_t *clock = ZTIMER_MSEC; // Verwenden von Millisekunden
+    ztimer_set(clock, &lv_timer, 1, lv_tick_task, NULL); // Setzt den Timer auf 1 ms
 
     // Start game loop
     while (1) {
         update_game();
         lv_task_handler();
-        xtimer_usleep(SNAKE_SPEED);
+        ztimer_usleep(SNAKE_SPEED);
     }
 }
 
