@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import lombok.Setter;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 /** In-memory implementation of a {@link RegistrationManager}. */
@@ -39,6 +40,12 @@ public class MemoryRegistrationManager implements RegistrationManager {
 
   @Inject
   UcDeviceResourceOperations ucDeviceResourceOperations;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.prefix")
+  protected String clientEndpointNamePrefix;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.filter-mode")
+  protected String clientEndpointNameFilterMode;
 
   @Setter
   private Integer registrationLifetime;
@@ -98,7 +105,9 @@ public class MemoryRegistrationManager implements RegistrationManager {
        */
       try {
         String registrationCode = generateUniqueRegistrationCode(registrationCodeMap.keySet());
-        writeRegistrationCodeToDevice(endpoint, registrationCode);
+        if (isAcceptableForWriting(endpoint)) {
+          writeRegistrationCodeToDevice(endpoint, registrationCode);
+        }
         registrationCodeMap.put(registrationCode, endpoint);
 
         LOGGER.info(
@@ -132,6 +141,24 @@ public class MemoryRegistrationManager implements RegistrationManager {
       ucFindDevice.findAll().forEach(device -> blocklist.add(device.getIdentifier()));
     }
     return !blocklist.contains(endpoint);
+  }
+
+  /**
+   * Check if we want to write to the device.
+   *
+   * <p>Note that Section "7.4.1. Endpoint Client Name" of the LwM2M spec says:
+   *   "[...] the Endpoint Client Name is unauthenticated and can be set to arbitrary
+   *   value by a misconfigured or malicious client and hence MUST NOT be used alone for
+   *   any decision making without prior matching the Endpoint Client Name against the
+   *   identifier used with the security protocol protecting LwM2M communication".
+   *
+   * @param endpointName of a device
+   */
+  private boolean isAcceptableForWriting(String endpointName) {
+    if (clientEndpointNameFilterMode.equals("receive")) {
+      return true;
+    }
+    return clientEndpointNamePrefix != null && endpointName.startsWith(clientEndpointNamePrefix);
   }
 
   /**
