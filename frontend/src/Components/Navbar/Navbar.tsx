@@ -114,13 +114,14 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="navbar-item">
-                    <button
+                    <Link
                       className="nav-link"
                       onClick={() => auth.removeUser()}
+                      to="/LandingPage"
                       style={loginButtonStyles}
                     >
                       Log out
-                    </button>
+                    </Link>
                   </li>
                 </>
               ) : (
