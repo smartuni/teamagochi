@@ -25,6 +25,24 @@ class DeviceApi {
     return data == undefined ? [] : data;
   }
 
+  public async registerDevice(registrationCode: string, deviceName: string) {
+    const {data, error} = await this.withClient()
+      .POST("/api/v1/devices/self/register/{registrationCode}/{deviceName}", {
+        params: {
+          path: {
+            registrationCode: registrationCode,
+            deviceName: deviceName,
+          }
+        }
+      });
+    
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
   private withClient() {
     if (!this.apiClient) {
       throw new Error("Client must be set.");
