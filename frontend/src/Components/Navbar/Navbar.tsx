@@ -8,7 +8,7 @@ import LinkDevice from "../LinkDevice.tsx";
 import { useAuth } from "react-oidc-context";
 import "./navbar.css";
 
-const Navbar = () => {
+const Navbar = (client) => {
   const auth = useAuth();
   const [activePage, setActivePage] = useState("Pet Page");
 
@@ -146,7 +146,7 @@ const Navbar = () => {
             }
           />
           <Route path="/Friends" element={<Friends />} />
-          <Route path="/PetPage" element={<PetPage />} />
+          <Route path="/PetPage" element={<PetPage client={client} />} />
         </Routes>
       </Router>
     </div>
