@@ -32,9 +32,13 @@
 #include "disp_dev.h"
 #include "init_lvgl.h"
 #include "events.h"
+
+#define ENABLE_DEBUG  1
 #include "debug.h"
 
 #include "ztimer.h"
+
+
 
 #define CPU_LABEL_COLOR     "FF0000"
 #define MEM_LABEL_COLOR     "0000FF"
@@ -502,8 +506,8 @@ for snake game
 #define SNAKE_MAX_LENGTH 10
 #define SNAKE_START_LENGTH 3
 #define GRID_SIZE 15
-#define GRID_WIDTH (300 / GRID_SIZE)
-#define GRID_HEIGHT (220 / GRID_SIZE)
+#define GRID_WIDTH (320 / GRID_SIZE)
+#define GRID_HEIGHT (240 / GRID_SIZE)
 #define SNAKE_SPEED 100000 // Microseconds
 
 
@@ -520,11 +524,10 @@ static lv_obj_t *snake_objs[SNAKE_MAX_LENGTH];
 static lv_obj_t *food_obj;
 
 void game_won(void) {
-    lv_obj_clean(lv_scr_act());
     lv_obj_t *label = lv_label_create(screen);
     lv_label_set_text(label, "You Win!");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
+    ztimer_sleep(ZTIMER_SEC,3);
     trigger_event(GAME_FINISHED);
 }
 
@@ -533,12 +536,12 @@ void init_game(void) {
 
     lv_obj_clean(lv_scr_act());
     screen = lv_obj_create(lv_scr_act());
-    lv_group_add_obj(group1, screen);
     static lv_style_t style_base;
     lv_style_init(&style_base);
     lv_style_set_border_width(&style_base,0);
+    lv_style_set_pad_all(&style_base,0);
     lv_obj_clear_flag(screen,LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_size(screen, 300, 220);
+    lv_obj_set_size(screen, 320, 240);
     lv_obj_add_style(screen, &style_base, LV_PART_MAIN);
     lv_obj_align(screen, LV_ALIGN_CENTER, 0, 0);
      
@@ -586,6 +589,7 @@ bool update_game(void) {
     }
 
     lv_obj_set_pos(snake_objs[0], snake[0].x * GRID_SIZE, snake[0].y * GRID_SIZE);
+    DEBUG("x: %d, y: %d\n",snake[0].x * GRID_SIZE,snake[0].y * GRID_SIZE);
 
     // Check food collision
     if (snake[0].x == food.x && snake[0].y == food.y) {
@@ -648,6 +652,7 @@ void *game_loop(void * arg) {
         lv_task_handler();
         ztimer_sleep(ZTIMER_USEC, SNAKE_SPEED);
     }
+    game_won();
     return NULL;
 }
 
