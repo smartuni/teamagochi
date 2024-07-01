@@ -1,14 +1,13 @@
-import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Inventory from "../Inventory.tsx";
 import Settings from "../Settings.tsx";
 import Friends from "../Friends.tsx";
 import PetPage from "../PetPage.tsx";
-import LinkDevice from "../LinkDevice.tsx";
 import { useAuth } from "react-oidc-context";
 import "./navbar.css";
+import { useState } from "react";
 
-const Navbar = (client) => {
+const Navbar = () => {
   const auth = useAuth();
   const [activePage, setActivePage] = useState("Pet Page");
 
@@ -22,7 +21,7 @@ const Navbar = (client) => {
     marginRight: "20px",
   };
 
-  const handlePageClick = (page) => {
+  const handlePageClick = (page: string) => {
     setActivePage(page);
   };
 
@@ -146,7 +145,7 @@ const Navbar = (client) => {
             }
           />
           <Route path="/Friends" element={<Friends />} />
-          <Route path="/PetPage" element={<PetPage client={client} />} />
+          <Route path="/PetPage" element={<PetPage />} />
         </Routes>
       </Router>
     </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const Footer = () => (
     <div className="footer-content">
         <footer className="footer page-footer font-small pt-3 bg-light">

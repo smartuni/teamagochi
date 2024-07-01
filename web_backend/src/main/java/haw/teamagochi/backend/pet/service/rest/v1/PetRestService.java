@@ -84,4 +84,19 @@ public class PetRestService {
     }
     throw new NotFoundException();
   }
+
+//  @DELETE
+//  @Path("/deleteAllPet")
+//  @Operation(summary = "Delete all pet")
+//  @APIResponse(responseCode = "200")
+//  @APIResponse(responseCode = "404", description = "Not Found")
+//  public List<PetDTO> deleteAllPet() {
+//    List<PetEntity> entities = ucFindPet.findAll();
+//    try {
+//      ucManagePet.deleteAll();
+//    } catch (Exception e) {
+//      throw new NotFoundException(e);
+//    }
+//    return petMapper.mapEntityToTransferObject(entities);
+//  }
 }
