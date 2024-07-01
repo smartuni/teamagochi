@@ -42,6 +42,7 @@
 
 lv_obj_t * roller1;
 
+lv_obj_t * screen;
 
 lv_obj_t * top_bar;
 lv_obj_t * center;
@@ -94,7 +95,7 @@ void init_menu(void);
 //main here
 
 
-static void menu_cb(lv_event_t * e){
+static void menu_cb(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_KEY) {
         
@@ -489,7 +490,16 @@ for snake game
 #define GRID_SIZE 10
 #define GRID_WIDTH (LV_HOR_RES_MAX / GRID_SIZE)
 #define GRID_HEIGHT (LV_VER_RES_MAX / GRID_SIZE)
-#define SNAKE_SPEED 200000 // Microseconds
+#define SNAKE_SPEED 100000 // Microseconds
+
+typedef enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+} Direction;
+
+Direction direction;
 
 typedef struct {
     int x;
@@ -503,8 +513,28 @@ static Point food;
 static lv_obj_t *snake_objs[SNAKE_MAX_LENGTH];
 static lv_obj_t *food_obj;
 
+static void game_cb(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_KEY) {
+        uint32_t key = lv_event_get_key(e);
+        if(key == LV_KEY_LEFT) {
+            DEBUG("LEFT\n");
+            direction = LEFT;
+        } else if(key == LV_KEY_RIGHT) {
+            DEBUG("RIGHT\n");
+            direction = RIGHT;
+        } else if(key == LV_KEY_UP) {
+            DEBUG("UP\n");
+            direction = UP;
+        } else if(key == LV_KEY_DOWN) {
+            DEBUG("DOWN\n");
+            direction = DOWN;
+        }
+    }
+}
+
 void game_won(void) {
-    lv_obj_t *label = lv_label_create(lv_scr_act());
+    lv_obj_t *label = lv_label_create(screen);
     lv_label_set_text(label, "You Win!");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 
@@ -513,7 +543,18 @@ void game_won(void) {
 
 void init_game(void) {
     snake_length = SNAKE_START_LENGTH;
+    lv_obj_clean(lv_scr_act());
+    screen = lv_obj_create(lv_scr_act());
+    lv_obj_add_event_cb(screen, game_cb, LV_EVENT_ALL, NULL);
+    lv_group_add_obj(group1, screen);
+    static lv_style_t style_base;
+    lv_style_init(&style_base);
+    lv_style_set_border_width(&style_base,0);
+    lv_obj_clear_flag(screen,LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_size(screen, 320, 240);
+    lv_obj_add_style(screen, &style_base, LV_PART_MAIN);
 
+     
     static lv_style_t snake_style;
     lv_style_init(&snake_style);
     lv_style_set_bg_color(&snake_style, lv_color_hex(0x00FF00)); // Grün für die Schlange
@@ -526,7 +567,7 @@ void init_game(void) {
     for (int i = 0; i < snake_length; i++) {
         snake[i].x = GRID_WIDTH / 2 - i;
         snake[i].y = GRID_HEIGHT / 2;
-        snake_objs[i] = lv_obj_create(lv_scr_act());
+        snake_objs[i] = lv_obj_create(screen);
         lv_obj_set_size(snake_objs[i], GRID_SIZE, GRID_SIZE);
         lv_obj_add_style(snake_objs[i], &snake_style, LV_PART_MAIN);
         lv_obj_set_pos(snake_objs[i], snake[i].x * GRID_SIZE, snake[i].y * GRID_SIZE);
@@ -536,7 +577,7 @@ void init_game(void) {
     // Place food
     food.x = lv_rand(0, GRID_WIDTH);
     food.y = lv_rand(0, GRID_HEIGHT);
-    food_obj = lv_obj_create(lv_scr_act());
+    food_obj = lv_obj_create(screen);
     lv_obj_set_size(food_obj, GRID_SIZE, GRID_SIZE);
     lv_obj_add_style(food_obj, &food_style, LV_PART_MAIN);
     lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
@@ -563,7 +604,7 @@ void update_game(void) {
     if (snake[0].x == food.x && snake[0].y == food.y) {
         if (snake_length < SNAKE_MAX_LENGTH) {
             snake_length++;
-            lv_obj_t *new_body_part = lv_obj_create(lv_scr_act());
+            lv_obj_t *new_body_part = lv_obj_create(screen);
             lv_obj_set_size(new_body_part, GRID_SIZE, GRID_SIZE);
             static lv_style_t style;
             lv_style_init(&style);
@@ -602,24 +643,25 @@ void update_game(void) {
 
 void lv_tick_task(void *arg) {
     (void)arg;
-    lv_tick_inc(1);
+    //lv_tick_inc(1);
 }
 
 
 
-void game_loop(void) {
+void *game_loop(void * arg) {
+    (void) arg;
     init_game();
 
     // Create a periodic timer to update LVGL
-    ztimer_t lv_timer;
-    ztimer_clock_t *clock = ZTIMER_MSEC; // Verwenden von Millisekunden
-    ztimer_set(clock, &lv_timer, 1, lv_tick_task, NULL); // Setzt den Timer auf 1 ms
-
+    // ztimer_periodic_wakeup_t lv_periodic_timer;
+    // ztimer_periodic_wakeup_init(ZTIMER_MSEC, &lv_periodic_timer, 1000);
+    // zitmer_periodic_wakeup_start(&lv_periodic_timer, lv_tick_task, NULL);
+    
     // Start game loop
     while (1) {
         update_game();
         lv_task_handler();
-        ztimer_usleep(SNAKE_SPEED);
+        ztimer_sleep(ZTIMER_USEC, SNAKE_SPEED);
     }
 }
 

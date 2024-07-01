@@ -28,6 +28,8 @@
 
 char display_thread_stack [DISPLAY_STACKSIZE];
 
+char game_thread_stack [DISPLAY_STACKSIZE];
+
 handler_result_t displayHandler_handleEvent(EVENT_T event){
     char buf[100];
     DEBUG("[DisplayHandler:handleEvent]\n");
@@ -49,7 +51,7 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
-            init_registered_pet();
+            //init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -78,40 +80,15 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
             init_pet_stats((char*)&buf);
             break;
         case GAME_START:
-            game_loop();
+            DEBUG("[DisplayHandler:handleEvent]: GAME_START\n");
+            thread_create(game_thread_stack, sizeof(game_thread_stack),
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_WOUT_YIELD, game_loop, NULL, "Snake Game");
             break;
         default:
         break;
      }
     lvgl_wakeup();
     return HANDLED;
-}
-
-void direction_handler(EVENT_T event) {
-    switch (event) {
-        case BUTTON_UP_PRESSED:
-            if (direction != DOWN) {
-                direction = UP;
-            }
-            break;
-        case BUTTON_DOWN_PRESSED:
-            if (direction != UP) {
-                direction = DOWN;
-            }
-            break;
-        case BUTTON_LEFT_PRESSED:
-            if (direction != RIGHT) {
-                direction = LEFT;
-            }
-            break;
-        case BUTTON_RIGHT_PRESSED:
-            if (direction != LEFT) {
-                direction = RIGHT;
-            }
-            break;
-        default:
-            break;
-    }
 }
 
 void *display_run(void * arg){

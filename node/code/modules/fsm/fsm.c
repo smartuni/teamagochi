@@ -350,16 +350,14 @@ void mainView_entry(void) {
 handler_result_t gameView_handler(EVENT_T event) {
     switch (event) {
         case BUTTON_UP_PRESSED:
-            direction_handler(BUTTON_UP_PRESSED);
-            return HANDLED;
+        case BUTTON_UP_RELEASED:
         case BUTTON_DOWN_PRESSED:
-            direction_handler(BUTTON_DOWN_PRESSED);
-            return HANDLED;
+        case BUTTON_DOWN_RELEASED:
         case BUTTON_LEFT_PRESSED:
-            direction_handler(BUTTON_LEFT_PRESSED);
-            return HANDLED;
+        case BUTTON_LEFT_RELEASED:
         case BUTTON_RIGHT_PRESSED:
-            direction_handler(BUTTON_RIGHT_PRESSED);
+        case BUTTON_RIGHT_RELEASED:
+            displayHandler_handleEvent(event);
             return HANDLED;
         case GAME_FINISHED:
             DEBUG("[FSM:gameView_handler]: GAME_FINISHED\n");
