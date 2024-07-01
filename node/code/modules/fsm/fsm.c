@@ -347,8 +347,19 @@ void mainView_entry(void) {
     displayHandler_handleEvent(READY); //to draw the pet
 }
 
+static bool raus = false;
+
 handler_result_t gameView_handler(EVENT_T event) {
     switch (event) {
+        case BUTTON_OK_PRESSED:
+            if (raus) {
+                traverse_state(&Pet_Level[0]); //transition to main_view
+            }
+            else {
+                raus = true;
+            }
+            return HANDLED;
+        case BUTTON_OK_RELEASED:
         case BUTTON_UP_PRESSED:
         case BUTTON_UP_RELEASED:
         case BUTTON_DOWN_PRESSED:
@@ -371,6 +382,7 @@ handler_result_t gameView_handler(EVENT_T event) {
 }
 
 void gameView_entry(void) {
+    raus = false;
     displayHandler_handleEvent(GAME_START);
 }
 //EOF
