@@ -3,6 +3,8 @@ import "./App.css";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
 import CreatePetModal from "./Components/CreatePetModal";
+import Settings from "./Components/Settings";
+import LandingPage from "./Components/LandingPage";
 
 function App() {
     const auth = useAuth();
@@ -35,7 +37,7 @@ function App() {
             </div>
         );
     }
-    return [<Navbar />, <CreatePetModal />, <Footer />];
+    return [<Navbar />, <Settings username="JoeMoma" />, <Footer />];
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import backgroundImage from '../Misc/compute-ea4c57a4.png';
-import Navbar from './Navbar/Navbar';
+import Footer from "../Components/Footer";
 
 const LandingPage = () => {
     React.useEffect(() => {
@@ -13,7 +13,6 @@ const LandingPage = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="vh-100 vw-100 d-flex justify-content-center align-items-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
                 <div className="text-white p-4 rounded text-center">
                     <main role="main">

@@ -29,9 +29,10 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
         const result = await deviceApi?.registerDevice(deviceKey, deviceName);
         console.log("Device ID:", deviceKey, " Device Name:", deviceName);
         if (result == undefined) {
-
+            //FEEDBACK TODO
+        } else {
+            onClose(); // Close the popup after submission
         }
-        onClose(); // Close the popup after submission
     };
 
     return (

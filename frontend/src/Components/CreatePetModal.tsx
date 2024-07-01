@@ -8,11 +8,11 @@ import profile_water from "../Misc/frog.png";
 const CreatePetModal = () => {
     const [open, setOpen] = useState(false);
     const [petName, setPetName] = useState("");
-    const [petType, setPetType] = useState("Land");
+    const [petType, setPetType] = useState("Water");
 
     const handleClose = () => {
         setPetName("");
-        setPetType("Land");
+        setPetType("Water");
         setOpen(false);
     };
 
@@ -30,7 +30,7 @@ const CreatePetModal = () => {
 
     const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault(); // Prevent form from reloading the page
-        if (petName.trim() === "" || petType === "") {
+        if (petName.trim() === "" || petName.trim() === "DEAD" || petType === "") {
             return;
         }
         // TODO: Save the device ID or perform any action with the input value
@@ -73,7 +73,9 @@ const CreatePetModal = () => {
                     >
                         <figure className="text-center">
                             <p className="lead">
-                                <strong>Enter your Pet Name below and choose it's Type:</strong>
+                                <strong>Enter your Pet Name below and choose it's Type:
+                                    <p>You cannot name your pet "DEAD"</p>
+                                </strong>
                             </p>
                         </figure>
 
@@ -148,6 +150,7 @@ const CreatePetModal = () => {
                                 autoComplete="off"
                                 checked={petType === "Land"}
                                 onChange={handleInputPetType}
+                                disabled
                             ></input>
                             <label className="btn btn-secondary" htmlFor="option1">
                                 Land
@@ -162,6 +165,7 @@ const CreatePetModal = () => {
                                 autoComplete="off"
                                 checked={petType === "Air"}
                                 onChange={handleInputPetType}
+                                disabled
                             ></input>
                             <label className="btn btn-secondary" htmlFor="option2">
                                 Air
