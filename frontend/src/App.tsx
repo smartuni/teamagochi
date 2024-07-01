@@ -27,7 +27,7 @@ function App() {
       <div style={{ backgroundColor: "#FFFFFF" }}>
         <div>
           <div>
-            <Navbar client={client} />
+            <Navbar />
           </div>
         </div>
         <Footer />

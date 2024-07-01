@@ -7,7 +7,7 @@ import { useAuth } from "react-oidc-context";
 import "./navbar.css";
 import { useState } from "react";
 
-const Navbar = (client) => {
+const Navbar = () => {
   const auth = useAuth();
   const [activePage, setActivePage] = useState("Pet Page");
 
@@ -145,7 +145,7 @@ const Navbar = (client) => {
             }
           />
           <Route path="/Friends" element={<Friends />} />
-          <Route path="/PetPage" element={<PetPage client={client} />} />
+          <Route path="/PetPage" element={<PetPage />} />
         </Routes>
       </Router>
     </div>
