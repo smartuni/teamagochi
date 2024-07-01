@@ -22,19 +22,19 @@ const CreatePetModal = () => {
 
     const handleInputPetType = (e: { target: { value: SetStateAction<string>; }; }) => {
         setPetType(e.target.value);
-    }; 
+    };
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault(); // Prevent form from reloading the page
-        if (petName.trim() === "" || petType === "") {
+        if (petName.trim() === "" || petName.trim() === "DEAD" || petType === "") {
             return;
         }
         // TODO: Save the device ID or perform any action with the input value
-        console.log("Pet Name:", petName," Pet Type:", petType);
+        console.log("Pet Name:", petName, " Pet Type:", petType);
         setOpen(false); // Close the popup after submission
     };
 
-  return (
+    return (
         <>
             <div className='container-fluid d-flex justify-content-center align-items-center' style={{ height: '100vh' }}>
                 <button className="btn btn-success" onClick={() => setOpen(true)}>Create Teamagochi</button>
@@ -44,20 +44,22 @@ const CreatePetModal = () => {
                 onClose={handleClose}
                 overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
                 contentStyle={{ borderRadius: '10px', border: '2px solid grey', width: '50%' }}
-            > 
-                <div style={{padding: '20px', position: 'relative' }}>
-                <button
+            >
+                <div style={{ padding: '20px', position: 'relative' }}>
+                    <button
                         type="button"
                         className="btn-close"
                         aria-label="Close"
                         style={{ position: 'absolute', top: '10px', right: '10px' }}
                         onClick={handleClose}
-                ></button>
+                    ></button>
 
                     <form className="row g-0 needs-validation justify-content-center" onSubmit={handleSubmit}>
                         <figure className='text-center'>
                             <p className='lead'>
-                                <strong>Enter your Pet Name below and choose it's Type:</strong>
+                                <strong>Enter your Pet Name below and choose it's Type:
+                                    <p>Pet name cannot be "DEAD"</p>
+                                </strong>
                             </p>
                         </figure>
 
@@ -82,21 +84,21 @@ const CreatePetModal = () => {
                         <div className="input-group  mb-1">
                             <span className="input-group-text">@</span>
                             <label htmlFor="inputLink" className="visually-hidden">Pet Name</label>
-                            <input type="text" className="form-control" id="inputPetName" 
-                                placeholder="Pet Name" required value={petName} onChange={handleInputPetName}/>
+                            <input type="text" className="form-control" id="inputPetName"
+                                placeholder="Pet Name" required value={petName} onChange={handleInputPetName} />
                             <div className='invalid-feedback'>ok</div>
                         </div>
 
-                        <div className= "btn-group btn-group-toggle pt-2" data-toggle="buttons">
-                            <input type="radio" className="btn-check" name="options" id="option1" value="Land" autoComplete="off" 
+                        <div className="btn-group btn-group-toggle pt-2" data-toggle="buttons">
+                            <input type="radio" className="btn-check" name="options" id="option1" value="Land" autoComplete="off"
                                 checked={petType === "Land"} onChange={handleInputPetType}></input>
                             <label className="btn btn-secondary" htmlFor="option1">Land</label>
 
-                            <input type="radio" className="btn-check" name="options" id="option2" value="Air" autoComplete="off" 
+                            <input type="radio" className="btn-check" name="options" id="option2" value="Air" autoComplete="off"
                                 checked={petType === "Air"} onChange={handleInputPetType}></input>
                             <label className="btn btn-secondary" htmlFor="option2">Air</label>
 
-                            <input type="radio" className="btn-check" name="options" id="option3" value="Water" autoComplete="off" 
+                            <input type="radio" className="btn-check" name="options" id="option3" value="Water" autoComplete="off"
                                 checked={petType === "Water"} onChange={handleInputPetType}></input>
                             <label className="btn btn-secondary" htmlFor='option3'>Water</label>
                         </div>
@@ -108,7 +110,7 @@ const CreatePetModal = () => {
                 </div>
             </Popup>
         </>
-  );
+    );
 };
 
 export default CreatePetModal;
