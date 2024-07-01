@@ -20,10 +20,20 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class GameCycleImpl implements GameCycle{
 
   @Inject
+  PetMapper petMapper;
+
+  /*
+    Use Cases
+   */
+  @Inject
   UcFindDevice findDevice;
 
   @Inject
-  PetMapper petMapper;
+  UcKillPet ucKillPet;
+
+  /*
+    Pet attribute VOs
+   */
 
   @Inject
   HungerVO hungerVO;
@@ -51,8 +61,9 @@ public class GameCycleImpl implements GameCycle{
   public void petGameCycle() {
       for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
         PetEntity pet = device.getPet();
-        if(pet != null) {
+        if(pet != null && !ucKillPet.isDead(pet)) {
           deteriorate(pet);
+          ucKillPet.killIfShouldDie(pet);
         }
       }//method
   }
