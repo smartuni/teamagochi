@@ -57,7 +57,11 @@ const Navbar = () => {
             <ul className="navbar-nav">
               {auth.isAuthenticated ? (
                 <>
-                  <li>
+                  <li
+                  className={`nav-item ${
+                      activePage === "Pet Page" ? "active" : ""
+                    }`}
+                  >
                     <Link
                       className="nav-link"
                       to="/PetPage"
