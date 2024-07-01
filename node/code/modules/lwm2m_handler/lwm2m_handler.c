@@ -42,7 +42,12 @@ static void lwm2m_write_callback(uint16_t event_id, callback_value value){
     (void) value;
     switch (event_id) {
         case LWM2M_PET_NAME_ID:
-            trigger_event_string(NAME,value.str);
+            if (strcmp(value,"DEAD")){
+                trigger_event(DEAD);
+            }
+            else {
+                trigger_event_string(NAME,value.str);
+            }
             break;
         case LWM2M_PET_COLOR_ID:
             trigger_event_int(COLOR,value.num);

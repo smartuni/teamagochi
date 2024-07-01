@@ -262,6 +262,11 @@ void userLinked_entry(void) {
 
 handler_result_t pet_handler(EVENT_T event) {
     switch (event) {
+        case DEAD:
+            DEBUG("[FSM:pet_handler]: DEAD\n");
+            userLinked = false;
+            traverse_state(&On_Level[1]); //transition to user_linked
+            return HANDLED;
         default:
             DEBUG("[FSM:pet_handler]: UNHANDLED\n");
             return UNHANDLED;
