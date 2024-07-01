@@ -46,6 +46,7 @@ struct hierarchical_state {
 static bool firstStart = true;
 static bool registered = false;
 static bool userLinked = false;
+static bool statsShowing = false;
 
 static const state_t Top_Level[2];
 static const state_t On_Level[3];
@@ -334,8 +335,15 @@ handler_result_t mainView_handler(EVENT_T event) {
             lwm2m_handleEvent(PET_CLEAN);
             return HANDLED;
         case INFO_PRESSED:
-        DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
-            displayHandler_handleEvent(INFO_PRESSED);
+            DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
+            if (!statsShowing) {
+                statsShowing = true;
+                displayHandler_handleEvent(INFO_PRESSED);
+            }
+            else {
+                statsShowing = false;
+                displayHandler_handleEvent(READY);
+            }
             return HANDLED;
         default:
             DEBUG("[FSM:mainView_handler]: UNHANDLED\n");
