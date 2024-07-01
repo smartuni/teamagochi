@@ -14,6 +14,8 @@ import jakarta.inject.Inject;
 import java.util.Random;
 
 import jakarta.transaction.Transactional;
+import lombok.Getter;
+import lombok.Setter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
@@ -55,16 +57,31 @@ public class GameCycleImpl implements GameCycle{
   HappinessVO happinessVO;
 
 
+  @Setter
+  private volatile boolean stopRequested = false;
+
+  @Getter
+  private volatile boolean stopped = false;
+
+
   @Override
   @Scheduled(every = "{GameCycle.interval}")
   @Transactional
   public void petGameCycle() {
+    if (stopRequested) {
+      // Exit the method if stop is requested
+      stopped = true;
+    }else {
+      stopped = false;
       for(DeviceEntity device: findDevice.findAll()){//only pets currently on a device
+
         PetEntity pet = device.getPet();
         if(pet != null && !ucKillPet.isDead(pet)) {
           deteriorate(pet);
           ucKillPet.killIfShouldDie(pet);
         }
+    }
+
       }//method
   }
 
