@@ -7,6 +7,8 @@ import haw.teamagochi.backend.pet.logic.comparator.PetSortByWellbeing;
 import haw.teamagochi.backend.pet.logic.comparator.PetSortByWellbeingAndHappiness;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -23,14 +25,15 @@ public class UcLeaderboardImpl implements UcLeaderboard {
   public List<PetEntity> getTop10() {
     List<PetEntity> leaderboard = getCompleteLeaderBoard();
     if(leaderboard.size()>10){
-      return leaderboard.subList(0,9);
+      return leaderboard.subList(0,10);
     }
     return leaderboard;
   }
 
   @Override
   public List<PetEntity> getCompleteLeaderBoard() {
-    List<PetEntity> leaderboard = findPet.findAll();
+    ArrayList<PetEntity> leaderboard = new ArrayList<>();
+        leaderboard.addAll(findPet.findAll());
     leaderboard.sort(compDefault);
     return leaderboard;
   }
@@ -39,14 +42,15 @@ public class UcLeaderboardImpl implements UcLeaderboard {
   public List<PetEntity> getHappinessTop10() {
     List<PetEntity> leaderboard = getCompleteHappinessLeaderBoard();
     if(leaderboard.size()>10){
-      return leaderboard.subList(0,9);
+      return leaderboard.subList(0,10);
     }
     return leaderboard;
   }
 
   @Override
   public List<PetEntity> getCompleteHappinessLeaderBoard() {
-    List<PetEntity> leaderboard = findPet.findAll();
+    ArrayList<PetEntity> leaderboard = new ArrayList<>();
+    leaderboard.addAll(findPet.findAll());
     leaderboard.sort(compHappiness);
     return leaderboard;
   }
@@ -55,14 +59,15 @@ public class UcLeaderboardImpl implements UcLeaderboard {
   public List<PetEntity> getWellbeingTop10() {
     List<PetEntity> leaderboard = getCompleteWellbeingLeaderboard();
     if(leaderboard.size()>10){
-      return leaderboard.subList(0,9);
+      return leaderboard.subList(0,10);
     }
     return leaderboard;
   }
 
   @Override
   public List<PetEntity> getCompleteWellbeingLeaderboard() {
-    List<PetEntity> leaderboard = findPet.findAll();
+    ArrayList<PetEntity> leaderboard = new ArrayList<>();
+    leaderboard.addAll(findPet.findAll());
     leaderboard.sort(compWellbeing);
     return leaderboard;
   }

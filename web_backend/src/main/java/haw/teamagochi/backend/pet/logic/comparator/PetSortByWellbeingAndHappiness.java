@@ -12,9 +12,9 @@ public class PetSortByWellbeingAndHappiness implements Comparator<PetEntity> {
     if(res == 0){
       return(o1.getName().compareTo(o2.getName()));
     } else if (res < 0) {
-      return -1;
+      return 1;
     }
-    return 1;
+    return -1;
   }//method
 
 }
