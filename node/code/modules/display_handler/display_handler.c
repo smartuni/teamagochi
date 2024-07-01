@@ -51,7 +51,6 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
-            //init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -67,7 +66,6 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case REGISTER_CODE:
             init_not_registered_code(get_register_code());
-            //init_not_registered_code("Hallo Tom");
             break;
         case REGISTERED:
             init_registered_no_pet();
@@ -78,6 +76,9 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
+            break;
+        case DEAD:
+            showDeadScreen();
             break;
         case GAME_START:
             DEBUG("[DisplayHandler:handleEvent]: GAME_START\n");

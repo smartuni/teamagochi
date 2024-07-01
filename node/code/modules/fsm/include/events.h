@@ -53,6 +53,7 @@ typedef enum {
     PET_ILL,
     PET_BORED,
     PET_DIRTY,
+    DEAD,
     VIBRATE,
     SCREEN_OFF,
     SCREEN_ON,
