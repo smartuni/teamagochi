@@ -54,8 +54,10 @@ typedef enum {
     PET_BORED,
     PET_DIRTY,
     VIBRATE,
-    INIT,
-    REGISTER,
+    SCREEN_OFF,
+    SCREEN_ON,
+    INIT, //unused
+    REGISTER, //unused
     REGISTERED,
     READY,
     REGISTER_CODE,
