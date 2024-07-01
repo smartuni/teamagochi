@@ -28,6 +28,7 @@
 #include "objects/device.h"
 #include "objects/security.h"
 #include "credentials.h"
+
 #include "liblwm2m.h"
 
 #define ENABLE_DEBUG  1
