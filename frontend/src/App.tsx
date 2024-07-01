@@ -37,7 +37,7 @@ function App() {
             </div>
         );
     }
-    return [<Navbar />, <Settings username="JoeMoma" />, <Footer />];
+    return [<Navbar />, <Footer />];
 }
 
 export default App;
