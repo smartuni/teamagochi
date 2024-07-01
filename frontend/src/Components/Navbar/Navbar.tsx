@@ -58,7 +58,7 @@ const Navbar = () => {
               {auth.isAuthenticated ? (
                 <>
                   <li
-                  className={`nav-item ${
+                    className={`nav-item ${
                       activePage === "Pet Page" ? "active" : ""
                     }`}
                   >
