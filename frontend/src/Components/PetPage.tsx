@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import petImage from "../assets/pet_frog.png";
+import petImage from "../Misc/frog.png";
 import CreatePetModal from "./CreatePetModal";
 import { Device, useDeviceApi } from "../lib/api/useDeviceApi";
 import { Pet, usePetApi } from "../lib/api/usePetApi";
@@ -26,7 +26,7 @@ const PetPage = () => {
         const pet = await petApi.getPetById(defaultDevice.petId);
         setPet(pet);
       }
-    }
+    };
 
     fetchData();
   }, [deviceApi, petApi]);
