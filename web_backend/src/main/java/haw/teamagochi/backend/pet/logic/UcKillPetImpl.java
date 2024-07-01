@@ -8,7 +8,6 @@ import haw.teamagochi.backend.pet.logic.Events.HealthVO;
 import haw.teamagochi.backend.pet.logic.Events.HungerVO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 class UcKillPetImpl implements UcKillPet {
@@ -45,12 +44,10 @@ class UcKillPetImpl implements UcKillPet {
         //TODO: Send "Death" event to the device.
     }
 
-    public boolean killIfShouldDie(PetEntity pet) {
+    public void killIfShouldDie(PetEntity pet) {
         if (!isDead(pet) && shouldDie(pet)) {
             kill(pet);
-            return true;
         }
-        return false;
     }
 
 

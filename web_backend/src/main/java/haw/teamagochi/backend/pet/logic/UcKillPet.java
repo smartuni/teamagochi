@@ -9,9 +9,8 @@ public interface UcKillPet {
 
     /**
      * Kills the pet if it is in a lethal state.
-     * @return whether pet was killed
      */
-    boolean killIfShouldDie(PetEntity pet);
+    void killIfShouldDie(PetEntity pet);
 
     boolean isDead(PetEntity pet);
 }
