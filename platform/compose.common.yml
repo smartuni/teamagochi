@@ -107,7 +107,7 @@ services:
       POSTGRES_BACKEND_DB: backend
       POSTGRES_BACKEND_PASSWORD: ${POSTGRES_BACKEND_PASSWORD}
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      test: [ "CMD", "pg_isready", "-q", "-h", "postgres", "-d", "postgres", "-U", "postgres" ]
       <<: *common-healthcheck
     volumes:
       - postgres:/var/lib/postgresql/data
