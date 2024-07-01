@@ -26,7 +26,7 @@ const PetDetails = (props: { pet: Pet; petImageSrc: string }) => {
         <PetDetailsProgressBar
           labelName="XP"
           value={petState.xp}
-          color="blue"
+          color="purple"
         />
         <PetDetailsProgressBar
           labelName="Happiness"
