@@ -20,12 +20,16 @@ handler_result_t on_handler(EVENT_T event);
 void on_entry(void);
 handler_result_t off_handler(EVENT_T event);
 void off_entry(void);
+
 handler_result_t unregistered_handler(EVENT_T event);
 void unregistered_entry(void);
 handler_result_t userLinked_handler(EVENT_T event);
 void userLinked_entry(void);
 handler_result_t pet_handler(EVENT_T event);
 void pet_entry(void);
+handler_result_t dead_handler(EVENT_T event);
+void dead_entry(void);
+
 handler_result_t mainView_handler(EVENT_T event);
 void mainView_entry(void);
 handler_result_t gameView_handler(EVENT_T event);
@@ -49,7 +53,7 @@ static bool userLinked = false;
 static bool statsShowing = false;
 
 static const state_t Top_Level[2];
-static const state_t On_Level[3];
+static const state_t On_Level[4];
 static const state_t Pet_Level[2];
 
 static const state_t Top_Level[] = {
@@ -94,6 +98,14 @@ static const state_t On_Level[] = {
         NULL,                     // Exit action handler
         &Top_Level[0],            // Parent state
         &Pet_Level[0],            // Child state
+        2                         // Hierarchical state level
+    },
+    {//dead
+        dead_handler,              // state handler
+        dead_entry,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &Top_Level[0],            // Parent state
+        NULL,                     // Child state
         2                         // Hierarchical state level
     }
 };
@@ -184,6 +196,7 @@ handler_result_t on_handler(EVENT_T event) {
 }
 
 void on_entry(void) {
+    displayHandler_handleEvent(REGISTERED);
     ioHandler_handleEvent(VIBRATE);
     ioHandler_handleEvent(SCREEN_ON);
     if (registered && userLinked) {
@@ -240,6 +253,7 @@ handler_result_t unregistered_handler(EVENT_T event) {
 }
 
 void unregistered_entry(void) {
+    DEBUG("[FSM:unregistered_state_handler]: Halooooo Lukas\n");
     displayHandler_handleEvent(REGISTER_CODE);
 }
 
@@ -257,6 +271,7 @@ handler_result_t userLinked_handler(EVENT_T event) {
 }
 
 void userLinked_entry(void) {
+    displayHandler_handleEvent(READY);
     registered = true;
 }
 
@@ -265,7 +280,7 @@ handler_result_t pet_handler(EVENT_T event) {
         case DEAD:
             DEBUG("[FSM:pet_handler]: DEAD\n");
             userLinked = false;
-            traverse_state(&On_Level[1]); //transition to user_linked
+            traverse_state(&On_Level[3]); //transition to dead
             return HANDLED;
         default:
             DEBUG("[FSM:pet_handler]: UNHANDLED\n");
@@ -276,6 +291,22 @@ handler_result_t pet_handler(EVENT_T event) {
 void pet_entry(void) {
     userLinked = true;
     traverse_state(&Pet_Level[0]); //transition to main_view
+}
+
+handler_result_t dead_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_OK_PRESSED:
+            DEBUG("[FSM:dead_handler]: BUTTON_OK_PRESSED\n");
+            traverse_state(&On_Level[0]); //transition to register
+            return HANDLED;
+        default:
+            DEBUG("[FSM:dead_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+void dead_entry(void) {
+    displayHandler_handleEvent(DEAD);
 }
 
 handler_result_t mainView_handler(EVENT_T event) {

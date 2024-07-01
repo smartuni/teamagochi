@@ -51,7 +51,6 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
-            //init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -77,6 +76,9 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
+            break;
+        case DEAD:
+            showDeadScreen();
             break;
         case GAME_START:
             DEBUG("[DisplayHandler:handleEvent]: GAME_START\n");
