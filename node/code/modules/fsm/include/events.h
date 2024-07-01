@@ -56,8 +56,8 @@ typedef enum {
     VIBRATE,
     SCREEN_OFF,
     SCREEN_ON,
-    INIT,
-    REGISTER,
+    INIT, //unused
+    REGISTER, //unused
     REGISTERED,
     READY,
     REGISTER_CODE,

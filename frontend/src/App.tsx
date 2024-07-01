@@ -51,18 +51,17 @@ function App() {
 
     // https://github.com/openapi-ts/openapi-typescript/tree/main/packages/openapi-fetch
     (async () => {
-      console.log("hi there!");
-      const { data, error } = await client.GET("/api/v1/devices/self", {});
-
-      console.log("data", data);
-      console.log("error", error);
+      //   console.log("hi there!");
+      //   const { data, error } = await client.GET("/api/v1/devices/self", {});
+      //   console.log("data", data);
+      //   console.log("error", error);
     })();
 
     return (
       <div style={{ backgroundColor: "#FFFFFF" }}>
         <div>
           <div>
-            <Navbar />
+            <Navbar client={client} />
           </div>
         </div>
         {/* <div>
