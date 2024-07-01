@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Friends = () => (
   <div>
     <h1>Friends Page</h1>

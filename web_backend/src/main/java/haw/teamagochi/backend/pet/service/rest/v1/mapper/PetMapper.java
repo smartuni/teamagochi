@@ -7,10 +7,12 @@ import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcFindUser;
 import java.util.List;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
@@ -40,10 +42,10 @@ public interface PetMapper {
   @Mapping(source = "state.cleanliness", target = "cleanliness")
   @Mapping(source = "state.fun", target = "fun")
   @Mapping(source = "state.xp", target = "xp")
-  PetEntity mapTransferObjectToEntity(PetDTO petDto);
+  PetEntity mapTransferObjectToEntity(PetDTO petDto, @Context UcFindUser ucFindUser, @Context UcFindPetType ucFindPetType);
 
   /**
-   * See {@link PetMapper#mapTransferObjectToEntity(PetDTO)}.
+   * See {@link PetMapper#mapTransferObjectToEntity(PetDTO, UcFindUser, UcFindPetType)}.
    */
   List<PetEntity> mapTransferObjectToEntity(List<PetDTO> petDtos);
 
@@ -61,13 +63,24 @@ public interface PetMapper {
    */
   List<PetDTO> mapEntityToTransferObject(List<PetEntity> petEntities);
 
-  @ObjectFactory
-  default UserEntity lookup(String uuid, @Context UcFindUser ucFindUser) {
-    return ucFindUser.find(uuid);
+  @AfterMapping
+  default void findOwner(PetDTO dto, @MappingTarget PetEntity entity, @Context UcFindUser ucFindUser) {
+    if (dto.getOwnerId() == null || ucFindUser == null) return;
+
+    UserEntity dbEntity = ucFindUser.find(dto.getOwnerId());
+    if (dbEntity != null) {
+      entity.setOwner(dbEntity);
+    }
   }
 
-  @ObjectFactory
-  default PetTypeEntity lookup(Long id, @Context UcFindPetType ucFindPetType) {
-    return ucFindPetType.find(id);
+  @AfterMapping
+  default void findPetTyp( PetDTO dto,@MappingTarget PetEntity entity, @Context UcFindPetType ucFindPetTyp) {
+    if (dto.getType() == null || ucFindPetTyp == null) return;
+
+    PetTypeEntity dbEntity = ucFindPetTyp.find(dto.getType());
+    if (dbEntity != null) {
+      entity.setPetType(dbEntity);
+    }
   }
+
 }

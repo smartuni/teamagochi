@@ -43,6 +43,8 @@ typedef enum {
     BUTTON_DOWN_RELEASED,
     BUTTON_RIGHT_PRESSED,
     BUTTON_RIGHT_RELEASED,
+    BUTTON_OK_LONG,
+    INFO_PRESSED,
     PET_FEED,
     PET_PLAY,
     PET_CLEAN,
@@ -52,8 +54,10 @@ typedef enum {
     PET_BORED,
     PET_DIRTY,
     VIBRATE,
-    INIT,
-    REGISTER,
+    SCREEN_OFF,
+    SCREEN_ON,
+    INIT, //unused
+    REGISTER, //unused
     REGISTERED,
     READY,
     REGISTER_CODE,
@@ -94,20 +98,18 @@ typedef struct{
 /* Enum of the fsm handler return values*/
 typedef enum
 {
-  EVENT_HANDLED,      //!< Event handled successfully.
-  EVENT_UN_HANDLED,    //!< Event could not be handled.
+  HANDLED,      //!< Event handled successfully.
+  UNHANDLED,    //!< Event could not be handled.
   //!< Handler handled the Event successfully and posted new event to itself.
   TRIGGERED_TO_SELF,
-}handler_result_t;
+} handler_result_t;
 
 
 /**
  * @brief Writes the actual pet stats into the parameter pointer
  * 
- * 
- * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
  */
-pet_stats_t* get_pet_stats(void);
+void get_pet_stats(char *buf);
 
 /**
  * @brief Writes the register code into the parameter pointer

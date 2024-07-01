@@ -4,6 +4,7 @@ import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -53,9 +54,9 @@ public class PetEntity {
 
   private int happiness = 0;
   private int wellbeing = 0;
-  private int health = 0;
+  private int health = 100;
   private int hunger = 0;
-  private int cleanliness = 0;
+  private int cleanliness = 100;
   private int fun = 0;
 
   @PositiveOrZero

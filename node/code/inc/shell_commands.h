@@ -2,6 +2,8 @@
 
 #include "shell.h"
 #include <stdio.h>
+#include "events.h"
+#include <stdlib.h>
 
 static int echo_command(int argc, char **argv)
 {
@@ -18,27 +20,39 @@ static int echo_command(int argc, char **argv)
     return 0;
 }
 
-// /**
-//  * @brief Sends an event to the dispatcher.
-//  * @example send_event 1
-// */
-// static int send_event(int argc, char **argv) {
-//     if (argc != 2) {
-//         puts("usage: send_event <event>");
-//         return 1;
-//     }
+static int send_event(int argc, char **argv) {
+    if (argc != 2) {
+        puts("usage: send_event <event_id>");
+        return 1;
+    }
 
-//     msg_t message;
-//     message.type = atoi(argv[1]);
+    int event_id = atoi(argv[1]);
+    if (event_id < 0) {
+        puts("usage: send_event <event_id>");
+        return 1;
+    }
 
-//     msg_try_send(&message, DISPATCHER_THREAD_ID);
+    trigger_event(event_id);
 
-//     return 0;
-// }
+    return 0;
+
+}
+
+static int registerFake_command(int argc, char **argv) {
+    (void)argv;
+    if (argc != 1) {
+        puts("usage: registerFake");
+        return 1;
+    }
+    trigger_event(REGISTERED);
+    trigger_event(READY);
+    return 0;
+}
 
 const shell_command_t SHELL_COMMANDS[] = {
     { "echo", "Prints the message to the console", echo_command },
-    // { "send_event", "Sends an event to the dispatcher. send_event 1", send_event },
+    { "send_event", "Sends an event to the dispatcher. send_event 1", send_event },
+    { "registerFake", "Fake´s the registration process", registerFake_command },
     { NULL, NULL, NULL }
 };
 

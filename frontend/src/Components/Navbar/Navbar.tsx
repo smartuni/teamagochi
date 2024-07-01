@@ -1,12 +1,11 @@
-import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Inventory from "../Inventory.tsx";
 import Settings from "../Settings.tsx";
 import Friends from "../Friends.tsx";
 import PetPage from "../PetPage.tsx";
-import LinkDevice from "../LinkDevice.tsx";
 import { useAuth } from "react-oidc-context";
 import "./navbar.css";
+import { useState } from "react";
 
 const Navbar = () => {
   const auth = useAuth();
@@ -22,7 +21,7 @@ const Navbar = () => {
     marginRight: "20px",
   };
 
-  const handlePageClick = (page) => {
+  const handlePageClick = (page: string) => {
     setActivePage(page);
   };
 
@@ -58,10 +57,7 @@ const Navbar = () => {
             <ul className="navbar-nav">
               {auth.isAuthenticated ? (
                 <>
-                      
-                  <li
-                    
-                  >
+                  <li>
                     <Link
                       className="nav-link"
                       to="/PetPage"
@@ -140,7 +136,14 @@ const Navbar = () => {
         </nav>
         <Routes>
           <Route path="/inventory" element={<Inventory />} />
-          <Route path="/Settings" element={<Settings />} />
+          <Route
+            path="/Settings"
+            element={
+              <Settings
+                username={auth.user?.profile?.preferred_username || "User"}
+              />
+            }
+          />
           <Route path="/Friends" element={<Friends />} />
           <Route path="/PetPage" element={<PetPage />} />
         </Routes>
