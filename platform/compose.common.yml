@@ -16,10 +16,13 @@ services:
     ports:
       - "127.0.0.1:${PROXY_PUBLIC_PORT}:80"
       - "[::]:${PROXY_PUBLIC_PORT}:80"
+      - "127.0.0.1:443:443"
+      - "[::]:443:443"
     volumes:
       - "./proxy/proxy_params:/etc/nginx/proxy_params:ro"
       - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./proxy/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro"
+      - "./data/ssl/certs:/etc/nginx/ssl"
     environment:
       PROXY_PUBLIC_PORT: ${PROXY_PUBLIC_PORT}
       # NOTE: picky about trailing slash
