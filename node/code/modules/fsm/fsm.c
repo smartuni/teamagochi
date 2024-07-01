@@ -356,19 +356,27 @@ handler_result_t mainView_handler(EVENT_T event) {
             return HANDLED;
         case PET_FEED:
             DEBUG("[FSM:mainView_handler]: PET_FEED\n");
-            lwm2m_handleEvent(PET_FEED);
+            if (!statsShowing) {
+                lwm2m_handleEvent(PET_FEED);
+            }
             return HANDLED;
         case PET_PLAY:
             DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
-            traverse_state(&Pet_Level[1]); //transition to game_view
+            if (!statsShowing) {
+                traverse_state(&Pet_Level[1]); //transition to game_view
+            }
             return HANDLED;
         case PET_MEDICATE:
             DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
-            lwm2m_handleEvent(PET_MEDICATE);
+            if (!statsShowing) {
+                lwm2m_handleEvent(PET_MEDICATE);
+            }
             return HANDLED;
         case PET_CLEAN:
             DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
-            lwm2m_handleEvent(PET_CLEAN);
+            if (!statsShowing) {
+                lwm2m_handleEvent(PET_CLEAN);
+            }
             return HANDLED;
         case INFO_PRESSED:
             DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
