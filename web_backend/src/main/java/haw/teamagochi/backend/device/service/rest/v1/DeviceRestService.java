@@ -5,8 +5,11 @@ import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
+import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.logic.gameCycle.GameCycleImpl;
+import io.quarkus.security.UnauthorizedException;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -14,6 +17,7 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
+import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -26,6 +30,8 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Tag(name = "a) devices", description = "Everything about devices.")
 @SecurityRequirement(name = "SecurityScheme")
 public class DeviceRestService {
+  @Inject
+  SecurityIdentity identity;
 
   @Inject
   protected DeviceMapper deviceMapper;
@@ -85,14 +91,23 @@ public class DeviceRestService {
   @Operation(summary = "Delete a device by its id")
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
+  @APIResponse(responseCode = "401", description = "Not Authorized")
   public DeviceDTO deleteDeviceById(@PathParam("deviceId") long deviceId) {
+    String uuid = SecurityUtil.getExternalUserId(identity);
     DeviceEntity entity = ucFindDevice.find(deviceId);
-    boolean wasDeleted = ucManageDevice.deleteById(deviceId);
-    if (wasDeleted) {
-      return deviceMapper.mapEntityToTransferObject(entity);
+    if (entity != null
+        && entity.getOwner() != null
+        && Objects.equals(entity.getOwner().getExternalID().toString(), uuid)) {//request authorised
+      boolean wasDeleted = ucManageDevice.deleteById(deviceId);
+      if (wasDeleted) {
+        return deviceMapper.mapEntityToTransferObject(entity);
+      }
+      throw new NotFoundException();
     }
-    throw new NotFoundException();
-  }
+    throw new UnauthorizedException();
+  }//method
+
+
   @DELETE
   @Path("/reset")
   @Operation(summary = "delete all Devices and Pets")
