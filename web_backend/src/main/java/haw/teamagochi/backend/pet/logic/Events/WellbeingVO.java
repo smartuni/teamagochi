@@ -47,10 +47,24 @@ public class WellbeingVO extends PetStatusVO {
 
     public int deteriorate(PetStateDTO pet) {
         int wellbeing = pet.getWellbeing();
-        int decrease = checkHappinessLimits(pet.getHealth());
-        decrease += checkHappinessLimits(pet.getCleanliness());
+        int decrease = checkWellbeingLimits(pet.getHealth());
+        decrease += checkWellbeingLimits(pet.getCleanliness());
         return boundaryCheck(wellbeing + decrease);
 
+    }
+
+    private int checkWellbeingLimits(int healthOrCleanlinessValue){
+        if(healthOrCleanlinessValue > 59){
+            return 0;
+        }else if(healthOrCleanlinessValue > 39){
+            return -5;
+        }else if(healthOrCleanlinessValue > 19){
+            return -10;
+        }else if(healthOrCleanlinessValue >= 1){
+            return -15;
+        }else{// healthOrCleanlinessValue == 0
+            return -20;
+        }
     }
 
 
