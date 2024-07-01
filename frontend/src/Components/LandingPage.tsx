@@ -13,7 +13,6 @@ const LandingPage = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="vh-100 vw-100 d-flex justify-content-center align-items-center" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
                 <div className="text-white p-4 rounded text-center">
                     <main role="main">

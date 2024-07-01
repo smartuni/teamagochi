@@ -2,6 +2,8 @@ import { useAuth } from "react-oidc-context";
 import "./App.css";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
+import LandingPage from "./Components/LandingPage";
+
 
 function App() {
   const auth = useAuth();
@@ -34,7 +36,7 @@ function App() {
       </div>
     );
   }
-  return [<Navbar />, <Footer />];
+  return [<Navbar />, <LandingPage />,<Footer />];
 }
 
 export default App;
