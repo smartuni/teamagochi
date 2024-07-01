@@ -1,5 +1,6 @@
 package haw.teamagochi.backend.device.logic;
 
+import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
 import haw.teamagochi.backend.device.logic.clients.rest.LeshanClientRestclient;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
@@ -18,10 +19,22 @@ public class UcDeviceResourceOperationsImpl implements UcDeviceResourceOperation
 
   private static final int DEVICE_OBJECT_ID = 32770;
 
-  private static final int PET_OBJECT_ID = 32769;
-
   @RestClient
   private LeshanClientRestclient restClient;
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean writeStatus(String endpoint, DeviceStatus status) {
+    ResourceDto resourceDto = createStatusResourceDto(status);
+
+    ResourceResponseDto response = restClient.writeClientResource(
+        endpoint, DEVICE_OBJECT_ID, 0, resourceDto.id,
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT, resourceDto
+    );
+
+    return !response.failure;
+  }
 
   /**
    * {@inheritDoc}
@@ -35,6 +48,10 @@ public class UcDeviceResourceOperationsImpl implements UcDeviceResourceOperation
         DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT, resourceDto);
 
     return !response.failure;
+  }
+
+  private ResourceDto createStatusResourceDto(DeviceStatus status) {
+    return createSingleStringResource(0, status.name().toUpperCase());
   }
 
   private ResourceDto createRegistrationCodeResourceDto(String registrationCode) {

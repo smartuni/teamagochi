@@ -68,6 +68,25 @@ public interface LeshanClientRestclient {
       @QueryParam("format") String format,
       ResourceDto resourceDto);
 
+  /**
+   * Write to a Teamagochi Device Resource.
+   *
+   * <p>Example:
+   * <pre>
+   *   http//example.com/clients/my-endpoint/3201/0/5550?timeout=300&format=TLV
+   *   {"id":1,"kind":"singleResource","value":"my-registration-code","type":"string"}
+   * </pre>
+   */
+  @PUT
+  @Path("/clients/{endpoint}/{object}/{instance}")
+  ResourceResponseDto writeClientObjectInstance(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance,
+      @QueryParam("timeout") Integer timeout,
+      @QueryParam("format") String format,
+      ObjectInstanceDto objectInstanceDto);
+
   @GET
   @Path("/objectspecs/{endpoint}")
   Set<ObjectspecDto> getClientObjectSpecifications(@PathParam("endpoint") String endpoint);
