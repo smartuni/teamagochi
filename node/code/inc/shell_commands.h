@@ -38,9 +38,21 @@ static int send_event(int argc, char **argv) {
 
 }
 
+static int registerFake_command(int argc, char **argv) {
+    (void)argv;
+    if (argc != 1) {
+        puts("usage: registerFake");
+        return 1;
+    }
+    trigger_event(REGISTERED);
+    trigger_event(READY);
+    return 0;
+}
+
 const shell_command_t SHELL_COMMANDS[] = {
     { "echo", "Prints the message to the console", echo_command },
     { "send_event", "Sends an event to the dispatcher. send_event 1", send_event },
+    { "registerFake", "Fake´s the registration process", registerFake_command },
     { NULL, NULL, NULL }
 };
 
