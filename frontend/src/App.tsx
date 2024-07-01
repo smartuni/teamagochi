@@ -2,8 +2,6 @@ import { useAuth } from "react-oidc-context";
 import "./App.css";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar/Navbar";
-import CreatePetModal from "./Components/CreatePetModal";
-import Settings from "./Components/Settings";
 import LandingPage from "./Components/LandingPage";
 
 function App() {
@@ -25,19 +23,19 @@ function App() {
         return <div>Oops... {auth.error.message}</div>;
     }
 
-    if (auth.isAuthenticated) {
-        return (
-            <div style={{ backgroundColor: "#FFFFFF" }}>
-                <div>
-                    <div>
-                        <Navbar />
-                    </div>
-                </div>
-                <Footer />
-            </div>
-        );
-    }
-    return [<Navbar />, <Footer />];
+  if (auth.isAuthenticated) {
+    return (
+      <div style={{ backgroundColor: "#FFFFFF" }}>
+        <div>
+          <div>
+            <Navbar />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+  return [<Navbar />, <LandingPage />,<Footer />];
 }
 
 export default App;

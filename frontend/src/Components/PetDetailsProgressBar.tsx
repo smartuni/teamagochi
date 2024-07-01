@@ -13,10 +13,9 @@ const PetDetailsProgressBar = (props: {
     <>
       {props.value != undefined && (
         <div>
-          <div className="h5 px-3">{props.labelName}</div>
           <ProgressBar
             className="px-1 py-2"
-            hideText={true}
+            label={props.labelName}
             progressColor={props.color}
             score={props.value}
           />

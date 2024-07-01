@@ -57,7 +57,11 @@ const Navbar = () => {
             <ul className="navbar-nav">
               {auth.isAuthenticated ? (
                 <>
-                  <li>
+                  <li
+                    className={`nav-item ${
+                      activePage === "Pet Page" ? "active" : ""
+                    }`}
+                  >
                     <Link
                       className="nav-link"
                       to="/PetPage"
@@ -110,13 +114,14 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="navbar-item">
-                    <button
+                    <Link
                       className="nav-link"
                       onClick={() => auth.removeUser()}
+                      to="/LandingPage"
                       style={loginButtonStyles}
                     >
                       Log out
-                    </button>
+                    </Link>
                   </li>
                 </>
               ) : (

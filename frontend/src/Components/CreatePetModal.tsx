@@ -6,6 +6,7 @@ import profile_air from "../Misc/duck_8bit.png";
 import profile_water from "../Misc/frog.png";
 
 const CreatePetModal = () => {
+  
     const [open, setOpen] = useState(false);
     const [petName, setPetName] = useState("");
     const [petType, setPetType] = useState("Water");
