@@ -28,14 +28,12 @@ public interface UcPetInteractions {
   /**
    * medicate a pet
    * @param pet the pet to be medicated
-   * @return the pet that was medicated
    */
   void medicatePet(PetEntity pet);
 
   /**
    * play with a pet
    * @param pet the pet to be played with
-   * @return the pet that has been played with
    */
   void playWithPet(PetEntity pet);
 
