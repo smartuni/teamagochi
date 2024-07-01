@@ -8,7 +8,7 @@ import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 public interface UcKillPet {
 
     /**
-     * Kills the pet if it is in a lethal state.
+     * Kills the pet if it is in a deadly state.
      * @return whether pet was killed
      */
     boolean killIfShouldDie(PetEntity pet);
