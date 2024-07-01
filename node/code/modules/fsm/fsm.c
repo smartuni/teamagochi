@@ -1,4 +1,3 @@
-
 #include "fsm.h"
 
 #include <stdio.h>
@@ -13,142 +12,114 @@
 
 char fsm_thread_stack[THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF];
 
-typedef struct hierarchical_state state_t;
 
+void *fsm_thread(void * arg);
+void fsm_handle(EVENT_T event);
+
+handler_result_t on_handler(EVENT_T event);
+void on_entry(void);
+handler_result_t off_handler(EVENT_T event);
+void off_entry(void);
+handler_result_t unregistered_handler(EVENT_T event);
+void unregistered_entry(void);
+handler_result_t userLinked_handler(EVENT_T event);
+void userLinked_entry(void);
+handler_result_t pet_handler(EVENT_T event);
+void pet_entry(void);
+handler_result_t mainView_handler(EVENT_T event);
+handler_result_t gameView_handler(EVENT_T event);
+
+//Our definition of an hierachical state
+typedef struct hierarchical_state state_t;
 struct hierarchical_state {
   fsm_handler Handler;  //!< State handler function
   void (*Entry)(void);  //!< Entry action for state
   void (*Exit)(void);   //!< Exit action for state.
 
   const state_t *const Parent;  //!< Parent state of the current state.
-  const state_t *const Node;    //!< Child states of the current state.
+  const state_t *const Child;    //!< Child states of the current state.
   uint32_t Level;               //!< Hierarchy level from the top state.
 };
 
-handler_result_t testHandler(EVENT_T event);
-void main_state_init_entry_handler(void);
-handler_result_t main_state_init_handler(EVENT_T event);
-void fsm_handle(EVENT_T event);
-void *fsm_thread(void * arg);
-// // This is an array of root (top most) states .
-// static const state_t Top_Level[] = {{
-//     top_level_awake_handler,        // state handler
-//     top_level_awake_entry_handler,  // Entry action handler
-//     top_level_awake_exit_handler,   // Exit action handler
-//     NULL,                           // Parent state
-//     RunningState,                   // Child state
-//     0                               // Hierarchical state level
-// }};
+static bool firstStart = true;
+static bool registered = false;
+static bool userLinked = false;
 
-// // This is an array of root (top most) states .
-// static const state_t RunningState[] = {{
-//     running_state_init_handler,        // state handler
-//     running_state_init_entry_handler,  // Entry action handler
-//     running_state_init_exit_handler,   // Exit action handler
-//     MainState,                         // Parent state
-//     NULL,                              // Child state
-//     1                                  // Hierarchical state level
-// }};
+static const state_t Top_Level[2];
+static const state_t On_Level[3];
+static const state_t Pet_Level[2];
 
-// // This is an array of root (top most) states .
-// static const state_t MainState[] = {
-//     {
-//         main_state_init_handler,        // state handler
-//         main_state_init_entry_handler,  // Entry action handler
-//         main_state_init_exit_handler,   // Exit action handler
-//         RunningState,                   // Parent state
-//         NULL,                           // Child state
-//         2                               // Hierarchical state level
-//     },
-//     {
-//         main_state_notregistered_handler,        // state handler
-//         main_state_notregistered_entry_handler,  // Entry action handler
-//         main_state_notregistered_exit_handler,   // Exit action handler
-//         RunningState,                            // Parent state
-//         NULL,                                    // Child state
-//         2                                        // Hierarchical state level
-//     },
-//     {
-//         main_state_linkednopet_handler,        // state handler
-//         main_state_linkednopet_entry_handler,  // Entry action handler
-//         main_state_linkednopet_exit_handler,   // Exit action handler
-//         RunningState,                          // Parent state
-//         NULL,                                  // Child state
-//         2                                      // Hierarchical state level
-//     },
-//     {
-//         main_state_pet_handler,        // state handler
-//         main_state_pet_entry_handler,  // Entry action handler
-//         main_state_pet_exit_handler,   // Exit action handler
-//         RunningState,                  // Parent state
-//         NULL,                          // Child state
-//         2                              // Hierarchical state level
-//     }};
-
-static const state_t MainState[4];
-static const state_t RunningState[1];
-
-// This is an array of root (top most) states .
-static const state_t MainState[] = {
-    {
-        main_state_init_handler,              // state handler
-        main_state_init_entry_handler,  // Entry action handler
-        NULL,                           // Exit action handler
-        &RunningState[0],               // Parent state
-        NULL,                           // Child state
-        2                               // Hierarchical state level
+static const state_t Top_Level[] = {
+    {//on
+        on_handler,     //state handler
+        on_entry,       //Entry action handler
+        NULL,        //Exit action handler
+        NULL,       //Parent state
+        &On_Level[0],       //Child state
+        1       //Hierarchical state level
     },
-    {
-        NULL,              // state handler
-        NULL,              // Entry action handler
-        NULL,              // Exit action handler
-        &RunningState[0],  // Parent state
-        NULL,              // Child state
-        2                  // Hierarchical state level
+    {//off
+        off_handler,              //state handler
+        off_entry,                //Entry action handler
+        NULL,                 //Exit action handler
+        NULL,                     //Parent state
+        NULL,                     //Child state
+        1                         //Hierarchical state level
+    }
+};
+
+static const state_t On_Level[] = {
+    {//unregistered
+        unregistered_handler,              // state handler
+        unregistered_entry,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &Top_Level[0],            // Parent state
+        NULL,                     // Child state
+        2                         // Hierarchical state level
     },
-    {
-        NULL,              // state handler
-        NULL,              // Entry action handler
-        NULL,              // Exit action handler
-        &RunningState[0],  // Parent state
-        NULL,              // Child state
-        2                  // Hierarchical state level
+    {//user_linked
+        userLinked_handler,              // state handler
+        userLinked_entry,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &Top_Level[0],            // Parent state
+        NULL,                     // Child state
+        2                         // Hierarchical state level
     },
-    {
-        NULL,              // state handler
-        NULL,              // Entry action handler
-        NULL,              // Exit action handler
-        &RunningState[0],  // Parent state
-        NULL,              // Child state
-        2                  // Hierarchical state level
-    }};
+    {//pet
+        pet_handler,              // state handler
+        pet_entry,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &Top_Level[0],            // Parent state
+        &Pet_Level[0],            // Child state
+        2                         // Hierarchical state level
+    }
+};
 
-// This is an array of root (top most) states .
-static const state_t RunningState[] = {{
-    NULL,           // state handler
-    NULL,           // Entry action handler
-    NULL,           // Exit action handler
-    NULL,           // Parent state
-    &MainState[0],  // Child state
-    1               // Hierarchical state level
-}};
+static const state_t Pet_Level[] = {
+    {//Main_View
+        mainView_handler,              // state handler
+        NULL,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &On_Level[2],             // Parent state
+        NULL,                     // Child state
+        3                         // Hierarchical state level
+    },
+    {//Game_View TODO: not used yet
+        gameView_handler,              // state handler
+        NULL,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &On_Level[2],             // Parent state
+        NULL,                     // Child state
+        3                         // Hierarchical state level
+    }
+};
 
-// // This is an array of root (top most) states .
-// static const state_t Top_Level[] = {{
-//     NULL,        // state handler
-//     NULL,  // Entry action handler
-//     NULL,   // Exit action handler
-//     NULL,                           // Parent state
-//     &RunningState[0],                   // Child state
-//     0                               // Hierarchical state level
-// }};
-
-static const state_t *currentState = &MainState[0];
+static const state_t *currentState = &Top_Level[1];
 
 void fsm_start_thread(void){
     set_t_events_pid(thread_create(fsm_thread_stack, sizeof(fsm_thread_stack),
                   THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
-                  fsm_thread, NULL, "fsm_thread"));
+                  fsm_thread, NULL, "fsm_thread"));    
 }
 
 void *fsm_thread(void *arg) {
@@ -156,64 +127,226 @@ void *fsm_thread(void *arg) {
     DEBUG("[FSM:thread]: start\n");
     currentState->Entry();
     events_start(fsm_handle);
-
     return NULL;
 }
 
 void fsm_handle(EVENT_T event) {
-    DEBUG("[FSM:fsm_handle]: handle\n");
+    if (!currentState->Handler) puts("no handler \n");
     handler_result_t result = currentState->Handler(event);
-    if (result != EVENT_HANDLED) {
+    if (result != HANDLED) {
         const state_t *pState = currentState;
         do {
-        // check if state has parent state.
-        if (pState->Parent == NULL)  // Is Node reached top
-        {
-            DEBUG("[FSM:fsm_handle]: Fatal error, terminating.\n");
-            // This is a fatal error. terminate state machine.
-            return;
+            //check if state has parent state.
+            if (pState->Parent == NULL) { //Is Node reached top
+                //This is a fatal error. terminate state machine.
+                return;
+            }
+            pState = pState->Parent;  // traverse to parent state
+            result = pState->Handler(event);
         }
+        while (pState->Handler ==
+                NULL || result == UNHANDLED);  // repeat again if parent state doesn't have handler or event is not handled
+    }
 
-        pState = pState->Parent;  // traverse to parent state
-        } while (pState->Handler ==
-                NULL);  // repeat again if parent state doesn't have handler
-        pState->Handler(event);
-    }else{
-        DEBUG("[FSM:fsm_handle]: Event handled\n");
+}
+
+void traverse_state(const state_t *target_state) {
+    while (target_state->Level < currentState->Level) {
+        if (currentState->Exit) currentState->Exit();
+        currentState = currentState->Parent;
+        //if (currentState->Entry) currentState->Entry(); //dont call entry action if you come from a child state
+    } 
+    while (target_state->Level > currentState->Level) {
+        currentState = currentState->Child;
+        if (currentState->Entry) currentState->Entry();
+    }
+    if (currentState->Level == target_state->Level) {
+        if (currentState->Exit) currentState->Exit();
+    }
+    currentState = target_state;
+    if (currentState->Entry) currentState->Entry();
+}
+
+handler_result_t on_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_OK_LONG:
+            DEBUG("[FSM:on_handler]: BUTTON_OK_LONG\n");
+            traverse_state(&Top_Level[1]); //transition to off
+            DEBUG("[FSM:on_handler]: transition to off\n");
+            return HANDLED;
+        default:
+            DEBUG("[FSM:on_handler]: UNHANDLED\n");
+            return HANDLED; //TODO: Error detection
     }
 }
 
-void traverse_state(state_t target_state) {
-  while (target_state.Level > currentState->Level) {
-    if (currentState->Exit) currentState->Exit();
-    currentState = currentState->Parent;
-    if (currentState->Entry) currentState->Entry();
-  }
-  while (target_state.Level < currentState->Level) {
-    currentState = currentState->Node;
-    if (currentState->Entry) currentState->Entry();
-  }
-  if (currentState->Level == target_state.Level) {
-    if (currentState->Exit) currentState->Exit();
-  }
-  currentState = &target_state;
-  if (currentState->Entry) currentState->Entry();
+void on_entry(void) {
+    ioHandler_handleEvent(VIBRATE);
+    ioHandler_handleEvent(SCREEN_ON);
+    if (registered && userLinked) {
+        traverse_state(&On_Level[2]); //transition to pet
+    }
+    else if (registered) {
+        traverse_state(&On_Level[1]); //transition to user_linked
+    }
+    else {
+        traverse_state(&On_Level[0]); //transition to unregistered
+    }
 }
 
-void main_state_init_entry_handler(void) {
-    DEBUG("[FSM:init_entry]\n");
-    lwm2m_handler_init();
-    lwm2m_handler_start();
-    io_init();
-    display_init();
-    startDisplayThread();
+handler_result_t off_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_OK_LONG:
+            DEBUG("[FSM:off_handler]: BUTTON_OK_LONG\n");
+            traverse_state(&Top_Level[0]); //transition to on
+            return HANDLED;
+        default:
+            DEBUG("[FSM:off_handler]: UNHANDLED\n");
+            return HANDLED; //TODO: Error detection
+    }
 }
 
-handler_result_t main_state_init_handler(EVENT_T event) {
-    DEBUG("[FSM:main_state_init_handler]: lwm2m handle\n");
-    lwm2m_handleEvent(event);
-    ioHandler_handleEvent(event);
-    displayHandler_handleEvent(event);
-    
-    return EVENT_HANDLED;
+void off_entry(void) {
+    if (firstStart) {
+        firstStart = false;
+        lwm2m_handler_init();
+        lwm2m_handler_start();
+        io_init();
+        display_init();
+        startDisplayThread();
+    }
+    ioHandler_handleEvent(SCREEN_OFF);
+    ioHandler_handleEvent(VIBRATE);
 }
+
+handler_result_t unregistered_handler(EVENT_T event) {
+    switch (event) {
+        case REGISTER_CODE:
+            DEBUG("[FSM:unregistered_state_handler]: REGISTER_CODE\n");
+            displayHandler_handleEvent(REGISTERED); //is that right?
+            displayHandler_handleEvent(REGISTER_CODE);
+            return HANDLED;
+        case REGISTERED:
+            DEBUG("[FSM:unregistered_state_handler]: REGISTERED\n");
+            traverse_state(&On_Level[1]); //transition to user_linked
+            return HANDLED;
+        default:
+            DEBUG("[FSM:unregistered_state_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+void unregistered_entry(void) {
+    displayHandler_handleEvent(REGISTER_CODE);
+}
+
+handler_result_t userLinked_handler(EVENT_T event) {
+    switch (event) {
+        case READY:
+            DEBUG("[FSM:userLinked_handler]: READY\n");
+            displayHandler_handleEvent(READY);
+            traverse_state(&On_Level[2]); //transition to pet
+            return HANDLED;
+        default:
+            DEBUG("[FSM:userLinked_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+void userLinked_entry(void) {
+    registered = true;
+}
+
+handler_result_t pet_handler(EVENT_T event) {
+    switch (event) {
+        default:
+            DEBUG("[FSM:pet_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+void pet_entry(void) {
+    displayHandler_handleEvent(READY); //to draw the pet
+    userLinked = true;
+    traverse_state(&Pet_Level[0]); //transition to main_view
+}
+
+handler_result_t mainView_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_OK_LONG:
+            DEBUG("[FSM:mainView_handler]: BUTTON_OK_LONG\n");
+            return UNHANDLED;
+        case BUTTON_OK_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_OK_PRESSED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_OK_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_OK_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_UP_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_UP_PRESSED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_UP_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_UP_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_DOWN_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_DOWN_PRESSED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_DOWN_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_DOWN_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_LEFT_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_LEFT_PRESSED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_LEFT_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_LEFT_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_RIGHT_PRESSED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_RIGHT_PRESSED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case BUTTON_RIGHT_RELEASED:
+            DEBUG("[FSM:mainView_handler]: BUTTON_RIGHT_RELEASED\n");
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case PET_FEED:
+            DEBUG("[FSM:mainView_handler]: PET_FEED\n");
+            lwm2m_handleEvent(PET_FEED);
+            return HANDLED;
+        case PET_PLAY:
+            DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
+            lwm2m_handleEvent(PET_PLAY);
+            return HANDLED;
+        case PET_MEDICATE:
+            DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
+            lwm2m_handleEvent(PET_MEDICATE);
+            return HANDLED;
+        case PET_CLEAN:
+            DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
+            lwm2m_handleEvent(PET_CLEAN);
+            return HANDLED;
+        case INFO_PRESSED:
+        DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
+            displayHandler_handleEvent(INFO_PRESSED);
+            return HANDLED;
+        default:
+            DEBUG("[FSM:mainView_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+handler_result_t gameView_handler(EVENT_T event) {
+    switch (event) {
+        default:
+            DEBUG("[FSM:gameView_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+//EOF

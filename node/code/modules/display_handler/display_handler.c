@@ -29,6 +29,7 @@
 char display_thread_stack [DISPLAY_STACKSIZE];
 
 handler_result_t displayHandler_handleEvent(EVENT_T event){
+    char buf[100];
     DEBUG("[DisplayHandler:handleEvent]\n");
      switch(event){
         case BUTTON_OK_PRESSED:
@@ -48,6 +49,7 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
+            init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -61,11 +63,24 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case BUTTON_RIGHT_RELEASED:
             right_released();
         break;
+        case REGISTER_CODE:
+            init_not_registered_code(get_register_code());
+            //init_not_registered_code("Hallo Tom");
+            break;
+        case REGISTERED:
+            init_registered_no_pet();
+            break;
+        case READY:
+            init_registered_pet();
+            break;
+        case INFO_PRESSED:
+            get_pet_stats((char*)&buf);
+            init_pet_stats((char*)&buf);
         default:
         break;
      }
     lvgl_wakeup();
-    return EVENT_HANDLED;
+    return HANDLED;
 }
 
 void *display_run(void * arg){

@@ -66,8 +66,18 @@ public class UcPetInteractionsImpl implements UcPetInteractions{
 
         // Attributes dependent on other attributes
         pet.setXp(xpVO.dispatch(event, dto));
-        pet.setHappiness(happinessVO.dispatch(event, dto));
-        pet.setWellbeing(wellbeingVO.dispatch(event, dto));
+
+        int newHappiness = happinessVO.dispatch(event, dto);
+        pet.setHappiness(newHappiness);
+        if (dto.getHappiness() != happinessVO.getMax() && newHappiness == happinessVO.getMax()) {
+            pet.setXp(xpVO.dispatch(PetEvents.REACHED_MAX_STATUS, dto));
+        }
+
+        int newWellbeing = wellbeingVO.dispatch(event, dto);
+        pet.setWellbeing(newWellbeing);
+        if (dto.getWellbeing() != wellbeingVO.getMax() && newWellbeing== wellbeingVO.getMax()) {
+            pet.setXp(xpVO.dispatch(PetEvents.REACHED_MAX_STATUS, dto));
+        }
 
     }
 }

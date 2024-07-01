@@ -26,7 +26,6 @@ extern "C" {
 #include "event.h"
 #include "thread.h"
 
-
 /* Enum of all Events */
 typedef enum {
     UNDEFINED,
@@ -44,6 +43,8 @@ typedef enum {
     BUTTON_DOWN_RELEASED,
     BUTTON_RIGHT_PRESSED,
     BUTTON_RIGHT_RELEASED,
+    BUTTON_OK_LONG,
+    INFO_PRESSED,
     PET_FEED,
     PET_PLAY,
     PET_CLEAN,
@@ -53,17 +54,70 @@ typedef enum {
     PET_BORED,
     PET_DIRTY,
     VIBRATE,
+    SCREEN_OFF,
+    SCREEN_ON,
+    INIT, //unused
+    REGISTER, //unused
+    REGISTERED,
+    READY,
+    REGISTER_CODE,
+    NAME,
+    COLOR,
+    HAPPINESS,
+    WELLBEING,
+    HEALTH,
+    XP,
+    HUNGER,
+    CLEANLINESS,
+    FUN
 }EVENT_T;
+
+typedef struct{
+    int32_t id;                                  /**< id of pet */                
+    char name[10];                                      /**< name of pet */
+    int32_t color;                               /**< color of the pet */
+    int32_t happiness;                           /**< happiness of the pet*/
+    int32_t wellbeing;                           /**< wellbeing of the pet*/
+    int32_t health;                              /**< health of the pet*/
+    int32_t xp;                                  /**< XP of the pet*/
+    int32_t hunger;                              /**< Hunger of the pet*/
+    int32_t cleanliness;                         /**< Cleanliness of the pet*/
+    int32_t fun;                                 /**< Fun of the pet*/
+    int32_t feed;                                   /**< pet fed */
+    int32_t medicate;                               /**< pet medicated */
+    int32_t play;                                   /**< pet played */
+    int32_t clean;                                  /**< pet cleaned */
+    mutex_t mutex;
+}pet_stats_t;
+
+typedef struct{
+    char code[8];
+    mutex_t mutex;
+}device_register_code;
 
 /* Enum of the fsm handler return values*/
 typedef enum
 {
-  EVENT_HANDLED,      //!< Event handled successfully.
-  EVENT_UN_HANDLED,    //!< Event could not be handled.
+  HANDLED,      //!< Event handled successfully.
+  UNHANDLED,    //!< Event could not be handled.
   //!< Handler handled the Event successfully and posted new event to itself.
   TRIGGERED_TO_SELF,
-}handler_result_t;
+} handler_result_t;
 
+
+/**
+ * @brief Writes the actual pet stats into the parameter pointer
+ * 
+ */
+void get_pet_stats(char *buf);
+
+/**
+ * @brief Writes the register code into the parameter pointer
+ * 
+ * 
+ * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
+ */
+char* get_register_code(void);
 
 /**
  * @brief Triggers an Event for the FSM
@@ -71,6 +125,10 @@ typedef enum
  * @param[in] event Event which should be send
  */
 void trigger_event(EVENT_T event);
+
+void trigger_event_int(EVENT_T event, int32_t value);
+void trigger_event_string(EVENT_T event, char* value);
+void trigger_event_bool(EVENT_T event, bool value);
 
 /**
  * @brief Sets the Callback for the FSM and starts the event loop
