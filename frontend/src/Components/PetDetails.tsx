@@ -19,18 +19,38 @@ const PetDetails = (props: { pet: Pet; petImageSrc: string }) => {
       <div className="col-6">
         <div className="h2 px-3 py-4">{pet.name}</div>
         <PetDetailsProgressBar
+          labelName="Health"
+          value={petState.health}
+          color="green"
+        />
+        <PetDetailsProgressBar
           labelName="XP"
           value={petState.xp}
-          color="green"
+          color="purple"
         />
         <PetDetailsProgressBar
           labelName="Happiness"
           value={petState.happiness}
-          color="purple"
+          color="red"
         />
         <PetDetailsProgressBar
-          labelName="Health"
-          value={petState.health}
+          labelName="Wellbeing"
+          value={petState.wellbeing}
+          color="red"
+        />
+        <PetDetailsProgressBar
+          labelName="Hunger"
+          value={petState.hunger}
+          color="red"
+        />
+        <PetDetailsProgressBar
+          labelName="Cleanliness"
+          value={petState.cleanliness}
+          color="red"
+        />
+        <PetDetailsProgressBar
+          labelName="Fun"
+          value={petState.fun}
           color="red"
         />
       </div>
