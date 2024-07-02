@@ -9,12 +9,20 @@ package haw.teamagochi.backend.device.logic.registrationmanager;
 public interface RegistrationManager {
 
   /**
-   * Register a client.
+   * Get client endpoint name for a given registration code.
    *
-   * @param registrationCode the key associated with the client
-   * @return the "Endpoint Client Name" of a LwM2M client
+   * @param registrationCode associated with the client
+   * @return the client endpoint name if found, otherwise null
    */
-  String registerClient(String registrationCode);
+  String getClientByCode(String registrationCode);
+
+  /**
+   * Update client after successful registration.
+   *
+   * @param endpoint is the "Endpoint Client Name" of a LwM2M client
+   * @param deviceId of the related device entity
+   */
+  boolean updateClient(String endpoint, Long deviceId);
 
   /**
    * Add a device.

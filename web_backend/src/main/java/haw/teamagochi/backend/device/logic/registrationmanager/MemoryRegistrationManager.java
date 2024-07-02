@@ -2,6 +2,8 @@ package haw.teamagochi.backend.device.logic.registrationmanager;
 
 import haw.teamagochi.backend.device.logic.UcDeviceResourceOperations;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
+import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
+import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,6 +42,9 @@ public class MemoryRegistrationManager implements RegistrationManager {
   @Inject
   UcDeviceResourceOperations ucDeviceResourceOperations;
 
+  @Inject
+  DeviceManager deviceManager;
+
   @Setter
   private Integer registrationLifetime;
 
@@ -58,21 +63,30 @@ public class MemoryRegistrationManager implements RegistrationManager {
    * {@inheritDoc}
    */
   @Override
-  public String registerClient(String registrationCode) {
-    String endpoint = registrationCodeMap.get(registrationCode);
+  public String getClientByCode(String registrationCode) {
+    return registrationCodeMap.get(registrationCode);
+  }
 
-    if (endpoint != null) {
-      // TODO write new state to the device
-
-      registrationCodeMap.remove(registrationCode);
-      clientMap.remove(endpoint);
-      blocklist.add(endpoint);
-
-      LOGGER.info(
-          "The client '" + endpoint + "' was registered with code '" + registrationCode + "'.");
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean updateClient(String endpoint, Long deviceId) {
+    if (!clientMap.containsKey(endpoint)) {
+      throw new IllegalStateException("Client is not available for registration.");
     }
 
-    return endpoint;
+    boolean result = ucDeviceResourceOperations.writeStatus(endpoint, DeviceStatus.REGISTERED);
+
+    if (result) {
+      removeClient(endpoint);
+      deviceManager.addDevice(endpoint, deviceId);
+      blocklist.add(endpoint);
+
+      LOGGER.info("The client '" + endpoint + "' was registered.");
+    }
+
+    return result;
   }
 
   /**
