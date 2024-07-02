@@ -4,6 +4,7 @@ import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcFindLeshanClient;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ClientDto;
+import io.quarkus.runtime.Startup;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,9 +17,12 @@ import org.jboss.logging.Logger;
 
 /** In-memory implementation of a {@link DeviceManager}. */
 @ApplicationScoped
+@Startup
 public class MemoryDeviceManager implements DeviceManager {
 
   private static final Logger LOGGER = Logger.getLogger(MemoryDeviceManager.class);
+
+  private boolean initialized;
 
   @Inject
   UcFindDevice ucFindDevice;
@@ -31,12 +35,20 @@ public class MemoryDeviceManager implements DeviceManager {
   Map<String, Long> devices;
 
   public MemoryDeviceManager() {
+    initialized = false;
     activeDevices = new HashSet<>();
     devices = new HashMap<>();
   }
 
+  /**
+   * Initialize the manager.
+   */
   @PostConstruct
-  void init() {
+  public void init() {
+    if (initialized) {
+      return;
+    }
+
     List<ClientDto> clientDtos = ucFindLeshanClient.getClients();
     for (ClientDto client : clientDtos) {
       DeviceEntity entity = ucFindDevice.findByIdentifier(client.endpoint);
@@ -44,6 +56,8 @@ public class MemoryDeviceManager implements DeviceManager {
         addDevice(entity.getIdentifier(), entity.getId());
       }
     }
+
+    initialized = true;
 
     LOGGER.debug("Initialized MemoryDeviceManager instance.");
   }
@@ -65,10 +79,19 @@ public class MemoryDeviceManager implements DeviceManager {
     activeDevices.add(endpoint);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void removeDevice(String endpoint) {
     devices.remove(endpoint);
     activeDevices.remove(endpoint);
+  }
+
+  @Override
+  public void removeAll() {
+    devices.clear();
+    activeDevices.clear();
   }
 
   /**
@@ -92,8 +115,6 @@ public class MemoryDeviceManager implements DeviceManager {
    */
   @Override
   public List<Long> getActiveDevices() {
-    return devices.entrySet().stream()
-        .filter(entry -> activeDevices.contains(entry.getKey()))
-        .map(Map.Entry::getValue).toList();
+    return activeDevices.stream().map(endpoint -> devices.get(endpoint)).toList();
   }
 }

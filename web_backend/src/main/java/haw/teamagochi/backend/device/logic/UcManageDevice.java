@@ -43,9 +43,10 @@ public interface UcManageDevice {
    * Register a device.
    *
    * @param registrationCode displayed on the device
-   * @param deviceName for the created device
+   * @param name for the created device
+   * @param type for the created device
    * @param uuid of the owner
    * @return the created entity
    */
-  public DeviceEntity registerDevice(String registrationCode, String deviceName, String uuid);
+  DeviceEntity registerDevice(String registrationCode, String name, String type, String uuid);
 }

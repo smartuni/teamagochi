@@ -4,6 +4,7 @@ import haw.teamagochi.backend.device.logic.UcDeviceResourceOperations;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
 import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
+import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,6 +22,7 @@ import org.jboss.logging.Logger;
 
 /** In-memory implementation of a {@link RegistrationManager}. */
 @ApplicationScoped
+@Startup
 public class MemoryRegistrationManager implements RegistrationManager {
 
   private static final Logger LOGGER = Logger.getLogger(MemoryRegistrationManager.class);
@@ -32,9 +34,6 @@ public class MemoryRegistrationManager implements RegistrationManager {
 
   /** Maps registration codes to endpoint client names. */
   private final HashMap<String, String> registrationCodeMap;
-
-  /** Blocklist: a cache for already registered devices. */
-  private final HashSet<String> blocklist;
 
   @Inject
   UcFindDevice ucFindDevice;
@@ -51,11 +50,11 @@ public class MemoryRegistrationManager implements RegistrationManager {
   public MemoryRegistrationManager() {
     clientMap = new HashMap<>();
     registrationCodeMap = new HashMap<>();
-    blocklist = new HashSet<>();
   }
 
   @PostConstruct
   void init() {
+    deviceManager.init();
     LOGGER.debug("Initialized MemoryRegistrationManager instance.");
   }
 
@@ -81,7 +80,6 @@ public class MemoryRegistrationManager implements RegistrationManager {
     if (result) {
       removeClient(endpoint);
       deviceManager.addDevice(endpoint, deviceId);
-      blocklist.add(endpoint);
 
       LOGGER.info("The client '" + endpoint + "' was registered.");
     }
@@ -142,10 +140,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
    * @return true if it should be added, otherwise false.
    */
   private boolean isClientAllowedForRegistration(String endpoint) {
-    if (blocklist.isEmpty()) {
-      ucFindDevice.findAll().forEach(device -> blocklist.add(device.getIdentifier()));
-    }
-    return !blocklist.contains(endpoint);
+    return !deviceManager.hasDevice(endpoint);
   }
 
   /**
@@ -225,9 +220,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
   }
 
   @Override
-  public void clearCache() {
-    blocklist.clear();
-  }
+  public void clearCache() {}
 
   /**
    * Find outdated clients.

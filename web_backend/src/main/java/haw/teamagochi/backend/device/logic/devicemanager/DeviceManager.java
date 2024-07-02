@@ -9,6 +9,9 @@ import java.util.List;
  */
 public interface DeviceManager {
 
+  /** Initialize */
+  void init();
+
   /**
    * Check if a device is known to the manager.
    *
@@ -30,6 +33,11 @@ public interface DeviceManager {
    * @param endpoint name of the client device
    */
   void removeDevice(String endpoint);
+
+  /**
+   * Remove all devices.
+   */
+  void removeAll();
 
   /**
    * Disable a device.
