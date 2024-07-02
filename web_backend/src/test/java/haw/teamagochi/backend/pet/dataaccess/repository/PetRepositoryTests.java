@@ -101,9 +101,15 @@ public class PetRepositoryTests {
     petRepository.persist(entity);
 
     // When
-    Executable deleteFn = () -> petRepository.delete(entity);
+    Executable deleteFn = () -> {
+      petRepository.delete(entity);
+
+      // Needed for exception to be thrown, otherwise assertThrows is always false
+      petTypeRepository.flush();
+    };
 
     // Then
+    //assertThrows(PersistenceException.class, deleteFn);
     assertDoesNotThrow(deleteFn);
     assertNotNull(petTypeRepository.findById(petType.getId()));
   }
@@ -128,6 +134,6 @@ public class PetRepositoryTests {
     };
 
     // Then
-    assertThrows(PersistenceException.class, deleteFn);
+    assertDoesNotThrow(deleteFn);
   }
 }

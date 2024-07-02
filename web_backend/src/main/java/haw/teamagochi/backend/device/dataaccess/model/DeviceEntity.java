@@ -1,25 +1,33 @@
 package haw.teamagochi.backend.device.dataaccess.model;
+
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Persist-able device representation.
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 public class DeviceEntity {
-
-  public DeviceEntity() {}
 
   @Id
   @GeneratedValue
@@ -27,7 +35,7 @@ public class DeviceEntity {
 
   @Nullable
   @Column(unique = true)
-  String identifier; // for device endpoint. Would be encrypted with DTLS?
+  private String identifier;
 
   @NonNull
   @Size(max = 255)
@@ -37,7 +45,6 @@ public class DeviceEntity {
   @Enumerated(EnumType.STRING) // save enum as string
   private DeviceType deviceType;
 
-
   @ManyToOne
   @Nullable
   private UserEntity owner;
@@ -45,7 +52,6 @@ public class DeviceEntity {
   @OneToOne
   @Nullable
   private PetEntity pet;
-
 
   @Override
   public boolean equals(Object o) {
@@ -62,5 +68,17 @@ public class DeviceEntity {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, deviceType);
+  }
+
+  @Override
+  public String toString() {
+    return "DeviceEntity{"
+        + "id=" + id
+        + ", identifier='" + identifier + '\''
+        + ", name='" + name + '\''
+        + ", deviceType=" + deviceType
+        + ", owner=" + owner
+        + ", pet=" + pet
+        + '}';
   }
 }
