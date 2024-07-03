@@ -4,7 +4,6 @@ import haw.teamagochi.backend.device.logic.clients.rest.LeshanClientRestclient;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectInstanceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
-import haw.teamagochi.backend.leshanclient.datatypes.rest.ValueDto;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
