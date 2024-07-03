@@ -188,7 +188,7 @@ public class LeshanClientResourceTests {
     assertEquals("singleResource", contentDto.kind);
     assertEquals(resourceId, contentDto.id);
     assertEquals("INTEGER", contentDto.type);
-    assertNotNull(Integer.valueOf(contentDto.value));
+    assertNotNull(contentDto.value);
     assertNull(contentDto.values); // because type == singleResource
 
     // Print

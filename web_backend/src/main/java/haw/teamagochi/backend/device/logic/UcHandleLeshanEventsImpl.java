@@ -24,7 +24,7 @@ public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
 
   @Override
   public void handleRegistration(RegistrationDto dto) {
-    LOGGER.debug("Received registration event: " + dto.endpoint + " (" + dto.registrationId + ")");
+    LOGGER.info("Received registration event: " + dto.endpoint + " (" + dto.registrationId + ")");
 
     if (deviceManager.hasDevice(dto.endpoint)) {
       deviceManager.enableDevice(dto.endpoint);
@@ -35,7 +35,7 @@ public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
 
   @Override
   public void handleDeregistration(RegistrationDto dto) {
-    LOGGER.debug(
+    LOGGER.info(
         "Received deregistration event: " + dto.endpoint + " (" + dto.registrationId + ")");
 
     if (deviceManager.hasDevice(dto.endpoint)) {
@@ -51,10 +51,10 @@ public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
       registrationManager.addClient(dto.registration.endpoint);
     }
 
-    LOGGER.debug(
+    LOGGER.info(
         "Received update event: "
             + dto.registration.endpoint
-            + "("
+            + " (registrationId: "
             + dto.update.registrationId
             + ")");
   }

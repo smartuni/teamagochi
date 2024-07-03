@@ -4,6 +4,7 @@ import haw.teamagochi.backend.device.logic.clients.rest.LeshanClientRestclient;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectInstanceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
+import haw.teamagochi.backend.leshanclient.datatypes.rest.ValueDto;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
@@ -41,15 +42,15 @@ public class UcPetResourceOperationsImpl implements UcPetResourceOperations {
     resources.add(createSingleIntegerResource(8, entity.getCleanliness()));
     resources.add(createSingleIntegerResource(9, entity.getFun()));
 
-    //createSingleBooleanResource(20, true) // Hungry
-    //createSingleBooleanResource(21, true) // Ill
-    //createSingleBooleanResource(22, true) // Bored
-    //createSingleBooleanResource(23, true) // Dirty
+    resources.add(createSingleBooleanResource(20, false)); // Hungry
+    resources.add(createSingleBooleanResource(21, false)); // Ill
+    resources.add(createSingleBooleanResource(22, false)); // Bored
+    resources.add(createSingleBooleanResource(23, false)); // Dirty
 
-    //createSingleIntegerResource(40, 0); // feed
-    //createSingleIntegerResource(41, 0); // medicate
-    //createSingleIntegerResource(42, 0); // play
-    //createSingleIntegerResource(43, 0); // clean
+    resources.add(createSingleIntegerResource(40, 0)); // feed
+    resources.add(createSingleIntegerResource(41, 0)); // medicate
+    resources.add(createSingleIntegerResource(42, 0)); // play
+    resources.add(createSingleIntegerResource(43, 0)); // clean
 
     ObjectInstanceDto instanceDto = new ObjectInstanceDto();
     instanceDto.kind = "instance";
@@ -82,7 +83,7 @@ public class UcPetResourceOperationsImpl implements UcPetResourceOperations {
     resourceDto.id = id;
     resourceDto.kind = "singleResource";
     resourceDto.type = "integer";
-    resourceDto.value = Integer.toString(value);
+    resourceDto.value = value;
 
     return resourceDto;
   }
@@ -92,7 +93,7 @@ public class UcPetResourceOperationsImpl implements UcPetResourceOperations {
     resourceDto.id = id;
     resourceDto.kind = "singleResource";
     resourceDto.type = "boolean";
-    resourceDto.value = String.valueOf(value);
+    resourceDto.value = value;
 
     return resourceDto;
   }

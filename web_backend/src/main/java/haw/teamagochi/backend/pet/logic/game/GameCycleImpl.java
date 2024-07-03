@@ -1,7 +1,6 @@
 package haw.teamagochi.backend.pet.logic.game;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
-import haw.teamagochi.backend.device.logic.UcDeviceResourceOperations;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcPetResourceOperations;
 import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
@@ -21,12 +20,15 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.jboss.logging.Logger;
 
 /**
  * Default implementation for {@link GameCycle}.
  */
 @ApplicationScoped
 public class GameCycleImpl implements GameCycle {
+
+  private static final Logger LOGGER = Logger.getLogger(GameCycleImpl.class);
 
   @Inject
   UcFindDevice findDevice;
@@ -53,9 +55,6 @@ public class GameCycleImpl implements GameCycle {
   HappinessVO happinessVO;
 
   @Inject
-  UcDeviceResourceOperations ucDeviceResourceOperations;
-
-  @Inject
   UcPetResourceOperations ucPetResourceOperations;
 
   @Inject
@@ -79,7 +78,6 @@ public class GameCycleImpl implements GameCycle {
     stopped = false;
 
     List<Long> activeDevices = deviceManager.getActiveDevices();
-    System.out.println("Active Devices: " + activeDevices); // TODO remove
 
     // Only pets currently on a device
     for (DeviceEntity device : findDevice.findAll()) {
@@ -88,8 +86,13 @@ public class GameCycleImpl implements GameCycle {
       if (pet != null) {
         deteriorate(pet);
 
-        if (deviceManager.getActiveDevices().contains(device.getId())) {
+        if (activeDevices.contains(device.getId())) {
           ucPetResourceOperations.writePet(device.getIdentifier(), pet);
+
+          LOGGER.info("Write "
+              + pet.getName()
+              + " to device "
+              + device.getIdentifier() + ".");
         }
       }
     }
