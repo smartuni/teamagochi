@@ -45,6 +45,12 @@ public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
 
   @Override
   public void handleUpdate(UpdatedDto dto) {
+    if (deviceManager.hasDevice(dto.registration.endpoint)) {
+      deviceManager.enableDevice(dto.registration.endpoint);
+    } else {
+      registrationManager.addClient(dto.registration.endpoint);
+    }
+
     LOGGER.debug(
         "Received update event: "
             + dto.registration.endpoint
