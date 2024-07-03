@@ -13,7 +13,6 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -65,7 +64,10 @@ public interface PetMapper {
 
   @AfterMapping
   default void findOwner(PetDTO dto, @MappingTarget PetEntity entity, @Context UcFindUser ucFindUser) {
-    if (dto.getOwnerId() == null || ucFindUser == null) return;
+    if (dto.getOwnerId() == null || ucFindUser == null) {
+      entity.setOwner(null);
+      return;
+    }
 
     UserEntity dbEntity = ucFindUser.find(dto.getOwnerId());
     if (dbEntity != null) {
@@ -74,13 +76,15 @@ public interface PetMapper {
   }
 
   @AfterMapping
-  default void findPetTyp( PetDTO dto,@MappingTarget PetEntity entity, @Context UcFindPetType ucFindPetTyp) {
-    if (dto.getType() == null || ucFindPetTyp == null) return;
+  default void findPetType(PetDTO dto, @MappingTarget PetEntity entity, @Context UcFindPetType ucFindPetType) {
+    if (dto.getType() == null || ucFindPetType == null) {
+      entity.setPetType(null);
+      return;
+    }
 
-    PetTypeEntity dbEntity = ucFindPetTyp.find(dto.getType());
+    PetTypeEntity dbEntity = ucFindPetType.find(dto.getType());
     if (dbEntity != null) {
       entity.setPetType(dbEntity);
     }
   }
-
 }

@@ -87,12 +87,12 @@ public class DeviceRestService {
   @APIResponse(responseCode = "404", description = "Not Found")
   public DeviceDTO deleteDeviceById(@PathParam("deviceId") long deviceId) {
     DeviceEntity entity = ucFindDevice.find(deviceId);
-    boolean wasDeleted = ucManageDevice.deleteById(deviceId);
-    if (wasDeleted) {
+    if (ucManageDevice.deleteById(deviceId)) {
       return deviceMapper.mapEntityToTransferObject(entity);
     }
     throw new NotFoundException();
   }
+
   @DELETE
   @Path("/reset")
   @Operation(summary = "delete all Devices and Pets")

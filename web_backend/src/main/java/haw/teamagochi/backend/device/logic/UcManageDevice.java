@@ -27,6 +27,14 @@ public interface UcManageDevice {
   DeviceEntity create(DeviceEntity entity);
 
   /**
+   * Update a device.
+   *
+   * @param entity to update
+   * @return the updated entity
+   */
+  DeviceEntity update(DeviceEntity entity);
+
+  /**
    * Delete a device.
    *
    * @param deviceId of the device
