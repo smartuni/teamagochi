@@ -12,9 +12,22 @@ server {
   include /etc/nginx/conf.d/*.include;
 
   #
-  # Development Dashboard
+  # Frontend
   #
   location / {
+    root /usr/share/nginx/html;
+    index index.html;
+    try_files $uri $uri/ /index.html;
+  }
+
+  #
+  # Development Dashboard
+  #
+  location = /dev {
+    rewrite ^ $scheme://$http_host/dev/ permanent;
+  }
+
+  location /dev/ {
     proxy_pass ${DEVDASH_WEB_URL};
     include proxy_params;
   }

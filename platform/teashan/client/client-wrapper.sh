@@ -30,8 +30,8 @@ ENDPOINT_NAME=teamagochi-java-client-0
 
 if [ "$USE_BOOTSTRAP" = true ]; then
     # With bootstrap server
-    SERVER_URL=coap://localhost:5683
-    { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
+    SERVER_URL=coap://[fd00:dead:beef::1]:5683
+    { sleep 10; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
         | java -jar ./leshan-client-demo.jar \
         --models-folder="$MODELS_FOLDER" \
         --server-url="$SERVER_URL" \

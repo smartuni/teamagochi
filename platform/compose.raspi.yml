@@ -8,12 +8,17 @@ services:
     environment:
       PROXY_PUBLIC_PORT: 80
     ports:
-      - "80:80"
-      - "443:443"
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+      - "[::]:80:80"
+      - "[::]:443:443"
+    volumes:
+      - "./data/htdocs:/usr/share/nginx/html"
   devdash:
-    environment:
-      VITE_AUTHORITY: http://teamagochi/kc/realms/teamagochi
-      VITE_CLIENT_ID: teamagochi-webapp
+    build:
+      args:
+        VITE_AUTHORITY: https://teamagochi/kc/realms/teamagochi
+        VITE_CLIENT_ID: teamagochi-webapp
   teashan:
     ports:
       - "[fd00:dead:beef::1]:5683:5683/udp" # [coap://]
@@ -23,7 +28,7 @@ services:
       - "[fd00:dead:beef::1]:5685:5685/udp" # [coap://]
   keycloak:
     environment:
-      KC_HOSTNAME_URL: http://teamagochi/kc
-      KC_HOSTNAME_ADMIN_URL: http://teamagochi/kc
+      KC_HOSTNAME_URL: https://teamagochi/kc
+      KC_HOSTNAME_ADMIN_URL: https://teamagochi/kc
   backend:
     pull_policy: never
