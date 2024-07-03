@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.pet.logic.Events;
+package haw.teamagochi.backend.pet.logic.game.events;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

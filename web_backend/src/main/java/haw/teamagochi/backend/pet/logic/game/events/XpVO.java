@@ -1,6 +1,5 @@
-package haw.teamagochi.backend.pet.logic.Events;
+package haw.teamagochi.backend.pet.logic.game.events;
 
-import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetStateDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

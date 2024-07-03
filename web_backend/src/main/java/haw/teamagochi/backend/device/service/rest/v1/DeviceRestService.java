@@ -6,7 +6,7 @@ import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
-import haw.teamagochi.backend.pet.logic.gameCycle.GameCycleImpl;
+import haw.teamagochi.backend.pet.logic.game.GameCycle;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -40,8 +40,7 @@ public class DeviceRestService {
   protected UcManagePet ucManagePet;
 
   @Inject
-  protected GameCycleImpl gameCycle;
-
+  protected GameCycle gameCycle;
 
   /**
    * Get all devices.
@@ -93,20 +92,21 @@ public class DeviceRestService {
     throw new NotFoundException();
   }
 
+  /**
+   * Reset everything.
+   */
   @DELETE
   @Path("/reset")
-  @Operation(summary = "delete all Devices and Pets")
+  @Operation(summary = "Delete all devices and pets")
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
-  public List<DeviceDTO> deleteAllPet() {
-    List<DeviceEntity> entities = ucFindDevice.findAll();
+  public void reset() {
     gameCycle.setStopRequested(true);
-    while (!gameCycle.isStopped()){
-      //waiting for stopped
+    while (!gameCycle.isStopped()) {
+      // waiting for stopped
     }
     ucManageDevice.deleteAll();
     ucManagePet.deleteAll();
     gameCycle.setStopRequested(false);
-    return deviceMapper.mapEntityToTransferObject(entities);
   }
 }
