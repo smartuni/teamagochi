@@ -1,0 +1,17 @@
+[req]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+req_extensions     = v3_req
+prompt             = no
+[req_distinguished_name]
+countryName         = DE
+stateOrProvinceName = Hamburg
+localityName        = Hamburg
+organizationName    = Teamagochi@HAW
+commonName          = teamagochi
+[v3_req]
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = *.teamagochi
+DNS.2 = teamagochi.dev
+DNS.3 = *.teamagochi.dev

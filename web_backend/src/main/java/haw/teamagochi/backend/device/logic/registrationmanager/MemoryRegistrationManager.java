@@ -1,7 +1,6 @@
 package haw.teamagochi.backend.device.logic.registrationmanager;
 
 import haw.teamagochi.backend.device.logic.UcDeviceResourceOperations;
-import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
 import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
 import io.quarkus.runtime.Startup;
@@ -12,12 +11,12 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import lombok.Setter;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 /** In-memory implementation of a {@link RegistrationManager}. */
@@ -36,13 +35,16 @@ public class MemoryRegistrationManager implements RegistrationManager {
   private final HashMap<String, String> registrationCodeMap;
 
   @Inject
-  UcFindDevice ucFindDevice;
-
-  @Inject
   UcDeviceResourceOperations ucDeviceResourceOperations;
 
   @Inject
   DeviceManager deviceManager;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.prefix")
+  protected String clientEndpointNamePrefix;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.filter-mode")
+  protected String clientEndpointNameFilterMode;
 
   @Setter
   private Integer registrationLifetime;
@@ -110,7 +112,9 @@ public class MemoryRegistrationManager implements RegistrationManager {
        */
       try {
         String registrationCode = generateUniqueRegistrationCode(registrationCodeMap.keySet());
-        writeRegistrationCodeToDevice(endpoint, registrationCode);
+        if (isAcceptableForWriting(endpoint)) {
+          writeRegistrationCodeToDevice(endpoint, registrationCode);
+        }
         registrationCodeMap.put(registrationCode, endpoint);
 
         LOGGER.info(
@@ -141,6 +145,24 @@ public class MemoryRegistrationManager implements RegistrationManager {
    */
   private boolean isClientAllowedForRegistration(String endpoint) {
     return !deviceManager.hasDevice(endpoint);
+  }
+
+  /**
+   * Check if we want to write to the device.
+   *
+   * <p>Note that Section "7.4.1. Endpoint Client Name" of the LwM2M spec says:
+   *   "[...] the Endpoint Client Name is unauthenticated and can be set to arbitrary
+   *   value by a misconfigured or malicious client and hence MUST NOT be used alone for
+   *   any decision making without prior matching the Endpoint Client Name against the
+   *   identifier used with the security protocol protecting LwM2M communication".
+   *
+   * @param endpointName of a device
+   */
+  private boolean isAcceptableForWriting(String endpointName) {
+    if (clientEndpointNameFilterMode.equals("receive")) {
+      return true;
+    }
+    return clientEndpointNamePrefix != null && endpointName.startsWith(clientEndpointNamePrefix);
   }
 
   /**

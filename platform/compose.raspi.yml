@@ -4,10 +4,31 @@
 #
 
 services:
+  proxy:
+    environment:
+      PROXY_PUBLIC_PORT: 80
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+      - "[::]:80:80"
+      - "[::]:443:443"
+    volumes:
+      - "./data/htdocs:/usr/share/nginx/html"
+  devdash:
+    build:
+      args:
+        VITE_AUTHORITY: https://teamagochi/kc/realms/teamagochi
+        VITE_CLIENT_ID: teamagochi-webapp
   teashan:
     ports:
-      - "[fd00:dead:beef::1]:5683:5683/udp" # [coap://]      CoAP over UDP (with experimental OSCORE)
-      - "[fd00:dead:beef::1]:5683:5683/tcp" # [coap+tcp://]  CoAP over TCP (experimental) 
-      - "[fd00:dead:beef::1]:5684:5684/udp" # [coaps://]     CoAP over DTLS
-      - "[fd00:dead:beef::1]:5684:5684/tcp" # [coaps+tcp://] CoAP over TLS (experimental)
-      - "[fd00:dead:beef::1]:5685:5685/udp" # [coap://]      CoAP over UDP[::]
+      - "[fd00:dead:beef::1]:5683:5683/udp" # [coap://]
+      - "[fd00:dead:beef::1]:5683:5683/tcp" # [coap+tcp://]
+      - "[fd00:dead:beef::1]:5684:5684/udp" # [coaps://]
+      - "[fd00:dead:beef::1]:5684:5684/tcp" # [coaps+tcp://]
+      - "[fd00:dead:beef::1]:5685:5685/udp" # [coap://]
+  keycloak:
+    environment:
+      KC_HOSTNAME_URL: https://teamagochi/kc
+      KC_HOSTNAME_ADMIN_URL: https://teamagochi/kc
+  backend:
+    pull_policy: never

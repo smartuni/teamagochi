@@ -13,6 +13,7 @@ import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.client.SseEvent;
@@ -33,6 +34,12 @@ public class LeshanEventListener {
   @RestClient
   private LeshanEventClient sseClient;
 
+  @ConfigProperty(name = "leshan.client-endpoint-name.prefix")
+  protected String clientEndpointNamePrefix;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.filter-mode")
+  protected String clientEndpointNameFilterMode;
+
   LeshanEventListener(UcHandleLeshanEvents ucHandleLeshanEvents) {
     this.ucHandleLeshanEvents = ucHandleLeshanEvents;
     this.objectMapper = new ObjectMapper();
@@ -44,9 +51,12 @@ public class LeshanEventListener {
         .registration()
         .emitOn(Infrastructure.getDefaultWorkerPool())
         .onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
-        .subscribe().with(sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
-              ucHandleLeshanEvents.handleRegistration(dto);
+              if (isAcceptableClientEndpointName(dto.endpoint)) {
+                ucHandleLeshanEvents.handleRegistration(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
@@ -60,7 +70,9 @@ public class LeshanEventListener {
         .subscribe().with(
             sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               RegistrationDto dto = objectMapper.readValue(event.data(), RegistrationDto.class);
-              ucHandleLeshanEvents.handleDeregistration(dto);
+              if (isAcceptableClientEndpointName(dto.endpoint)) {
+                ucHandleLeshanEvents.handleDeregistration(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
@@ -74,7 +86,9 @@ public class LeshanEventListener {
         .subscribe().with(
             sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               UpdatedDto dto = objectMapper.readValue(event.data(), UpdatedDto.class);
-              ucHandleLeshanEvents.handleUpdate(dto);
+              if (isAcceptableClientEndpointName(dto.registration.endpoint)) {
+                ucHandleLeshanEvents.handleUpdate(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
@@ -88,7 +102,9 @@ public class LeshanEventListener {
         .subscribe().with(
             sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
-              ucHandleLeshanEvents.handleSleeping(dto);
+              if (isAcceptableClientEndpointName(dto.ep)) {
+                ucHandleLeshanEvents.handleSleeping(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
@@ -102,7 +118,9 @@ public class LeshanEventListener {
         .subscribe().with(
             sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               AwakeDto dto = objectMapper.readValue(event.data(), AwakeDto.class);
-              ucHandleLeshanEvents.handleAwake(dto);
+              if (isAcceptableClientEndpointName(dto.ep)) {
+                ucHandleLeshanEvents.handleAwake(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
@@ -116,9 +134,29 @@ public class LeshanEventListener {
         .subscribe().with(
             sseEvent -> handleEventConsumer(sseEvent, (event) -> {
               CoaplogDto dto = objectMapper.readValue(event.data(), CoaplogDto.class);
-              ucHandleLeshanEvents.handleCoapLog(dto);
+              if (isAcceptableClientEndpointName(dto.ep)) {
+                ucHandleLeshanEvents.handleCoapLog(dto);
+              }
             }
         ), failure -> LOGGER.error(failure.getMessage()));
+  }
+
+  /**
+   * Check if the event is about a Teamagochi device.
+   *
+   * <p>Note that Section "7.4.1. Endpoint Client Name" of the LwM2M spec says:
+   *   "[...] the Endpoint Client Name is unauthenticated and can be set to arbitrary
+   *   value by a misconfigured or malicious client and hence MUST NOT be used alone for
+   *   any decision making without prior matching the Endpoint Client Name against the
+   *   identifier used with the security protocol protecting LwM2M communication".
+   *
+   * @param value to evaluate
+   */
+  private boolean isAcceptableClientEndpointName(String value) {
+    if (clientEndpointNameFilterMode.equals("write")) {
+      return true;
+    }
+    return clientEndpointNamePrefix != null && value.startsWith(clientEndpointNamePrefix);
   }
 
   /**
@@ -129,8 +167,8 @@ public class LeshanEventListener {
    */
   private void handleEventConsumer(
       SseEvent<String> event, CheckedEventConsumer<? super SseEvent<String>> onItem) {
-    Log.debug("Handle: " + event.name());
     try {
+      Log.debug("Handle: " + event.name());
       onItem.accept(event);
     } catch (JsonProcessingException exception) {
       Log.error("Error processing JSON: " + event.name(), exception);

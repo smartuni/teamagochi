@@ -1,15 +1,33 @@
 server {
   listen 80 default_server;
   listen [::]:80 default_server;
+  listen 443 default_server ssl;
+  listen [::]:443 default_server ssl;
 
   server_name _;
+
+  ssl_certificate /etc/nginx/ssl/server.crt;
+  ssl_certificate_key /etc/nginx/ssl/server.key;
 
   include /etc/nginx/conf.d/*.include;
 
   #
-  # Development Dashboard
+  # Frontend
   #
   location / {
+    root /usr/share/nginx/html;
+    index index.html;
+    try_files $uri $uri/ /index.html;
+  }
+
+  #
+  # Development Dashboard
+  #
+  location = /dev {
+    rewrite ^ $scheme://$http_host/dev/ permanent;
+  }
+
+  location /dev/ {
     proxy_pass ${DEVDASH_WEB_URL};
     include proxy_params;
   }

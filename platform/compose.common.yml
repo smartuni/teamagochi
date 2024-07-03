@@ -13,13 +13,16 @@ x-common-healthcheck: &common-healthcheck
 services:
   proxy:
     image: nginx:1.25-alpine
-    ports:
-      - "127.0.0.1:${PROXY_PUBLIC_PORT}:80"
-      - "[::]:${PROXY_PUBLIC_PORT}:80"
+    #ports:
+      #- "127.0.0.1:${PROXY_PUBLIC_PORT}:80"
+      #- "[::1]:${PROXY_PUBLIC_PORT}:80"
+      #- "127.0.0.1:443:443"
+      #- "[::1]:443:443"
     volumes:
       - "./proxy/proxy_params:/etc/nginx/proxy_params:ro"
       - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./proxy/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro"
+      - "./data/ssl/certs:/etc/nginx/ssl"
     environment:
       PROXY_PUBLIC_PORT: ${PROXY_PUBLIC_PORT}
       # NOTE: picky about trailing slash
@@ -104,7 +107,7 @@ services:
       POSTGRES_BACKEND_DB: backend
       POSTGRES_BACKEND_PASSWORD: ${POSTGRES_BACKEND_PASSWORD}
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      test: [ "CMD", "pg_isready", "-q", "-h", "postgres", "-d", "postgres", "-U", "postgres" ]
       <<: *common-healthcheck
     volumes:
       - postgres:/var/lib/postgresql/data
