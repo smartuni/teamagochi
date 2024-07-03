@@ -735,7 +735,7 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "http://teamagochi:3030/*", "https://teamagochi:5173/*", "http://teamagochi/*", "https://teamagochi/*" ],
+    "redirectUris" : [ "http://teamagochi:3030/*", "http://localhost:5173/*", "http://teamagochi/*", "https://teamagochi/*" ],
     "webOrigins" : [ "http://teamagochi:3030", "+", "http://teamagochi", "https://teamagochi", "https://teamagochi:5713" ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -748,7 +748,7 @@
     "frontchannelLogout" : true,
     "protocol" : "openid-connect",
     "attributes" : {
-      "post.logout.redirect.uris" : "/*##http://teamagochi:3030##https://teamagochi:5173/*##http://teamagochi/*##https://teamagochi/*",
+      "post.logout.redirect.uris" : "/*##http://teamagochi:3030##http://localhost:5173/*##http://teamagochi/*##https://teamagochi/*",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false",
       "use.refresh.tokens" : "true",
