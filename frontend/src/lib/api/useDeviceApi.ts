@@ -10,13 +10,13 @@ class DeviceApi {
   constructor(apiClient: ApiClient) {
     this.apiClient = apiClient;
   }
-  
+
   public setApiClient(apiClient: ApiClient) {
     this.apiClient = apiClient;
   }
 
   public async getDevices(): Promise<Device[]> {
-    const {data, error} = await this.withClient().GET("/api/v1/devices/self");
+    const { data, error } = await this.withClient().GET("/api/v1/devices/self");
 
     // TODO
     console.log(data);
@@ -26,7 +26,7 @@ class DeviceApi {
   }
 
   public async registerDevice(registrationCode: string, deviceName: string) {
-    const {data, error} = await this.withClient()
+    const { data, error } = await this.withClient()
       .POST("/api/v1/devices/self/register/{registrationCode}/{deviceName}", {
         params: {
           path: {
@@ -35,7 +35,7 @@ class DeviceApi {
           }
         }
       });
-    
+
     // TODO
     console.log(data);
     console.log(error);

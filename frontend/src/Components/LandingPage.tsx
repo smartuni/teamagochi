@@ -5,6 +5,7 @@ import Navbar from "./Navbar/Navbar";
 import { Link } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 
+
 const LandingPage = () => {
   const auth = useAuth();
   React.useEffect(() => {
