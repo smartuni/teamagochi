@@ -1,6 +1,7 @@
 package haw.teamagochi.backend.device.service.rest.v1;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
+import haw.teamagochi.backend.device.logic.UcChangePet;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
@@ -41,6 +42,8 @@ public class DeviceRestSelfService {
 
   @Inject
   protected UcManageDevice ucManageDevice;
+  @Inject
+  UcChangePet ucChangePet;
 
   /**
    * Get all devices.
@@ -101,4 +104,24 @@ public class DeviceRestSelfService {
     }
     throw new NotFoundException();
   }
+
+  @POST
+  @Path("/changepet/{deviceID}/{PetID}")
+  @Operation(summary = "Set Pet for the Device")
+  @APIResponse(responseCode = "200")
+  @APIResponse(responseCode = "404", description = "Not Found")
+  public DeviceDTO changePet(@PathParam("deviceID") long deviceId, @PathParam("PetID") long petId){
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    DeviceEntity device = ucFindDevice.find(deviceId);
+    if(device != null
+        && device.getOwner() != null
+        && Objects.equals(device.getOwner().getExternalID().toString(), uuid)){//request authorised
+      device = ucChangePet.changePet(deviceId, petId);
+      if (device != null) {
+        return deviceMapper.mapEntityToTransferObject(device);
+      }//if
+    }//if
+    throw new NotFoundException();
+    }//method
+
 }

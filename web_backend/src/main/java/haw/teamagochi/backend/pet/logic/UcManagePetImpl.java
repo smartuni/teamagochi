@@ -90,6 +90,7 @@ public class UcManagePetImpl implements UcManagePet {
    * {@inheritDoc}
    */
   @Override
+  @Transactional
   public void deleteAll() {
     petRepository.deleteAll();
   }
