@@ -527,7 +527,7 @@ for snake game
 #define GRID_SIZE 15
 #define GRID_WIDTH (320 / GRID_SIZE)
 #define GRID_HEIGHT (240 / GRID_SIZE)
-#define SNAKE_SPEED 100 // Milliseconds
+#define SNAKE_SPEED 300 // Milliseconds
 
 int snake_speed = SNAKE_SPEED;
 
