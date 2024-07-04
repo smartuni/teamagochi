@@ -25,14 +25,57 @@ class DeviceApi {
     return data == undefined ? [] : data;
   }
 
-  public async registerDevice(registrationCode: string, deviceName: string) {
+  public async updateDevice(device: Device) {
+    const { data, error } = await this.withClient().PUT(
+      "/api/v1/devices/self/{deviceId}", {
+        params: {
+          path: {
+            deviceId: device.id!,
+          }
+        },
+        body: device,
+      }
+    )
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
+  public async deleteDevice(deviceId: number) {
     const { data, error } = await this.withClient()
-      .POST("/api/v1/devices/self/register/{registrationCode}/{deviceName}", {
+      .DELETE("/api/v1/devices/self/{deviceId}", {
+        params: {
+          path: {
+            deviceId: deviceId,
+          }
+        }
+      });
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
+  public async registerDevice(
+    registrationCode: string,
+    deviceName: string,
+    deviceType: string)
+  {
+    const { data, error } = await this.withClient()
+      .POST("/api/v1/devices/self/register/{registrationCode}", {
         params: {
           path: {
             registrationCode: registrationCode,
-            deviceName: deviceName,
           }
+        },
+        body: {
+          type: deviceType,
+          name: deviceName
         }
       });
 

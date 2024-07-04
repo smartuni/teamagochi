@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import profile_pic1 from '../Misc/defaultUserPic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LinkDevice from "../Components/LinkDevice";
+import LinkDevice from "./SettingsLinkDevice";
 import { Pet, usePetApi } from "../lib/api/usePetApi";
+import { Device, useDeviceApi } from "../lib/api/useDeviceApi";
+import SettingsDeviceList from "./SettingsDeviceList";
+import SettingsPetList from "./SettingsPetList";
 
 interface SettingsProps {
     username: string;
@@ -12,6 +15,7 @@ function Settings(
     { username }: SettingsProps
 ) {
     const [pets, setPets] = useState<Pet[]>([]);
+    const [devices, setDevices] = useState<Device[]>([]);
     const [items, setItems] = useState(['Pet 1', 'Pet 2', 'Pet 3']);
     const [showLinkDevice, setShowLinkDevice] = useState<boolean>(true);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -19,26 +23,51 @@ function Settings(
     const [itemToRemove, setItemToRemove] = useState<number | null>(null);
 
     const petApi = usePetApi();
+    const deviceApi = useDeviceApi();
 
     useEffect(() => {
-        if ( !petApi ) return;
+        if ( !petApi || ! deviceApi ) return;
 
         const fetchData = async () => {
+          const pets = await petApi.getPets();
+          setPets(pets);
 
-            const pets = await petApi?.getPets();
-
-            setPets(pets);
-
+          const devices = await deviceApi.getDevices();
+          setDevices(devices);
         }
 
-        fetchData;
-    }, [petApi]);
-    const handleRemoveItem = (index: number) => {
-        setShowModal(true);
-        setItemToRemove(index);
+        fetchData();
+    }, [petApi, deviceApi]);
+
+    const handleRemoveDevice = async (deviceId: number) => {
+        if ( ! deviceApi ) return;
+
+        await deviceApi.deleteDevice(deviceId);
+
+        const updated = devices.filter(device => device.id != deviceId);
+        setDevices(updated);
     };
 
-    console.log("loaded-Pets", pets);
+    const handleRemovePet = async (petId: number) => {
+        if ( ! petApi ) return;
+
+        await petApi.removePet(petId);
+
+        const updated = pets.filter(pet => pet.id != petId);
+        setPets(updated);
+    }
+
+    const handleSelectPet = async (petId: number) => {
+        if ( ! deviceApi ||  ! devices[0] ) return;
+
+        const currentDevice = devices[0];
+        currentDevice.petId = petId;
+
+        await deviceApi.updateDevice(currentDevice);
+
+        const updatedDevices = devices.filter(device => device.id !== currentDevice.id);
+        setDevices([...updatedDevices, currentDevice]);
+    }
 
     const confirmRemoveItem = () => {
         if (itemToRemove !== null) {
@@ -56,12 +85,13 @@ function Settings(
         setItemToRemove(null);
     };
 
-    const selectItem = (index: number) => {
-        setSelectedIndex(index);
-    };
+    console.log({
+        devices: devices,
+        pets: pets,
+    })
 
     return (
-        <div className='d-flex justify-content-center pt-4 pb-2'>
+        <div className='d-flex justify-content-center pt-4 pb-2 mb-12'>
             <div className="card align-items-center text-bg-light" style={{ width: "500px" }}>
                 <img src={profile_pic1} className="card-img-top py-3" alt="profile picture" style={{ width: "50%", height: "auto" }} />
                 <h2 className="card-title text-center"><kbd className='bg-success text-white'>PROFILE</kbd></h2>
@@ -72,35 +102,43 @@ function Settings(
                         </div>
                         <input type="text" className="form-control text-black" placeholder={username} disabled style={{ fontSize: "1.5rem", height: "60px" }}></input>
                     </div>
-                    <div className='d-flex justify-content-center pt-2'>
-                        <button type="button" className="btn btn-success btn-block w-100" style={{ fontSize: "1.5rem", height: "60px" }} onClick={() => setShowLinkDevice(false)} >Link Device</button>
+                    <div className='pt-4 mb-4' style={{ width: "100%" }}>
+                        <h3>Device</h3>
+                        {devices.length == 0 ?
+                            (
+                                <button
+                                    type="button"
+                                    className="btn btn-success btn-block w-100 my-2"
+                                    style={{ fontSize: "1.5rem", height: "60px" }}
+                                    onClick={() => setShowLinkDevice(false)}
+                                >
+                                    Link Device
+                                </button>
+                            ) : (
+                                <SettingsDeviceList
+                                    devices={devices}
+                                    removeCallback={handleRemoveDevice}
+                                />
+                            )
+                        }
                     </div>
                     <div className='pt-4' style={{ width: "100%" }}>
-                        <ul className="list-group" style={{ fontSize: "1.2rem" }}>
-                           {pets.length === 0 && (
-                            <li className="list-group-item d-flex justify-content-between align-items-center py-3">No pets available</li>
-                           )} 
-                            {pets.map((pets, index) => (
-                                <li key={index} className="list-group-item d-flex justify-content-between align-items-center py-3">
-                                    {pets.name}
-                                    <div>
-                                        <button
-                                            className="btn btn-primary btn-lg mx-1"
-                                            onClick={() => selectItem(index)}
-                                            disabled={selectedIndex === index}
-                                        >
-                                            {selectedIndex === index ? 'Selected' : 'Select'}
-                                        </button>
-                                        <button className="btn btn-danger btn-lg mx-1" onClick={() => handleRemoveItem(index)}>Remove</button>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                        <h3>Pets</h3>
+                        <SettingsPetList
+                            pets={pets}
+                            currentDevice={devices[0]}
+                            selectCallback={handleSelectPet}
+                            removeCallback={handleRemovePet}
+                        />
                     </div>
                 </div>
             </div>
+
             {showLinkDevice === false && (
-                <LinkDevice onClose={() => setShowLinkDevice(true)} />
+                <LinkDevice
+                    onClose={() => setShowLinkDevice(true)}
+                    onSubmit={(device) => setDevices([...devices, device])}
+                />
             )}
 
             {showModal && (
@@ -114,8 +152,16 @@ function Settings(
                                 <p>Are you sure you want to remove this pet?</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={cancelRemoveItem}>No</button>
-                                <button type="button" className="btn btn-danger" onClick={confirmRemoveItem}>Yes</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={cancelRemoveItem}
+                                >No</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={confirmRemoveItem}
+                                >Yes</button>
                             </div>
                         </div>
                     </div>

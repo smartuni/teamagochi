@@ -4,12 +4,14 @@ import "reactjs-popup/dist/index.css";
 import profile_land from "../Misc/8-bit-dog-nobg.png";
 import profile_air from "../Misc/duck_8bit.png";
 import profile_water from "../Misc/frog.png";
+import { usePetApi } from "../lib/api/usePetApi";
 
 const CreatePetModal = () => {
   
     const [open, setOpen] = useState(false);
     const [petName, setPetName] = useState("");
     const [petType, setPetType] = useState("Water");
+    const petApi = usePetApi();
 
     const handleClose = () => {
         setPetName("");
@@ -29,14 +31,33 @@ const CreatePetModal = () => {
         setPetType(e.target.value);
     };
 
-    const handleSubmit = (e: { preventDefault: () => void }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault(); // Prevent form from reloading the page
+
         if (petName.trim() === "" || petName.trim() === "DEAD" || petType === "") {
             return;
         }
-        // TODO: Save the device ID or perform any action with the input value
-        console.log("Pet Name:", petName, " Pet Type:", petType);
-        setOpen(false); // Close the popup after submission
+
+        if (petApi === undefined) {
+          // Initialization error
+            return;
+        }
+
+        let newPet;
+        try {
+          newPet = await petApi.createPet({
+            name: petName,
+            type: 1,
+            state: undefined,
+          })
+        } catch (error) {
+          return;
+        }
+
+        // Close the popup after submission
+        setOpen(false);
+
+        console.log("Added pet", newPet);
     };
 
     return (
@@ -46,7 +67,7 @@ const CreatePetModal = () => {
                 style={{ height: "100vh" }}
             >
                 <button className="btn btn-success" onClick={() => setOpen(true)}>
-                    Create Teamagochi
+                    Create Pet
                 </button>
             </div>
             <Popup
@@ -74,8 +95,9 @@ const CreatePetModal = () => {
                     >
                         <figure className="text-center">
                             <p className="lead">
-                                <strong>Enter your Pet Name below and choose it's Type:
-                                    <p>You cannot name your pet "DEAD"</p>
+                                <strong>
+                                  Enter your pet's name below and choose it's type:
+                                  {/* <span>You cannot name your pet "DEAD"</span> */}
                                 </strong>
                             </p>
                         </figure>

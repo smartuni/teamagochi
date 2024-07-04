@@ -38,6 +38,38 @@ class PetApi {
     return data;
   }
 
+  public async createPet(pet: Pet) {
+    const {data, error} = await this.withClient().POST(
+      "/api/v1/pets/self",
+      {
+        body: pet,
+      }
+    )
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
+  public async removePet(id: number) {
+    const {data, error} = await this.withClient().DELETE(
+      "/api/v1/pets/{petId}",
+      {
+        params: {
+          path: { petId: id }
+        }
+      }
+    )
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
   private withClient() {
     if (!this.apiClient) {
       throw new Error("Client must be set.");
