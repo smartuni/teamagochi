@@ -533,7 +533,7 @@ for snake game
 #define GRID_SIZE 15
 #define GRID_WIDTH (320 / GRID_SIZE)
 #define GRID_HEIGHT (240 / GRID_SIZE)
-#define SNAKE_SPEED 500 // Milliseconds
+#define SNAKE_SPEED 100 // Milliseconds
 
 int snake_speed = SNAKE_SPEED;
 
@@ -552,6 +552,7 @@ static lv_obj_t *food_obj;
 
 void game_won(void) {
     lv_obj_t *label = lv_label_create(screen);
+    snake_speed = SNAKE_SPEED;
     lv_label_set_text(label, "You Win!");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     ztimer_sleep(ZTIMER_SEC,3);
@@ -563,7 +564,7 @@ void game_won(void) {
 
 void init_game(void) {
     snake_length = SNAKE_START_LENGTH;
-
+    snake_speed = SNAKE_SPEED;
     lv_obj_clean(lv_scr_act());
     screen = lv_obj_create(lv_scr_act());
     static lv_style_t style_base;
@@ -639,7 +640,7 @@ bool update_game(void) {
         food.x = lv_rand(0, GRID_WIDTH);
         food.y = lv_rand(0, GRID_HEIGHT);
         lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
-        snake_speed -= 50;
+        snake_speed -= 10;
     }
 
     // Check win condition
