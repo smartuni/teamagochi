@@ -17,4 +17,3 @@ USEMODULE += lvgl_extra_widget_spinner
 USEMODULE += lvgl_widget_arc
 USEMODULE += lvgl_extra_layout_flex
 USEMODULE += lvgl_extra_widget_tabview
-USEMODULE += lvgl_

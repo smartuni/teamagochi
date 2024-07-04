@@ -397,7 +397,7 @@ handler_result_t mainView_handler(EVENT_T event) {
 }
 
 void mainView_entry(void) {
-    displayHandler_handleEvent(READY); //to draw the pet
+    // displayHandler_handleEvent(READY); //to draw the pet
 }
 
 static bool raus = false;

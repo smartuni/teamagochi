@@ -424,6 +424,8 @@ void init_pet_stats(char* stats){
 }
 
 void init_menu(void){
+    lv_obj_clean(bottom_bar);
+    current_img_index = 0;
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_bg_opa(&style,LV_OPA_TRANSP);
@@ -531,7 +533,9 @@ for snake game
 #define GRID_SIZE 15
 #define GRID_WIDTH (320 / GRID_SIZE)
 #define GRID_HEIGHT (240 / GRID_SIZE)
-#define SNAKE_SPEED 100000 // Microseconds
+#define SNAKE_SPEED 500 // Milliseconds
+
+int snake_speed = SNAKE_SPEED;
 
 
 typedef struct {
@@ -551,6 +555,9 @@ void game_won(void) {
     lv_label_set_text(label, "You Win!");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     ztimer_sleep(ZTIMER_SEC,3);
+    init_default_screen("Initializing ...");
+    init_registered_pet();
+    init_menu();
     trigger_event(GAME_FINISHED);
 }
 
@@ -588,8 +595,8 @@ void init_game(void) {
     direction = RIGHT;
 
     // Place food
-    food.x = lv_rand(0, GRID_WIDTH);
-    food.y = lv_rand(0, GRID_HEIGHT);
+    food.x = lv_rand(1, GRID_WIDTH-1);
+    food.y = lv_rand(1, GRID_HEIGHT-1);
     food_obj = lv_obj_create(screen);
     lv_obj_set_size(food_obj, GRID_SIZE, GRID_SIZE);
     lv_obj_add_style(food_obj, &food_style, LV_PART_MAIN);
@@ -612,7 +619,7 @@ bool update_game(void) {
     }
 
     lv_obj_set_pos(snake_objs[0], snake[0].x * GRID_SIZE, snake[0].y * GRID_SIZE);
-    DEBUG("x: %d, y: %d\n",snake[0].x * GRID_SIZE,snake[0].y * GRID_SIZE);
+    // DEBUG("x: %d, y: %d\n",snake[0].x * GRID_SIZE,snake[0].y * GRID_SIZE);
 
     // Check food collision
     if (snake[0].x == food.x && snake[0].y == food.y) {
@@ -632,6 +639,7 @@ bool update_game(void) {
         food.x = lv_rand(0, GRID_WIDTH);
         food.y = lv_rand(0, GRID_HEIGHT);
         lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
+        snake_speed -= 50;
     }
 
     // Check win condition
@@ -673,7 +681,7 @@ void *game_loop(void * arg) {
             break;
         }
         lv_task_handler();
-        ztimer_sleep(ZTIMER_USEC, SNAKE_SPEED);
+        ztimer_sleep(ZTIMER_MSEC, snake_speed);
     }
     game_won();
     return NULL;
