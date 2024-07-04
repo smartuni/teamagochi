@@ -4,6 +4,7 @@ import haw.teamagochi.backend.general.security.SecurityUtil;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.logic.UcFindPet;
 import haw.teamagochi.backend.pet.logic.UcFindPetType;
+import haw.teamagochi.backend.pet.logic.UcLeaderboard;
 import haw.teamagochi.backend.pet.logic.UcManagePet;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetDTO;
@@ -53,6 +54,9 @@ public class PetRestSelfService {
 
   @Inject
   protected UcFindPetType ucFindPetType;
+
+  @Inject
+  protected UcLeaderboard ucLeaderboard;
 
   /**
    * Get all pets.
@@ -111,5 +115,15 @@ public class PetRestSelfService {
       return petMapper.mapEntityToTransferObject(pet);
     }
     throw new NotFoundException();
+  }
+
+  @GET
+  @Path("/leaderboard")
+  @Operation(summary = "Get the current Leaderboard")
+  @APIResponse(responseCode = "200")
+  public List<PetDTO> getLeaderboard() {
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    List<PetEntity> leaderboard = ucLeaderboard.getCompleteLeaderBoard();
+    return petMapper.mapEntityToTransferObject(leaderboard);
   }
 }
