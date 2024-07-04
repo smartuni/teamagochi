@@ -77,7 +77,7 @@ typedef enum {
 
 typedef struct{
     int32_t id;                                  /**< id of pet */                
-    char name[10];                                      /**< name of pet */
+    char name[20];                                      /**< name of pet */
     int32_t color;                               /**< color of the pet */
     int32_t happiness;                           /**< happiness of the pet*/
     int32_t wellbeing;                           /**< wellbeing of the pet*/
@@ -111,16 +111,23 @@ typedef enum
 /**
  * @brief Writes the actual pet stats into the parameter pointer
  * 
+ * @param[out] buf Buffer in which the stats get written
  */
 void get_pet_stats(char *buf);
 
 /**
+ * @brief Writes the actual pet stats into the parameter pointer short version for top row
+ * 
+ * @param[out] buf Buffer in which the stats get written
+ */
+void get_pet_short_info(char *buf);
+
+/**
  * @brief Writes the register code into the parameter pointer
- * 
- * 
- * @param[in] stats The pointer to an pet_stats_t object in which the that gets copied.
+ * @return char pointer to the register code
  */
 char* get_register_code(void);
+
 
 /**
  * @brief Triggers an Event for the FSM

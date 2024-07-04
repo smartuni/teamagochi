@@ -18,6 +18,10 @@ void get_pet_stats(char *buf){
             pet_stats.happiness, pet_stats.wellbeing, pet_stats.health, pet_stats.xp,pet_stats.hunger, pet_stats.cleanliness, pet_stats.fun);
 }
 
+void get_pet_short_info(char *buf){
+    sprintf(buf,"%s XP: %ld%%",pet_stats.name, pet_stats.xp);
+}
+
 char* get_register_code(void){
     printf("code in get: %s\n",register_code.code);
     return register_code.code;

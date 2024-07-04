@@ -72,6 +72,9 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
             break;
         case READY:
             init_registered_pet();
+            char text[50];
+            get_pet_short_info((char*) &text);
+            change_top_bar_text((char*) &text);
             break;
         case INFO_PRESSED:
             get_pet_stats((char*)&buf);

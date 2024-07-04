@@ -18,8 +18,6 @@
  * @}
  */
 #include "lvgl/src/widgets/lv_img.h"
-#include "lvgl/src/widgets/lv_roller.h"
-//#include "lvgl/src/widgets/lv_label.h"
 
 #include <string.h>
 
@@ -30,22 +28,12 @@
 #include "lvgl/src/core/lv_indev.h"
 #include "lvgl/src/hal/lv_hal_indev.h"
 #include "disp_dev.h"
+#include "ztimer.h"
 #include "init_lvgl.h"
 #include "events.h"
 
 #define ENABLE_DEBUG  1
 #include "debug.h"
-
-#include "ztimer.h"
-
-
-
-#define CPU_LABEL_COLOR     "FF0000"
-#define MEM_LABEL_COLOR     "0000FF"
-#define CHART_POINT_NUM     100
-
-lv_obj_t * roller1;
-
 
 typedef enum {
     UP,
@@ -181,6 +169,64 @@ static uint32_t keypad_get_key(void)
     return 0;
 }
 
+void enter_pressed(void){
+    buttons[0].state = true;
+}
+
+void enter_released(void){
+    buttons[0].state = false;
+}
+
+void up_pressed(void){
+    direction = UP;
+    buttons[1].state = true;
+}
+
+void up_released(void){
+    buttons[1].state = false;
+}
+
+void down_pressed(void){
+    direction = DOWN;
+    buttons[2].state = true;
+}
+
+void down_released(void){
+    buttons[2].state = false;    
+}
+
+void left_pressed(void){
+    direction = LEFT;
+    buttons[3].state = true;
+}
+
+void left_released(void){
+    buttons[3].state = false;    
+}
+
+void right_pressed(void){
+    direction = RIGHT;
+    buttons[4].state = true;
+}
+
+void right_released(void){
+    buttons[4].state = false;    
+}
+
+static void timer_cb(lv_timer_t *param){
+    (void) param;
+    lvgl_wakeup();
+}
+
+void change_top_bar_text(char* top_bar_text){
+    lv_obj_clean(top_bar);
+    // Add a label to the top bar
+    lv_obj_t * pet_label = lv_label_create(top_bar);
+    lv_label_set_text(pet_label, top_bar_text);
+    lv_obj_set_style_text_color(pet_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+
+}  
+
 void init_default_screen(char* top_bar_text){
     lv_obj_clean(lv_scr_act());
     static lv_style_t style_base;
@@ -249,56 +295,6 @@ void init_default_screen(char* top_bar_text){
     
 }
 
-void enter_pressed(void){
-    buttons[0].state = true;
-}
-
-void enter_released(void){
-    buttons[0].state = false;
-}
-
-void up_pressed(void){
-    direction = UP;
-    buttons[1].state = true;
-}
-
-void up_released(void){
-    buttons[1].state = false;
-}
-
-void down_pressed(void){
-    direction = DOWN;
-    buttons[2].state = true;
-}
-
-void down_released(void){
-    buttons[2].state = false;    
-}
-
-void left_pressed(void){
-    direction = LEFT;
-    buttons[3].state = true;
-}
-
-void left_released(void){
-    buttons[3].state = false;    
-}
-
-void right_pressed(void){
-    direction = RIGHT;
-    buttons[4].state = true;
-}
-
-void right_released(void){
-    buttons[4].state = false;    
-}
-
-static void timer_cb(lv_timer_t *param){
-    (void) param;
-    lvgl_wakeup();
-}
-
-
 void init_not_registered(void){
     lv_obj_clean(center);
     /* Style of the align bar*/
@@ -329,8 +325,6 @@ void init_not_registered(void){
 
     wakeup_task = lv_timer_create(timer_cb, WAKEUP_TIME, NULL); 
 }
-
-
 
 void init_not_registered_code(char *code){
     // timer_deactivate();
