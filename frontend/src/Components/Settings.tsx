@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import profile_pic1 from '../Misc/defaultUserPic.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LinkDevice from "./SettingsLinkDevice";
@@ -6,14 +6,14 @@ import { Pet, usePetApi } from "../lib/api/usePetApi";
 import { Device, useDeviceApi } from "../lib/api/useDeviceApi";
 import SettingsDeviceList from "./SettingsDeviceList";
 import SettingsPetList from "./SettingsPetList";
+import Loading from "./Loading";
+import CreatePetModal, { OpenState } from "./CreatePetModal";
 
 interface SettingsProps {
     username: string;
 }
 
-function Settings(
-    { username }: SettingsProps
-) {
+function Settings({ username }: SettingsProps) {
     const [pets, setPets] = useState<Pet[]>([]);
     const [devices, setDevices] = useState<Device[]>([]);
     const [items, setItems] = useState(['Pet 1', 'Pet 2', 'Pet 3']);
@@ -22,6 +22,8 @@ function Settings(
     const [showModal, setShowModal] = useState<boolean>(false);
     const [itemToRemove, setItemToRemove] = useState<number | null>(null);
 
+    const [loading, setLoading] = useState(true);
+    const createPetModalOpenState = useRef<OpenState>(null);
     const petApi = usePetApi();
     const deviceApi = useDeviceApi();
 
@@ -34,6 +36,8 @@ function Settings(
 
           const devices = await deviceApi.getDevices();
           setDevices(devices);
+
+          setLoading(false);
         }
 
         fetchData();
@@ -47,6 +51,19 @@ function Settings(
         const updated = devices.filter(device => device.id != deviceId);
         setDevices(updated);
     };
+
+    const handleOpenCreatePetModal = async (open: boolean) => {
+      if ( ! petApi ) return;
+
+      createPetModalOpenState.current?.setOpen(open)
+    }
+
+    const handleCloseCreatePetModal = async () => {
+      if ( ! petApi ) return;
+
+      const pets = await petApi.getPets();
+      setPets(pets);
+    }
 
     const handleRemovePet = async (petId: number) => {
         if ( ! petApi ) return;
@@ -90,6 +107,14 @@ function Settings(
         pets: pets,
     })
 
+    if (loading) {
+      return (
+        <div className="align-content-center flex-grow-1 align-self-center">
+          <Loading />
+        </div>
+      )
+    }
+
     return (
         <div className='d-flex justify-content-center pt-4 pb-2 mb-12'>
             <div className="card align-items-center text-bg-light" style={{ width: "500px" }}>
@@ -127,6 +152,7 @@ function Settings(
                         <SettingsPetList
                             pets={pets}
                             currentDevice={devices[0]}
+                            createCallback={handleOpenCreatePetModal}
                             selectCallback={handleSelectPet}
                             removeCallback={handleRemovePet}
                         />
@@ -140,6 +166,8 @@ function Settings(
                     onSubmit={(device) => setDevices([...devices, device])}
                 />
             )}
+
+            <CreatePetModal onClose={handleCloseCreatePetModal} ref={createPetModalOpenState} />
 
             {showModal && (
                 <div className="modal show d-block" tabIndex={-1} role="dialog">

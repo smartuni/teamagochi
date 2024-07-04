@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { Pet } from "../lib/api/usePetApi";
 import { Device } from "../lib/api/useDeviceApi";
-import { Link } from "react-router-dom";
 
 interface Props {
     currentDevice: Device;
     pets: Pet[];
+    createCallback: (open: boolean) => void;
     selectCallback: (id: number) => void;
     removeCallback: (id: number) => void;
 }
 
 const SettingsPetList = (props: Props) => {
-    const { currentDevice, pets, selectCallback, removeCallback } = props;
+    const {currentDevice, pets, createCallback, selectCallback, removeCallback} = props;
     const [selected, setSelected] = useState<number | undefined>(undefined);
 
     if (currentDevice !== undefined && currentDevice.petId !== selected) {
         setSelected(currentDevice.petId);
+    }
+
+    const handleCreateButton = (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      event.preventDefault();
+      createCallback(true);
     }
 
     return (
@@ -23,7 +28,7 @@ const SettingsPetList = (props: Props) => {
     <ul className="list-group" style={{ fontSize: "1.2rem" }}>
         {pets.length === 0 && (
             <li className="list-group-item d-flex justify-content-between align-items-center py-3">
-                No pets available.  <Link to="/PetPage">Create a pet</Link>
+                No pets available.
             </li>
         )} 
         {pets.map((pet) => (
@@ -54,6 +59,11 @@ const SettingsPetList = (props: Props) => {
                 </div>
             </li>
         ))}
+        <li className="d-flex justify-content-between align-items-center p-3">
+          <a href="#" onClick={handleCreateButton}>
+            Create pet
+          </a>
+        </li>
     </ul>
     </>
     );
