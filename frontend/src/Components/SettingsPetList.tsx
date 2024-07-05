@@ -23,6 +23,11 @@ const SettingsPetList = (props: Props) => {
       createCallback(true);
     }
 
+    const petIsSelectable = (): boolean => {
+      //return currentDevice !== undefined && (selected === null || selected === undefined || selected !== petId);
+      return currentDevice !== undefined;
+    }
+
     return (
     <>
     <ul className="list-group" style={{ fontSize: "1.2rem" }}>
@@ -42,9 +47,9 @@ const SettingsPetList = (props: Props) => {
                             selectCallback(pet.id);
                             setSelected(pet.id);
                         }}
-                        disabled={currentDevice === undefined || selected === pet.id}
+                        disabled={!petIsSelectable()}
                     >
-                        {selected === pet.id ? 'Selected' : 'Select'}
+                        {selected === pet.id ? 'Bring back' : 'Select'}
                     </button>
                     <button
                         className="btn btn-danger btn-lg mx-1"

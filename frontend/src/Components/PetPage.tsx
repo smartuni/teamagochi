@@ -50,7 +50,7 @@ const PetPage = () => {
     <div className="container-lg">
       <div className="d-flex flex-column p-4">
         {pet != undefined ? (
-          <PetDetails pet={pet} petImageSrc={petImage} />
+          <PetDetails pet={pet} petImageSrc={petImage} deadPetImageSrc={petImageGray} />
         ) : (
           <div className="d-flex flex-row justify-content-center align-items-center w-full p-5">
             <div className="col-2">

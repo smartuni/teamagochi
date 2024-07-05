@@ -74,13 +74,13 @@ function Settings({ username }: SettingsProps) {
         setPets(updated);
     }
 
-    const handleSelectPet = async (petId: number) => {
+    const handleSelectPet = async (petId: number | undefined) => {
         if ( ! deviceApi ||  ! devices[0] ) return;
 
         const currentDevice = devices[0];
         currentDevice.petId = petId;
 
-        await deviceApi.updateDevice(currentDevice);
+        await deviceApi.updateDevice(currentDevice); //TODO deselect?
 
         const updatedDevices = devices.filter(device => device.id !== currentDevice.id);
         setDevices([...updatedDevices, currentDevice]);
