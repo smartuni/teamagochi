@@ -76,14 +76,15 @@ public class UcHandleLeshanEventsImpl implements UcHandleLeshanEvents {
     }
 
     Long petId = deviceManager.getActivePetByClientEndpointName(dto.ep);
-    InteractionRecord interactionRecord = petManager.getCurrentInteraction(petId);
 
-    if (petId == null || interactionRecord == null) {
+    if (petId == null) {
       LOGGER.warn("Received notification event for inactive pet: " + dto.ep);
       return;
     }
 
-    if (interactionRecord.isEvaluated()) {
+    InteractionRecord interactionRecord = petManager.getCurrentInteraction(petId);
+
+    if (interactionRecord == null || interactionRecord.isEvaluated()) {
       petManager.addInteraction(petId, new InteractionRecord());
       interactionRecord = petManager.getCurrentInteraction(petId);
     }
