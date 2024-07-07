@@ -58,7 +58,7 @@ public class UcPetResourceOperationsImpl implements UcPetResourceOperations {
 
     ResourceResponseDto response = restClient.writeClientObjectInstance(
         endpoint, PET_OBJECT_ID, instanceDto.id,
-        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT, instanceDto);
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT, true, instanceDto);
 
     return !response.failure;
   }

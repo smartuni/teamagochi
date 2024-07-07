@@ -81,7 +81,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
 
     if (result) {
       removeClient(endpoint);
-      deviceManager.addDevice(endpoint, deviceId);
+      deviceManager.add(endpoint, deviceId);
 
       LOGGER.info("The client '" + endpoint + "' was registered.");
     }
@@ -144,7 +144,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
    * @return true if it should be added, otherwise false.
    */
   private boolean isClientAllowedForRegistration(String endpoint) {
-    return !deviceManager.hasDevice(endpoint);
+    return !deviceManager.contains(endpoint);
   }
 
   /**

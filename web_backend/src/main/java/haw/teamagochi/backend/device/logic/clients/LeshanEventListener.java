@@ -6,6 +6,7 @@ import haw.teamagochi.backend.device.logic.UcHandleLeshanEvents;
 import haw.teamagochi.backend.device.logic.clients.sse.LeshanEventClient;
 import haw.teamagochi.backend.leshanclient.datatypes.events.AwakeDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.CoaplogDto;
+import haw.teamagochi.backend.leshanclient.datatypes.events.NotificationDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.RegistrationDto;
 import haw.teamagochi.backend.leshanclient.datatypes.events.UpdatedDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -90,6 +91,22 @@ public class LeshanEventListener {
                 ucHandleLeshanEvents.handleUpdate(dto);
               }
             }
+        ), failure -> LOGGER.error(failure.getMessage()));
+  }
+
+  @Startup
+  void receiveNotificationEvents() {
+    sseClient
+        .notification()
+        .emitOn(Infrastructure.getDefaultWorkerPool())
+        .onFailure().invoke(failure -> LOGGER.error(failure.getMessage()))
+        .subscribe().with(
+            sseEvent -> handleEventConsumer(sseEvent, (event) -> {
+                  NotificationDto dto = objectMapper.readValue(event.data(), NotificationDto.class);
+                  if (isAcceptableClientEndpointName(dto.ep)) {
+                    ucHandleLeshanEvents.handleNotification(dto);
+                  }
+                }
         ), failure -> LOGGER.error(failure.getMessage()));
   }
 

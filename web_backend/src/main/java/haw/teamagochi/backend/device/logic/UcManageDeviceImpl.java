@@ -45,8 +45,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Transactional
   public DeviceEntity create(String name, DeviceType deviceType) {
     DeviceEntity device = new DeviceEntity(name, deviceType);
-    deviceRepository.persist(device);
-    return device;
+    return create(device);
   }
 
   /**
@@ -56,6 +55,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   @Transactional
   public DeviceEntity create(DeviceEntity entity) {
     deviceRepository.persist(entity);
+    deviceManager.reloadDevice(entity.getIdentifier());
     return entity;
   }
 
@@ -74,9 +74,10 @@ public class UcManageDeviceImpl implements UcManageDevice {
         throw new RuntimeException("User is not owner of the pet.");
       }
     }
-    // TODO map to response code?! should not be 500
 
     deviceRepository.getEntityManager().merge(entity);
+    deviceManager.reloadDevice(entity.getIdentifier());
+
     return entity;
   }
 
@@ -88,7 +89,7 @@ public class UcManageDeviceImpl implements UcManageDevice {
   public boolean deleteById(long deviceId) {
     try {
       DeviceEntity entity = deviceRepository.findById(deviceId);
-      deviceManager.removeDevice(entity.getIdentifier());
+      deviceManager.remove(entity.getIdentifier());
       deviceRepository.delete(entity);
     } catch (Exception e) {
       return false;

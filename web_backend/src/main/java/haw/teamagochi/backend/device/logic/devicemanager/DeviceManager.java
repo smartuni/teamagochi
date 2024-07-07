@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface DeviceManager {
 
-  /** Initialize */
+  /** Initialize. */
   void init();
 
   /**
@@ -17,7 +17,7 @@ public interface DeviceManager {
    *
    * @param endpoint name of the client device
    */
-  boolean hasDevice(String endpoint);
+  boolean contains(String endpoint);
 
   /**
    * Add a device.
@@ -25,14 +25,14 @@ public interface DeviceManager {
    * @param endpoint name of the client device
    * @param deviceId for the device entity
    */
-  void addDevice(String endpoint, Long deviceId);
+  void add(String endpoint, Long deviceId);
 
   /**
    * Remove a device.
    *
    * @param endpoint name of the client device
    */
-  void removeDevice(String endpoint);
+  void remove(String endpoint);
 
   /**
    * Remove all devices.
@@ -54,9 +54,24 @@ public interface DeviceManager {
   void enableDevice(String endpoint);
 
   /**
-   * Get all active.
+   * Reload a device, more precisely disable and enable immediately.
+   *
+   * @param endpoint name of the client device
+   */
+  void reloadDevice(String endpoint);
+
+  /**
+   * Get all active devices.
    *
    * @return all active devices
    */
   List<Long> getActiveDevices();
+
+  /**
+   * Get pet of a client device.
+   *
+   * @param endpoint name of the client device
+   * @return the id of the pet, or null if not pet is active on the device
+   */
+  Long getActivePetByClientEndpointName(String endpoint);
 }

@@ -21,6 +21,7 @@ public interface RegistrationManager {
    *
    * @param endpoint is the "Endpoint Client Name" of a LwM2M client
    * @param deviceId of the related device entity
+   * @return true if client was registered and new state was written to device, otherwise false
    */
   boolean updateClient(String endpoint, Long deviceId);
 
