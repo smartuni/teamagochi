@@ -1,29 +1,26 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "ObjectResponse",
+  "title": "Notification",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "status": {
+    "ep": {
       "type": "string"
     },
-    "valid": {
-      "type": "boolean"
+    "kind": {
+      "type": "string"
     },
-    "success": {
-      "type": "boolean"
+    "res": {
+      "type": "string"
     },
-    "failure": {
-      "type": "boolean"
-    },
-    "content": {
+    "val": {
       "$ref": "../common/Resource.json"
     }
   },
   "required": [
-    "failure",
-    "status",
-    "success",
-    "valid"
+    "ep",
+    "kind",
+    "res",
+    "val"
   ]
 }

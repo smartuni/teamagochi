@@ -9,6 +9,7 @@ public enum EventType {
   Registration,
   Deregistration,
   Updated,
+  Notification,
   Sleeping,
   Awake,
   Coaplog;

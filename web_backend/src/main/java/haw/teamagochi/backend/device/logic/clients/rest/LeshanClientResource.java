@@ -2,6 +2,7 @@ package haw.teamagochi.backend.device.logic.clients.rest;
 
 import haw.teamagochi.backend.leshanclient.datatypes.rest.*;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import java.util.Set;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -30,6 +31,17 @@ public class LeshanClientResource {
       @PathParam("object") Integer object,
       @PathParam("instance") Integer instance) {
     return clientRestclient.getClientObjectInstance(endpoint, object, instance);
+  }
+
+  public ResourceResponseDto observeClientResource(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance,
+      @PathParam("resource") Integer resource,
+      @QueryParam("timeout") Integer timeout,
+      @QueryParam("format") String format) {
+    return clientRestclient.observeClientResource(
+        endpoint, object, instance, resource, timeout, format);
   }
 
   public ResourceResponseDto getClientResource(

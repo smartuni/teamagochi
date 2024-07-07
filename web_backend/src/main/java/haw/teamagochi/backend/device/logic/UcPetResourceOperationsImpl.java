@@ -2,7 +2,7 @@ package haw.teamagochi.backend.device.logic;
 
 import haw.teamagochi.backend.device.logic.clients.rest.LeshanClientRestclient;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectInstanceDto;
-import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
+import haw.teamagochi.backend.leshanclient.datatypes.common.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -61,6 +61,21 @@ public class UcPetResourceOperationsImpl implements UcPetResourceOperations {
         DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT, instanceDto);
 
     return !response.failure;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void observePetInteractions(String endpoint) {
+    restClient.observeClientResource(endpoint, PET_OBJECT_ID, 0, 40,
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT);
+    restClient.observeClientResource(endpoint, PET_OBJECT_ID, 0, 41,
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT);
+    restClient.observeClientResource(endpoint, PET_OBJECT_ID, 0, 42,
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT);
+    restClient.observeClientResource(endpoint, PET_OBJECT_ID, 0, 43,
+        DEFAULT_COAP_TIMEOUT, DEFAULT_COAP_FORMAT);
   }
 
   private ResourceDto createSingleStringResource(int id, String value) {

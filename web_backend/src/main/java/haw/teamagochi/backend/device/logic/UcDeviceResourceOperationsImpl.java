@@ -2,7 +2,7 @@ package haw.teamagochi.backend.device.logic;
 
 import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
 import haw.teamagochi.backend.device.logic.clients.rest.LeshanClientRestclient;
-import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
+import haw.teamagochi.backend.leshanclient.datatypes.common.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;

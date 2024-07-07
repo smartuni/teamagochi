@@ -17,4 +17,11 @@ public interface UcPetResourceOperations {
    * @return true if successful, otherwise false
    */
   boolean writePet(String endpoint, PetEntity entity);
+
+  /**
+   * Observe interactions.
+   *
+   * @param endpoint name of the client device
+   */
+  void observePetInteractions(String endpoint);
 }
