@@ -5,12 +5,15 @@ import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcPetResourceOperations;
 import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
+import haw.teamagochi.backend.pet.logic.UcPetInteractions;
 import haw.teamagochi.backend.pet.logic.game.events.CleanlinessVO;
 import haw.teamagochi.backend.pet.logic.game.events.FunVO;
 import haw.teamagochi.backend.pet.logic.game.events.HappinessVO;
 import haw.teamagochi.backend.pet.logic.game.events.HealthVO;
 import haw.teamagochi.backend.pet.logic.game.events.HungerVO;
 import haw.teamagochi.backend.pet.logic.game.events.WellbeingVO;
+import haw.teamagochi.backend.pet.logic.petmanager.InteractionRecord;
+import haw.teamagochi.backend.pet.logic.petmanager.PetManager;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetStateDTO;
 import io.quarkus.scheduler.Scheduled;
@@ -55,10 +58,16 @@ public class GameCycleImpl implements GameCycle {
   HappinessVO happinessVO;
 
   @Inject
+  UcPetInteractions ucPetInteractions;
+
+  @Inject
   UcPetResourceOperations ucPetResourceOperations;
 
   @Inject
   DeviceManager deviceManager;
+
+  @Inject
+  PetManager petManager;
 
   @Setter
   private volatile boolean stopRequested = false;
@@ -84,17 +93,42 @@ public class GameCycleImpl implements GameCycle {
       PetEntity pet = device.getPet();
 
       if (pet != null) {
+        processPetInteractions(pet);
         deteriorate(pet);
 
         if (activeDevices.contains(device.getId())) {
           ucPetResourceOperations.writePet(device.getIdentifier(), pet);
 
-          LOGGER.info("Write "
-              + pet.getName()
-              + " to device "
-              + device.getIdentifier() + ".");
+          LOGGER.info("Write " + pet.getName() + " to device " + device.getIdentifier() + ".");
         }
       }
+    }
+  }
+
+  @Transactional
+  private void processPetInteractions(PetEntity pet) {
+    InteractionRecord interactionRecord = petManager.getCurrentInteraction(pet.getId());
+
+    if (interactionRecord != null && !interactionRecord.isEvaluated()) {
+
+      if (interactionRecord.getClean() > 0) {
+        ucPetInteractions.cleanPet(pet);
+        interactionRecord.setClean(0);
+      }
+      if (interactionRecord.getFeed() > 0) {
+        ucPetInteractions.feedPet(pet);
+        interactionRecord.setFeed(0);
+      }
+      if (interactionRecord.getPlay() > 0) {
+        ucPetInteractions.playWithPet(pet);
+        interactionRecord.setPlay(0);
+      }
+      if (interactionRecord.getMedicate() > 0) {
+        ucPetInteractions.medicatePet(pet);
+        interactionRecord.setMedicate(0);
+      }
+
+      interactionRecord.setEvaluated(true);
     }
   }
 
