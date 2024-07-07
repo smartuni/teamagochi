@@ -28,6 +28,7 @@
 #include "objects/device.h"
 #include "objects/security.h"
 #include "credentials.h"
+
 #include "liblwm2m.h"
 
 #define ENABLE_DEBUG  1
@@ -90,17 +91,18 @@ static void lwm2m_write_callback(uint16_t event_id, callback_value value){
 static void lwm2m_pet_device_write_callback(uint16_t event_id, char* value){
     switch (event_id) {
         case LWM2M_DEVICE_STATUS_ID:
-            if (strcmp(value,"INIT")){
+            if (strcmp(value,"INIT") == 0){
+                DEBUG("[Lwm2mHandler:write_callback]: init\n");
                 trigger_event(INIT);
-            }else if(strcmp(value,"REGISTER")){
-            }else if(strcmp(value,"REGISTERED")){
+            }else if(strcmp(value,"REGISTERED") == 0){
+                DEBUG("[Lwm2mHandler:write_callback]: registered\n");
                 trigger_event(REGISTERED);
-            }else if(strcmp(value,"READY")){
+            }else if(strcmp(value,"READY") == 0){
+                DEBUG("[Lwm2mHandler:write_callback]: ready\n");
                 trigger_event(READY);
             }       
             break;           
         case LWM2M_DEVICE_REGISTER_ID:
-            printf("Value of device cb: %s\n",value);
             trigger_event_string(REGISTER_CODE,value);
             break;
         case LW2M_DEVICE_TIME_ID:
