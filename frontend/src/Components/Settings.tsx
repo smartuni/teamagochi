@@ -78,7 +78,7 @@ function Settings({ username }: SettingsProps) {
         if ( ! deviceApi ||  ! devices[0] ) return;
 
         const currentDevice = devices[0];
-        currentDevice.petId = petId;
+        currentDevice.petId = (currentDevice.petId !== petId) ? petId : undefined;
 
         await deviceApi.updateDevice(currentDevice); //TODO deselect?
 

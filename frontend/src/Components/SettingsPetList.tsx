@@ -49,7 +49,7 @@ const SettingsPetList = (props: Props) => {
                         }}
                         disabled={!petIsSelectable()}
                     >
-                        {selected === pet.id ? 'Bring back' : 'Select'}
+                        {selected === pet.id ? 'Return' : 'Select'}
                     </button>
                     <button
                         className="btn btn-danger btn-lg mx-1"

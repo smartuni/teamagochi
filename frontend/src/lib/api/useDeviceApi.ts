@@ -16,13 +16,18 @@ class DeviceApi {
   }
 
   public async getDevices(): Promise<Device[]> {
-    const { data, error } = await this.withClient().GET("/api/v1/devices/self");
+    let result: Device[] = [];
 
-    // TODO
-    console.log(data);
-    console.log(error);
-
-    return data == undefined ? [] : data;
+    try {
+      const { data } = await this.withClient().GET("/api/v1/devices/self");
+      if (data !== undefined) {
+        result = data;
+      }
+    } catch (error: unknown) {
+      this.printErrorMessage(error);
+    }
+    
+    return result;
   }
 
   public async updateDevice(device: Device) {
@@ -92,6 +97,12 @@ class DeviceApi {
     }
 
     return this.apiClient;
+  }
+
+  private printErrorMessage(error: unknown) {
+    if (error instanceof Error) {
+      console.warn("Error when fetching devices");
+    }
   }
 }
 
