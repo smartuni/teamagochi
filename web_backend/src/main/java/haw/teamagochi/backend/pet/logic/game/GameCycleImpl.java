@@ -105,7 +105,6 @@ public class GameCycleImpl implements GameCycle {
     }
   }
 
-  @Transactional
   private void processPetInteractions(PetEntity pet) {
     InteractionRecord interactionRecord = petManager.getCurrentInteraction(pet.getId());
 
@@ -132,9 +131,7 @@ public class GameCycleImpl implements GameCycle {
     }
   }
 
-  @Transactional
-  // Needs to be public bc. Transactional.
-  public void deteriorate(PetEntity pet) {
+  private void deteriorate(PetEntity pet) {
     // Deteriorate base attributes
     int newHunger = hungerVO.deteriorate(pet.getHunger());
     pet.setHunger(newHunger);
