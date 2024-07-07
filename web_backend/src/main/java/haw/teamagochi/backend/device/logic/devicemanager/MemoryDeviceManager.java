@@ -107,12 +107,14 @@ public class MemoryDeviceManager implements DeviceManager {
   public void remove(String endpoint) {
     devices.remove(endpoint);
     activeDevices.remove(endpoint);
+    pets.remove(endpoint);
   }
 
   @Override
   public void removeAll() {
     devices.clear();
     activeDevices.clear();
+    pets.clear();
   }
 
   /**
