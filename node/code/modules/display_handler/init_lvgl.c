@@ -623,8 +623,8 @@ bool update_game(void) {
             snake_objs[snake_length - 1] = new_body_part;
         }
 
-        food.x = lv_rand(0, GRID_WIDTH);
-        food.y = lv_rand(0, GRID_HEIGHT);
+        food.x = lv_rand(0, GRID_WIDTH-1);
+        food.y = lv_rand(0, GRID_HEIGHT-1);
         lv_obj_set_pos(food_obj, food.x * GRID_SIZE, food.y * GRID_SIZE);
         snake_speed -= 10;
     }
