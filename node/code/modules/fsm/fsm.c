@@ -196,7 +196,7 @@ handler_result_t on_handler(EVENT_T event) {
 }
 
 void on_entry(void) {
-    displayHandler_handleEvent(REGISTERED);
+    // displayHandler_handleEvent(REGISTERED);
     ioHandler_handleEvent(VIBRATE);
     ioHandler_handleEvent(SCREEN_ON);
     if (registered && userLinked) {
@@ -238,10 +238,9 @@ void off_entry(void) {
 handler_result_t unregistered_handler(EVENT_T event) {
     printf("[FSM:unregistered_state_handler]: event: %d \n",event);
     switch (event) {
-        
         case REGISTER_CODE:
             DEBUG("[FSM:unregistered_state_handler]: REGISTER_CODE\n");
-            displayHandler_handleEvent(REGISTERED); //is that right?
+            // displayHandler_handleEvent(REGISTERED); //is that right?
             displayHandler_handleEvent(REGISTER_CODE);
             return HANDLED;
         case REGISTERED:
@@ -256,7 +255,7 @@ handler_result_t unregistered_handler(EVENT_T event) {
 
 void unregistered_entry(void) {
     DEBUG("[FSM:unregistered_state_handler]: Halooooo Lukas\n");
-    displayHandler_handleEvent(REGISTER_CODE);
+    // displayHandler_handleEvent(REGISTER_CODE);
 }
 
 handler_result_t userLinked_handler(EVENT_T event) {
@@ -273,7 +272,7 @@ handler_result_t userLinked_handler(EVENT_T event) {
 }
 
 void userLinked_entry(void) {
-    displayHandler_handleEvent(READY);
+    // displayHandler_handleEvent(READY);
     registered = true;
 }
 

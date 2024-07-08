@@ -58,7 +58,7 @@ ifndef CONFIG_LWM2M_SERVER_URI
   
 endif
 ##### /LWM2M #####
-CFLAGS += -DCONFIG_LWM2M_DEVICE_NAME=\""urn:t8i:dev:1"\"
+CFLAGS += -DCONFIG_LWM2M_DEVICE_NAME=\""urn:t8i:dev:5"\"
 
 include $(RIOTBASE)/Makefile.include
 
