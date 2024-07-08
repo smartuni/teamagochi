@@ -255,7 +255,7 @@ handler_result_t unregistered_handler(EVENT_T event) {
 
 void unregistered_entry(void) {
     DEBUG("[FSM:unregistered_state_handler]: Halooooo Lukas\n");
-    // displayHandler_handleEvent(REGISTER_CODE);
+    displayHandler_handleEvent(REGISTER_CODE);
 }
 
 handler_result_t userLinked_handler(EVENT_T event) {
