@@ -28,6 +28,8 @@
 
 char display_thread_stack [DISPLAY_STACKSIZE];
 
+char game_thread_stack [DISPLAY_STACKSIZE];
+
 handler_result_t displayHandler_handleEvent(EVENT_T event){
     char buf[100];
     DEBUG("[DisplayHandler:handleEvent]\n");
@@ -49,7 +51,6 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case BUTTON_DOWN_RELEASED:
             down_released();
-            init_registered_pet();
         break;
         case BUTTON_LEFT_PRESSED:
             left_pressed();
@@ -65,7 +66,6 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         break;
         case REGISTER_CODE:
             init_not_registered_code(get_register_code());
-            //init_not_registered_code("Hallo Tom");
             break;
         case REGISTERED:
             init_registered_no_pet();
@@ -79,6 +79,15 @@ handler_result_t displayHandler_handleEvent(EVENT_T event){
         case INFO_PRESSED:
             get_pet_stats((char*)&buf);
             init_pet_stats((char*)&buf);
+            break;
+        case DEAD:
+            showDeadScreen();
+            break;
+        case GAME_START:
+            DEBUG("[DisplayHandler:handleEvent]: GAME_START\n");
+            thread_create(game_thread_stack, sizeof(game_thread_stack),
+                  THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_WOUT_YIELD, game_loop, NULL, "Snake Game");
+            break;
         default:
         break;
      }

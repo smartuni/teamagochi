@@ -20,14 +20,20 @@ handler_result_t on_handler(EVENT_T event);
 void on_entry(void);
 handler_result_t off_handler(EVENT_T event);
 void off_entry(void);
+
 handler_result_t unregistered_handler(EVENT_T event);
 void unregistered_entry(void);
 handler_result_t userLinked_handler(EVENT_T event);
 void userLinked_entry(void);
 handler_result_t pet_handler(EVENT_T event);
 void pet_entry(void);
+handler_result_t dead_handler(EVENT_T event);
+void dead_entry(void);
+
 handler_result_t mainView_handler(EVENT_T event);
+void mainView_entry(void);
 handler_result_t gameView_handler(EVENT_T event);
+void gameView_entry(void);
 
 //Our definition of an hierachical state
 typedef struct hierarchical_state state_t;
@@ -44,9 +50,10 @@ struct hierarchical_state {
 static bool firstStart = true;
 static bool registered = false;
 static bool userLinked = false;
+static bool statsShowing = false;
 
 static const state_t Top_Level[2];
-static const state_t On_Level[3];
+static const state_t On_Level[4];
 static const state_t Pet_Level[2];
 
 static const state_t Top_Level[] = {
@@ -92,13 +99,21 @@ static const state_t On_Level[] = {
         &Top_Level[0],            // Parent state
         &Pet_Level[0],            // Child state
         2                         // Hierarchical state level
+    },
+    {//dead
+        dead_handler,              // state handler
+        dead_entry,                     // Entry action handler
+        NULL,                     // Exit action handler
+        &Top_Level[0],            // Parent state
+        NULL,                     // Child state
+        2                         // Hierarchical state level
     }
 };
 
 static const state_t Pet_Level[] = {
     {//Main_View
         mainView_handler,              // state handler
-        NULL,                     // Entry action handler
+        mainView_entry,                     // Entry action handler
         NULL,                     // Exit action handler
         &On_Level[2],             // Parent state
         NULL,                     // Child state
@@ -106,7 +121,7 @@ static const state_t Pet_Level[] = {
     },
     {//Game_View TODO: not used yet
         gameView_handler,              // state handler
-        NULL,                     // Entry action handler
+        gameView_entry,                     // Entry action handler
         NULL,                     // Exit action handler
         &On_Level[2],             // Parent state
         NULL,                     // Child state
@@ -181,6 +196,7 @@ handler_result_t on_handler(EVENT_T event) {
 }
 
 void on_entry(void) {
+    // displayHandler_handleEvent(REGISTERED);
     ioHandler_handleEvent(VIBRATE);
     ioHandler_handleEvent(SCREEN_ON);
     if (registered && userLinked) {
@@ -222,10 +238,9 @@ void off_entry(void) {
 handler_result_t unregistered_handler(EVENT_T event) {
     printf("[FSM:unregistered_state_handler]: event: %d \n",event);
     switch (event) {
-        
         case REGISTER_CODE:
             DEBUG("[FSM:unregistered_state_handler]: REGISTER_CODE\n");
-            displayHandler_handleEvent(REGISTERED); //is that right?
+            // displayHandler_handleEvent(REGISTERED); //is that right?
             displayHandler_handleEvent(REGISTER_CODE);
             return HANDLED;
         case REGISTERED:
@@ -239,6 +254,7 @@ handler_result_t unregistered_handler(EVENT_T event) {
 }
 
 void unregistered_entry(void) {
+    DEBUG("[FSM:unregistered_state_handler]: Halooooo Lukas\n");
     displayHandler_handleEvent(REGISTER_CODE);
 }
 
@@ -256,11 +272,17 @@ handler_result_t userLinked_handler(EVENT_T event) {
 }
 
 void userLinked_entry(void) {
+    // displayHandler_handleEvent(READY);
     registered = true;
 }
 
 handler_result_t pet_handler(EVENT_T event) {
     switch (event) {
+        case DEAD:
+            DEBUG("[FSM:pet_handler]: DEAD\n");
+            userLinked = false;
+            traverse_state(&On_Level[3]); //transition to dead
+            return HANDLED;
         default:
             DEBUG("[FSM:pet_handler]: UNHANDLED\n");
             return UNHANDLED;
@@ -268,9 +290,24 @@ handler_result_t pet_handler(EVENT_T event) {
 }
 
 void pet_entry(void) {
-    displayHandler_handleEvent(READY); //to draw the pet
     userLinked = true;
     traverse_state(&Pet_Level[0]); //transition to main_view
+}
+
+handler_result_t dead_handler(EVENT_T event) {
+    switch (event) {
+        case BUTTON_OK_PRESSED:
+            DEBUG("[FSM:dead_handler]: BUTTON_OK_PRESSED\n");
+            traverse_state(&On_Level[0]); //transition to register
+            return HANDLED;
+        default:
+            DEBUG("[FSM:dead_handler]: UNHANDLED\n");
+            return UNHANDLED;
+    }
+}
+
+void dead_entry(void) {
+    displayHandler_handleEvent(DEAD);
 }
 
 handler_result_t mainView_handler(EVENT_T event) {
@@ -319,24 +356,40 @@ handler_result_t mainView_handler(EVENT_T event) {
             displayHandler_handleEvent(event);
             return HANDLED;
         case PET_FEED:
-            DEBUG("[FSM:mainView_handler]: PET_FEED\n");
-            lwm2m_handleEvent(PET_FEED);
+            if (!statsShowing) {
+                DEBUG("[FSM:mainView_handler]: PET_FEED\n");
+                lwm2m_handleEvent(PET_FEED);
+            }
             return HANDLED;
         case PET_PLAY:
-            DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
-            lwm2m_handleEvent(PET_PLAY);
+            if (!statsShowing) {
+                DEBUG("[FSM:mainView_handler]: PET_PLAY\n");
+                traverse_state(&Pet_Level[1]); //transition to game_view
+            }
             return HANDLED;
         case PET_MEDICATE:
-            DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
-            lwm2m_handleEvent(PET_MEDICATE);
+            if (!statsShowing) {
+                DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
+                lwm2m_handleEvent(PET_MEDICATE);
+            }
             return HANDLED;
         case PET_CLEAN:
-            DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
-            lwm2m_handleEvent(PET_CLEAN);
+            if (!statsShowing) {
+                DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
+                lwm2m_handleEvent(PET_CLEAN);
+            }
             return HANDLED;
         case INFO_PRESSED:
-        DEBUG("[FSM:mainView_handler]: INFO_PRESSED\n");
-            displayHandler_handleEvent(INFO_PRESSED);
+            if (!statsShowing) {
+                DEBUG("[FSM:mainView_handler]: show Statview\n");
+                statsShowing = true;
+                displayHandler_handleEvent(INFO_PRESSED);
+            }
+            else {
+                DEBUG("[FSM:mainView_handler]: hide Statview\n");
+                statsShowing = false;
+                displayHandler_handleEvent(READY);
+            }
             return HANDLED;
         default:
             DEBUG("[FSM:mainView_handler]: UNHANDLED\n");
@@ -344,11 +397,46 @@ handler_result_t mainView_handler(EVENT_T event) {
     }
 }
 
+void mainView_entry(void) {
+    // displayHandler_handleEvent(READY); //to draw the pet
+}
+
+static bool raus = false;
+
 handler_result_t gameView_handler(EVENT_T event) {
     switch (event) {
+        case BUTTON_OK_PRESSED:
+            if (raus) {
+                traverse_state(&Pet_Level[0]); //transition to main_view
+            }
+            else {
+                raus = true;
+            }
+            return HANDLED;
+        case BUTTON_OK_RELEASED:
+        case BUTTON_UP_PRESSED:
+        case BUTTON_UP_RELEASED:
+        case BUTTON_DOWN_PRESSED:
+        case BUTTON_DOWN_RELEASED:
+        case BUTTON_LEFT_PRESSED:
+        case BUTTON_LEFT_RELEASED:
+        case BUTTON_RIGHT_PRESSED:
+        case BUTTON_RIGHT_RELEASED:
+            displayHandler_handleEvent(event);
+            return HANDLED;
+        case GAME_FINISHED:
+            DEBUG("[FSM:gameView_handler]: GAME_FINISHED\n");
+            traverse_state(&Pet_Level[0]); //transition to main_view
+            lwm2m_handleEvent(PET_PLAY);     
+            return HANDLED;
         default:
             DEBUG("[FSM:gameView_handler]: UNHANDLED\n");
             return UNHANDLED;
     }
+}
+
+void gameView_entry(void) {
+    raus = false;
+    displayHandler_handleEvent(GAME_START);
 }
 //EOF
