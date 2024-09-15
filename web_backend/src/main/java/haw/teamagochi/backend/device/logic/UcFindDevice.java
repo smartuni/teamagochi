@@ -43,6 +43,14 @@ public interface UcFindDevice {
   DeviceEntity findByIdentifier(String identifier);
 
   /**
+   * Find device by the pet on it.
+   *
+   * @param petID of the pet on the device
+   * @return oet if found, otherwise null
+   */
+  DeviceEntity findByPet(long petID);
+
+  /**
    * Find all devices.
    *
    * @return entities if found, otherwise empty list
