@@ -26,11 +26,15 @@ fi
 
 USE_BOOTSTRAP=true
 MODELS_FOLDER=models
-ENDPOINT_NAME=teamagochi-java-client-0
+DEFAULT_ENDPOINT_ID=java-1
+ENDPOINT_NAME="urn:t8i:dev:${1:-$DEFAULT_ENDPOINT_ID}"
+
+shift
 
 if [ "$USE_BOOTSTRAP" = true ]; then
     # With bootstrap server
     SERVER_URL=coap://localhost:5683
+    #SERVER_URL=coap://teamagochi:5683
     { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
         | java -jar ./leshan-client-demo.jar \
         --models-folder="$MODELS_FOLDER" \
@@ -40,6 +44,7 @@ if [ "$USE_BOOTSTRAP" = true ]; then
 else
     # Without bootstrap server
     SERVER_URL=coap://localhost:5783
+    #SERVER_URL=coap://teamagochi:5783
     { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
         | java -jar ./leshan-client-demo.jar \
         --models-folder="$MODELS_FOLDER" \
