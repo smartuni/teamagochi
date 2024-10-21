@@ -1,19 +1,9 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import backgroundImage from "../Misc/compute-ea4c57a4.png";
-import Navbar from "./Navbar/Navbar";
-import { Link } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 
 
 const LandingPage = () => {
   const auth = useAuth();
-  React.useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
 
   return (
     <div>

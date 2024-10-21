@@ -1,41 +1,97 @@
 import { useAuth } from "react-oidc-context";
-import "./App.css";
 import Footer from "./Components/Footer";
-import Navbar from "./Components/Navbar/Navbar";
+import Navbar from "./Components/Navbar";
 import LandingPage from "./Components/LandingPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./lib/ProtectedRoute";
+import Settings from "./Components/Settings";
+import PetPage from "./Components/PetPage";
+import NotFound from "./Components/NotFound";
+import { ToastContainer, toast } from "react-toastify";
+
+import "./App.css";
 
 function App() {
     const auth = useAuth();
 
     switch (auth.activeNavigator) {
         case "signinSilent":
-            return <div>Signing you in...</div>;
+            return;
         case "signoutRedirect":
-            return <div>Signing you out...</div>;
+            return;
     }
 
     if (auth.isLoading) {
-        return <div>Loading...</div>;
+        toast("Logging in...");
+        return;
+        // return <div>Loading...</div>;
     }
 
     if (auth.error) {
         console.error(auth.error);
-        return <div>Oops... {auth.error.message}</div>;
+        toast(auth.error.message);
+        return;
+        // return <div>Oops... {auth.error.message}</div>;
     }
 
-  if (auth.isAuthenticated) {
+    if (!auth.isAuthenticated) {
+        return (
+            <>
+            <div style={{height: "100vh"}}>
+                <Navbar />
+                <LandingPage />
+            </div>
+            <div>
+                <Footer />
+            </div>
+            </>
+        );
+    }
+
     return (
-      <div style={{ backgroundColor: "#FFFFFF" }}>
-        <div>
-          <div>
+        <>
+        <BrowserRouter basename="/">
             <Navbar />
-          </div>
-        </div>
-        <Footer />
-      </div>
+            <div className="main-content" style={{ backgroundColor: "#FFFFFF" }}>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<LandingPage />}
+                    />
+                    <Route
+                        path="/PetPage"
+                        element={
+                            <ProtectedRoute>
+                                <PetPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/Settings"
+                        element={
+                        <ProtectedRoute>
+                            <Settings
+                                username={auth.user?.profile?.preferred_username || "User"}
+                            />
+                        </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="*"
+                        element={
+                            <ProtectedRoute>
+                                <NotFound />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </div>
+            <Footer />
+        </BrowserRouter>
+        <ToastContainer />
+        </>
     );
-  }
-  return [<Navbar />, <LandingPage />,<Footer />];
 }
 
 export default App;

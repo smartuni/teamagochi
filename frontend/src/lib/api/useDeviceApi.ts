@@ -16,23 +16,71 @@ class DeviceApi {
   }
 
   public async getDevices(): Promise<Device[]> {
-    const { data, error } = await this.withClient().GET("/api/v1/devices/self");
+    let result: Device[] = [];
+
+    try {
+      const { data } = await this.withClient().GET("/api/v1/devices/self");
+      if (data !== undefined) {
+        result = data;
+      }
+    } catch (error: unknown) {
+      this.printErrorMessage(error);
+    }
+    
+    return result;
+  }
+
+  public async updateDevice(device: Device) {
+    const { data, error } = await this.withClient().PUT(
+      "/api/v1/devices/self/{deviceId}", {
+        params: {
+          path: {
+            deviceId: device.id!,
+          }
+        },
+        body: device,
+      }
+    )
 
     // TODO
     console.log(data);
     console.log(error);
 
-    return data == undefined ? [] : data;
+    return data;
   }
 
-  public async registerDevice(registrationCode: string, deviceName: string) {
+  public async deleteDevice(deviceId: number) {
     const { data, error } = await this.withClient()
-      .POST("/api/v1/devices/self/register/{registrationCode}/{deviceName}", {
+      .DELETE("/api/v1/devices/self/{deviceId}", {
+        params: {
+          path: {
+            deviceId: deviceId,
+          }
+        }
+      });
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
+  public async registerDevice(
+    registrationCode: string,
+    deviceName: string,
+    deviceType: string)
+  {
+    const { data, error } = await this.withClient()
+      .POST("/api/v1/devices/self/register/{registrationCode}", {
         params: {
           path: {
             registrationCode: registrationCode,
-            deviceName: deviceName,
           }
+        },
+        body: {
+          type: deviceType,
+          name: deviceName
         }
       });
 
@@ -49,6 +97,12 @@ class DeviceApi {
     }
 
     return this.apiClient;
+  }
+
+  private printErrorMessage(error: unknown) {
+    if (error instanceof Error) {
+      console.warn("Error when fetching devices");
+    }
   }
 }
 

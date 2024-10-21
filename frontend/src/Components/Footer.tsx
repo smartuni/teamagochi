@@ -1,8 +1,5 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './footer.css';
 const Footer = () => (
-    <footer className="footer page-footer font-small pt-3 bg-light">
+    <footer className={`footer page-footer font-small pt-3 bg-light`}>
         <div className="container text-center text-md-left">
             <div className="row">
                 <div className="col-md-6 mt-md-0 mt-3">

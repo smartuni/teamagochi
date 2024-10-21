@@ -53,6 +53,7 @@ typedef enum {
     PET_ILL,
     PET_BORED,
     PET_DIRTY,
+    DEAD,
     VIBRATE,
     SCREEN_OFF,
     SCREEN_ON,
@@ -69,7 +70,9 @@ typedef enum {
     XP,
     HUNGER,
     CLEANLINESS,
-    FUN
+    FUN,
+    GAME_START,
+    GAME_FINISHED,
 }EVENT_T;
 
 typedef struct{
