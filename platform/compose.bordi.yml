@@ -1,0 +1,13 @@
+#
+# Additions which are only relevant on the Raspberry Pi. Use with `-f` option,
+# e.g.: `docker compose -f compose.yml -f compose.raspi.yml up`
+#
+
+services:
+  teashan:
+    ports:
+      - "[2001:db8:1::1]:5683:5683/udp" # [coap://]      CoAP over UDP (with experimental OSCORE)
+      - "[2001:db8:1::1]:5683:5683/tcp" # [coap+tcp://]  CoAP over TCP (experimental) 
+      - "[2001:db8:1::1]:5684:5684/udp" # [coaps://]     CoAP over DTLS
+      - "[2001:db8:1::1]:5684:5684/tcp" # [coaps+tcp://] CoAP over TLS (experimental)
+      - "[2001:db8:1::1]:5685:5685/udp" # [coap://]      CoAP over UDP[::]
