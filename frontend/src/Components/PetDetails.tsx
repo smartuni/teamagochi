@@ -1,23 +1,25 @@
 import { Pet } from "../lib/api/usePetApi";
 import PetDetailsProgressBar from "./PetDetailsProgressBar";
 
-const PetDetails = (props: { pet: Pet; petImageSrc: string }) => {
-  const { pet, petImageSrc } = props;
+const PetDetails = (props: { pet: Pet; petImageSrc: string; deadPetImageSrc: string }) => {
+  const { pet, petImageSrc, deadPetImageSrc } = props;
 
   if (!pet.state) return;
   const petState = pet.state;
+  const petIsAlive = petState.health! > 0;
+  const petImage = petIsAlive ? petImageSrc : deadPetImageSrc;
 
   return (
-    <>
-      <div className="col-6">
+    <div className="d-flex flex-row">
+      <div className="col-5">
         <img
           className="img-fluid"
-          src={petImageSrc}
+          src={petImage}
           alt="Image showing the pet"
         />
       </div>
       <div className="col-6">
-        <div className="h2 px-3 py-4">{pet.name}</div>
+        <div className="h2 px-3 py-4">{pet.name}{petIsAlive || " died... 👻"}</div>
         <PetDetailsProgressBar
           labelName="Health"
           value={petState.health}
@@ -54,7 +56,7 @@ const PetDetails = (props: { pet: Pet; petImageSrc: string }) => {
           color="red"
         />
       </div>
-    </>
+    </div>
   );
 };
 

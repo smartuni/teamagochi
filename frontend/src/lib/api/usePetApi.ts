@@ -16,13 +16,18 @@ class PetApi {
   }
 
   public async getPets(): Promise<Pet[]> {
-    const {data, error} = await this.withClient().GET("/api/v1/pets/self");
+    let result: Pet[] = [];
 
-    // TODO
-    console.log(data);
-    console.log(error);
+    try {
+      const { data } = await this.withClient().GET("/api/v1/pets/self");
+      if (data !== undefined) {
+        result = data;
+      }
+    } catch (error: unknown) {
+      this.printErrorMessage(error);
+    }
 
-    return data == undefined ? [] : data;
+    return result;
   }
 
   public async getPetById(id: number): Promise<Pet|undefined> {
@@ -38,12 +43,50 @@ class PetApi {
     return data;
   }
 
+  public async createPet(pet: Pet) {
+    const {data, error} = await this.withClient().POST(
+      "/api/v1/pets/self",
+      {
+        body: pet,
+      }
+    )
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
+  public async removePet(id: number) {
+    const {data, error} = await this.withClient().DELETE(
+      "/api/v1/pets/{petId}",
+      {
+        params: {
+          path: { petId: id }
+        }
+      }
+    )
+
+    // TODO
+    console.log(data);
+    console.log(error);
+
+    return data;
+  }
+
   private withClient() {
     if (!this.apiClient) {
       throw new Error("Client must be set.");
     }
 
     return this.apiClient;
+  }
+
+  private printErrorMessage(error: unknown) {
+    if (error instanceof Error) {
+      console.warn("Error when fetching pets");
+    }
   }
 }
 

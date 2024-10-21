@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useDeviceApi } from "../lib/api/useDeviceApi";
+import { Device, useDeviceApi } from "../lib/api/useDeviceApi";
 import 'reactjs-popup/dist/index.css';
 
 interface LinkDeviceProps {
     onClose: () => void; // onClose prop should be a function that closes the popup
+    onSubmit: (device: Device) => void;
 }
 
-function LinkDevice({ onClose }: LinkDeviceProps) {
+function LinkDevice({ onClose, onSubmit }: LinkDeviceProps) {
     const [deviceKey, setDeviceKey] = useState("");
     const [deviceName, setDeviceName] = useState("");
+    const [error, setError] = useState("");
     const deviceApi = useDeviceApi();
 
     const handleInputChangeKey = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,17 +24,44 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent form from reloading the page
-        if (deviceKey.trim() === "") {
+
+        const registrationCode = deviceKey.trim();
+        const name = deviceName.trim();
+
+        if (registrationCode === "" || name === "") {
+            // Invalid form data
+            setError("An error occured, please try again!")
             return;
         }
-        // TODO: Save the device ID or perform any action with the input value
-        const result = await deviceApi?.registerDevice(deviceKey, deviceName);
-        console.log("Device ID:", deviceKey, " Device Name:", deviceName);
-        if (result == undefined) {
-            //FEEDBACK TODO
-        } else {
-            onClose(); // Close the popup after submission
+
+        if (deviceApi === undefined) {
+            // Initialization error
+            setError("An error occured, please try again!")
+            return;
         }
+
+        let newDevice;
+        try {
+            newDevice = await deviceApi.registerDevice(deviceKey, deviceName, "FROG");
+           } catch (error) {
+            // Request error
+            setError("An error occured, please try again!")
+            return;
+        }
+
+        if (newDevice === undefined) {
+            // Invalid registration code
+            setError("An error occured, please try again!")
+            return;
+        }
+
+        onSubmit(newDevice);
+
+        // Close the popup after submission
+        onClose();
+
+        console.log("Added device", newDevice);
+        console.log(error)
     };
 
     return (
@@ -49,22 +78,29 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
                     aria-label="Close"
                     style={{ position: 'absolute', top: '10px', right: '10px' }}
                     onClick={onClose} // Also close on clicking the close button
-                ></button>
+                />
+
                 <form className="row g-0 needs-validation" onSubmit={handleSubmit}>
                     <figure className='text-center'>
                         <p className='lead'>
-                            <strong>Enter your device Key Registration and Name below:</strong>
+                            <strong>Register device</strong>
                         </p>
                     </figure>
 
-                    <div className="input-group  mb-1">
+                    {error !== "" &&
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    }
+
+                    <div className="input-group mb-2">
                         <span className="input-group-text">#</span>
-                        <label htmlFor="inputLink" className="visually-hidden">Device Key Registration</label>
+                        <label htmlFor="inputLink" className="visually-hidden">Device Registration Code</label>
                         <input
                             type="text"
                             className="form-control"
                             id="inputDeviceId"
-                            placeholder="Device Key Registration"
+                            placeholder="Device Registration Code"
                             required
                             value={deviceKey}
                             onChange={handleInputChangeKey}
@@ -72,7 +108,7 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
                         <div className='invalid-feedback'>ok</div>
                     </div>
 
-                    <div className="input-group mb-1 py-2">
+                    <div className="input-group my-2">
                         <span className="input-group-text">@</span>
                         <label htmlFor="inputLink" className="visually-hidden">Device Name</label>
                         <input
@@ -84,6 +120,21 @@ function LinkDevice({ onClose }: LinkDeviceProps) {
                             value={deviceName}
                             onChange={handleInputChangeDName}
                         />
+                        <div className='invalid-feedback'>ok</div>
+                    </div>
+
+                    <div className="input-group my-2">
+                        <span className="input-group-text">🐸</span>
+                        <label htmlFor="inputLink" className="visually-hidden">Device Type</label>
+                        <select
+                            className="form-select"
+                            id="inputDeviceType"
+                            required
+                            disabled
+                            value="FROG"
+                        >
+                            <option>Frog</option>
+                        </select>
                         <div className='invalid-feedback'>ok</div>
                     </div>
 

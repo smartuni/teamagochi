@@ -1,14 +1,23 @@
 #root {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
+    width: 100%;
     min-height: 100vh;
-    flex-grow: 1;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+  color: #ffffff; /* Change to the desired color */
+  text-shadow: 0 0 10px #ffffff;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-bottom: 2em;
 }
 
 .footer {
   display: flex;
   width: 100%;
-  position: fixed;
-  bottom: 0;
 }
