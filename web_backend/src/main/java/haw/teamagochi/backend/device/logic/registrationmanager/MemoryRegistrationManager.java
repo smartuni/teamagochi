@@ -1,7 +1,9 @@
 package haw.teamagochi.backend.device.logic.registrationmanager;
 
 import haw.teamagochi.backend.device.logic.UcDeviceResourceOperations;
-import haw.teamagochi.backend.device.logic.UcFindDevice;
+import haw.teamagochi.backend.device.logic.clients.rest.DeviceStatus;
+import haw.teamagochi.backend.device.logic.devicemanager.DeviceManager;
+import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,16 +11,17 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import lombok.Setter;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 /** In-memory implementation of a {@link RegistrationManager}. */
 @ApplicationScoped
+@Startup
 public class MemoryRegistrationManager implements RegistrationManager {
 
   private static final Logger LOGGER = Logger.getLogger(MemoryRegistrationManager.class);
@@ -31,14 +34,17 @@ public class MemoryRegistrationManager implements RegistrationManager {
   /** Maps registration codes to endpoint client names. */
   private final HashMap<String, String> registrationCodeMap;
 
-  /** Blocklist: a cache for already registered devices. */
-  private final HashSet<String> blocklist;
-
-  @Inject
-  UcFindDevice ucFindDevice;
-
   @Inject
   UcDeviceResourceOperations ucDeviceResourceOperations;
+
+  @Inject
+  DeviceManager deviceManager;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.prefix")
+  protected String clientEndpointNamePrefix;
+
+  @ConfigProperty(name = "leshan.client-endpoint-name.filter-mode")
+  protected String clientEndpointNameFilterMode;
 
   @Setter
   private Integer registrationLifetime;
@@ -46,11 +52,11 @@ public class MemoryRegistrationManager implements RegistrationManager {
   public MemoryRegistrationManager() {
     clientMap = new HashMap<>();
     registrationCodeMap = new HashMap<>();
-    blocklist = new HashSet<>();
   }
 
   @PostConstruct
   void init() {
+    deviceManager.init();
     LOGGER.debug("Initialized MemoryRegistrationManager instance.");
   }
 
@@ -58,21 +64,29 @@ public class MemoryRegistrationManager implements RegistrationManager {
    * {@inheritDoc}
    */
   @Override
-  public String registerClient(String registrationCode) {
-    String endpoint = registrationCodeMap.get(registrationCode);
+  public String getClientByCode(String registrationCode) {
+    return registrationCodeMap.get(registrationCode);
+  }
 
-    if (endpoint != null) {
-      // TODO write new state to the device
-
-      registrationCodeMap.remove(registrationCode);
-      clientMap.remove(endpoint);
-      blocklist.add(endpoint);
-
-      LOGGER.info(
-          "The client '" + endpoint + "' was registered with code '" + registrationCode + "'.");
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean updateClient(String endpoint, Long deviceId) {
+    if (!clientMap.containsKey(endpoint)) {
+      throw new IllegalStateException("Client is not available for registration.");
     }
 
-    return endpoint;
+    boolean result = ucDeviceResourceOperations.writeStatus(endpoint, DeviceStatus.REGISTERED);
+
+    if (result) {
+      removeClient(endpoint);
+      deviceManager.add(endpoint, deviceId);
+
+      LOGGER.info("The client '" + endpoint + "' was registered.");
+    }
+
+    return result;
   }
 
   /**
@@ -98,7 +112,9 @@ public class MemoryRegistrationManager implements RegistrationManager {
        */
       try {
         String registrationCode = generateUniqueRegistrationCode(registrationCodeMap.keySet());
-        writeRegistrationCodeToDevice(endpoint, registrationCode);
+        if (isAcceptableForWriting(endpoint)) {
+          writeRegistrationCodeToDevice(endpoint, registrationCode);
+        }
         registrationCodeMap.put(registrationCode, endpoint);
 
         LOGGER.info(
@@ -128,10 +144,25 @@ public class MemoryRegistrationManager implements RegistrationManager {
    * @return true if it should be added, otherwise false.
    */
   private boolean isClientAllowedForRegistration(String endpoint) {
-    if (blocklist.isEmpty()) {
-      ucFindDevice.findAll().forEach(device -> blocklist.add(device.getIdentifier()));
+    return !deviceManager.contains(endpoint);
+  }
+
+  /**
+   * Check if we want to write to the device.
+   *
+   * <p>Note that Section "7.4.1. Endpoint Client Name" of the LwM2M spec says:
+   *   "[...] the Endpoint Client Name is unauthenticated and can be set to arbitrary
+   *   value by a misconfigured or malicious client and hence MUST NOT be used alone for
+   *   any decision making without prior matching the Endpoint Client Name against the
+   *   identifier used with the security protocol protecting LwM2M communication".
+   *
+   * @param endpointName of a device
+   */
+  private boolean isAcceptableForWriting(String endpointName) {
+    if (clientEndpointNameFilterMode.equals("receive")) {
+      return true;
     }
-    return !blocklist.contains(endpoint);
+    return clientEndpointNamePrefix != null && endpointName.startsWith(clientEndpointNamePrefix);
   }
 
   /**
@@ -211,9 +242,7 @@ public class MemoryRegistrationManager implements RegistrationManager {
   }
 
   @Override
-  public void clearCache() {
-    blocklist.clear();
-  }
+  public void clearCache() {}
 
   /**
    * Find outdated clients.

@@ -5,6 +5,12 @@ FROM node:20.12-bookworm as base
 #
 FROM base as builder
 
+ARG VITE_AUTHORITY
+ARG VITE_CLIENT_ID
+
+ENV VITE_AUTHORITY=$VITE_AUTHORITY
+ENV VITE_CLIENT_ID=$VITE_CLIENT_ID
+
 WORKDIR /build
 
 COPY package*.json ./

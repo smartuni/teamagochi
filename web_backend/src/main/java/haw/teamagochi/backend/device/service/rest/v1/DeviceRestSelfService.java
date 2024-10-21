@@ -1,17 +1,21 @@
 package haw.teamagochi.backend.device.service.rest.v1;
 
 import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
-import haw.teamagochi.backend.device.logic.UcChangePet;
 import haw.teamagochi.backend.device.logic.UcFindDevice;
 import haw.teamagochi.backend.device.logic.UcManageDevice;
 import haw.teamagochi.backend.device.service.rest.v1.mapper.DeviceMapper;
 import haw.teamagochi.backend.device.service.rest.v1.model.DeviceDTO;
 import haw.teamagochi.backend.general.security.SecurityUtil;
+import haw.teamagochi.backend.pet.logic.UcFindPet;
+import haw.teamagochi.backend.user.logic.UcFindUser;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
@@ -38,12 +42,16 @@ public class DeviceRestSelfService {
   protected DeviceMapper deviceMapper;
 
   @Inject
+  protected UcFindUser ucFindUser;
+
+  @Inject
+  protected UcFindPet ucFindPet;
+
+  @Inject
   protected UcFindDevice ucFindDevice;
 
   @Inject
   protected UcManageDevice ucManageDevice;
-  @Inject
-  UcChangePet ucChangePet;
 
   /**
    * Get all devices.
@@ -83,6 +91,55 @@ public class DeviceRestSelfService {
   }
 
   /**
+   * Update a device.
+   *
+   * @param deviceId of the device to update
+   * @return the {@link DeviceDTO} if deleted
+   * @throws NotFoundException if no device was found
+   */
+  @PUT
+  @Path("/{deviceId}")
+  @Operation(summary = "Update a device")
+  @APIResponse(responseCode = "200")
+  @APIResponse(responseCode = "404", description = "Not Found")
+  @Transactional
+  public DeviceDTO updateDevice(@PathParam("deviceId") long deviceId, DeviceDTO dto) {
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    if (dto.getOwnerId() != null
+        && Objects.equals(dto.getOwnerId(), uuid)
+        && Objects.equals(dto.getId(), deviceId)) {
+      DeviceEntity entity = deviceMapper.mapTransferObjectToEntity(
+          dto, ucFindUser, ucFindPet, ucFindDevice);
+      ucManageDevice.update(entity);
+      return deviceMapper.mapEntityToTransferObject(entity);
+    }
+    throw new NotFoundException();
+  }
+
+  /**
+   * Delete a device by its id.
+   *
+   * @param deviceId of the device to delete
+   * @return the {@link DeviceDTO} if deleted
+   * @throws NotFoundException if no device was found
+   */
+  @DELETE
+  @Path("/{deviceId}")
+  @Operation(summary = "Delete a device by its id")
+  @APIResponse(responseCode = "200")
+  @APIResponse(responseCode = "404", description = "Not Found")
+  public DeviceDTO deleteDeviceById(@PathParam("deviceId") long deviceId) {
+    String uuid = SecurityUtil.getExternalUserId(identity);
+    DeviceEntity entity = ucFindDevice.find(deviceId);
+    if (entity.getOwner() != null
+        && Objects.equals(uuid, entity.getOwner().getExternalID().toString())
+        && ucManageDevice.deleteById(deviceId)) {
+      return deviceMapper.mapEntityToTransferObject(entity);
+    }
+    throw new NotFoundException();
+  }
+
+  /**
    * Register a device using a registration code.
    *
    * @param registrationCode the registration code for a device
@@ -90,38 +147,18 @@ public class DeviceRestSelfService {
    * @throws NotFoundException if the registration code is not found
    */
   @POST
-  @Path("/register/{registrationCode}/{deviceName}")
+  @Path("/register/{registrationCode}")
   @Operation(summary = "Register a device using a registration code")
   @APIResponse(responseCode = "200")
   @APIResponse(responseCode = "404", description = "Not Found")
   public DeviceDTO registerDevice(
-      @PathParam("registrationCode") String registrationCode,
-      @PathParam("deviceName") String deviceName) {
+      @PathParam("registrationCode") String registrationCode, DeviceDTO dto) {
     String uuid = SecurityUtil.getExternalUserId(identity);
-    DeviceEntity entity = ucManageDevice.registerDevice(registrationCode, deviceName, uuid);
+    DeviceEntity entity =
+        ucManageDevice.registerDevice(registrationCode, dto.getName(), dto.getType(), uuid);
     if (entity != null) {
       return deviceMapper.mapEntityToTransferObject(entity);
     }
     throw new NotFoundException();
   }
-
-  @POST
-  @Path("/changepet/{deviceID}/{PetID}")
-  @Operation(summary = "Set Pet for the Device")
-  @APIResponse(responseCode = "200")
-  @APIResponse(responseCode = "404", description = "Not Found")
-  public DeviceDTO changePet(@PathParam("deviceID") long deviceId, @PathParam("PetID") long petId){
-    String uuid = SecurityUtil.getExternalUserId(identity);
-    DeviceEntity device = ucFindDevice.find(deviceId);
-    if(device != null
-        && device.getOwner() != null
-        && Objects.equals(device.getOwner().getExternalID().toString(), uuid)){//request authorised
-      device = ucChangePet.changePet(deviceId, petId);
-      if (device != null) {
-        return deviceMapper.mapEntityToTransferObject(device);
-      }//if
-    }//if
-    throw new NotFoundException();
-    }//method
-
 }

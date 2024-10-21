@@ -88,7 +88,10 @@ public interface DeviceMapper {
 
   @AfterMapping
   default void findOwner(DeviceDTO dto, @MappingTarget DeviceEntity entity, @Context UcFindUser ucFindUser) {
-    if (dto.getOwnerId() == null || ucFindUser == null) return;
+    if (dto.getOwnerId() == null || ucFindUser == null) {
+      entity.setOwner(null);
+      return;
+    }
 
     UserEntity dbEntity = ucFindUser.find(dto.getOwnerId());
     if (dbEntity != null) {
@@ -98,7 +101,10 @@ public interface DeviceMapper {
 
   @AfterMapping
   default void findPet(DeviceDTO dto, @MappingTarget DeviceEntity entity, @Context UcFindPet ucFindPet) {
-    if (dto.getPetId() == null || ucFindPet == null) return;
+    if (dto.getPetId() == null || ucFindPet == null) {
+      entity.setPet(null);
+      return;
+    }
 
     PetEntity dbEntity = ucFindPet.find(dto.getPetId());
     if (dbEntity != null) {
@@ -108,7 +114,10 @@ public interface DeviceMapper {
 
   @AfterMapping
   default void findDeviceIdentifier(@MappingTarget DeviceEntity entity, @Context UcFindDevice ucFindDevice) {
-    if (ucFindDevice == null) return;
+    if (ucFindDevice == null) {
+      entity.setIdentifier(null);
+      return;
+    }
 
     DeviceEntity dbEntity = ucFindDevice.find(entity.getId());
     if (dbEntity != null) {

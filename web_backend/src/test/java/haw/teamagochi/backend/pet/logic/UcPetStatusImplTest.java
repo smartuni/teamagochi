@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
 import haw.teamagochi.backend.pet.dataaccess.model.PetTypeEntity;
-import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import haw.teamagochi.backend.pet.logic.game.events.PetEvents;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
 import haw.teamagochi.backend.user.logic.UcManageUser;
 import io.quarkus.test.junit.QuarkusTest;

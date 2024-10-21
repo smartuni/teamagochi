@@ -1,4 +1,4 @@
-package haw.teamagochi.backend.pet.logic.Events;
+package haw.teamagochi.backend.pet.logic.game.events;
 
 public abstract class PetConditionVO extends PetAttributeVO{
 

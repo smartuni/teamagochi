@@ -34,6 +34,7 @@ shift
 if [ "$USE_BOOTSTRAP" = true ]; then
     # With bootstrap server
     SERVER_URL=coap://localhost:5683
+    #SERVER_URL=coap://[fd00:dead:beef::1]:5683
     #SERVER_URL=coap://teamagochi:5683
     { sleep 5; echo -e "create 32769\n create 32770\n delete 6\n delete 3303\n delete 3442\n"; } \
         | java -jar ./leshan-client-demo.jar \

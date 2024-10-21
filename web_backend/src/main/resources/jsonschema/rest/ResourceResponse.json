@@ -17,7 +17,7 @@
       "type": "boolean"
     },
     "content": {
-      "$ref": "Resource.json"
+      "$ref": "../common/Resource.json"
     }
   },
   "required": [

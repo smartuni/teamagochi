@@ -3,6 +3,7 @@ package haw.teamagochi.backend.device.logic.clients.sse;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.AwakeEventFilter;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.CoaplogEventFilter;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.DeregistrationEventFilter;
+import haw.teamagochi.backend.device.logic.clients.sse.filter.NotificationEventFilter;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.RegistrationEventFilter;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.SleepingEventFilter;
 import haw.teamagochi.backend.device.logic.clients.sse.filter.UpdatedEventFilter;
@@ -41,6 +42,12 @@ public interface LeshanEventClient {
   @Produces(MediaType.SERVER_SENT_EVENTS)
   @SseEventFilter(UpdatedEventFilter.class)
   Multi<SseEvent<String>> updated();
+
+  @GET
+  @Path("/")
+  @Produces(MediaType.SERVER_SENT_EVENTS)
+  @SseEventFilter(NotificationEventFilter.class)
+  Multi<SseEvent<String>> notification();
 
   @GET
   @Path("/")

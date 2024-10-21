@@ -6,7 +6,7 @@ import haw.teamagochi.backend.leshanclient.datatypes.rest.ClientDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectInstanceResponseDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectResponseDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ObjectspecDto;
-import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceDto;
+import haw.teamagochi.backend.leshanclient.datatypes.common.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.ResourceResponseDto;
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.Set;
@@ -188,7 +188,7 @@ public class LeshanClientResourceTests {
     assertEquals("singleResource", contentDto.kind);
     assertEquals(resourceId, contentDto.id);
     assertEquals("INTEGER", contentDto.type);
-    assertNotNull(Integer.valueOf(contentDto.value));
+    assertNotNull(contentDto.value);
     assertNull(contentDto.values); // because type == singleResource
 
     // Print

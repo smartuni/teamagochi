@@ -1,7 +1,14 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
-import haw.teamagochi.backend.pet.logic.Events.*;
+import haw.teamagochi.backend.pet.logic.game.events.CleanlinessVO;
+import haw.teamagochi.backend.pet.logic.game.events.FunVO;
+import haw.teamagochi.backend.pet.logic.game.events.HappinessVO;
+import haw.teamagochi.backend.pet.logic.game.events.HealthVO;
+import haw.teamagochi.backend.pet.logic.game.events.HungerVO;
+import haw.teamagochi.backend.pet.logic.game.events.PetEvents;
+import haw.teamagochi.backend.pet.logic.game.events.WellbeingVO;
+import haw.teamagochi.backend.pet.logic.game.events.XpVO;
 import haw.teamagochi.backend.pet.service.rest.v1.mapper.PetMapper;
 import haw.teamagochi.backend.pet.service.rest.v1.model.PetStateDTO;
 import jakarta.enterprise.context.ApplicationScoped;

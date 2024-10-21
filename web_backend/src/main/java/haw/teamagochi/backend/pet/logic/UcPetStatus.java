@@ -1,7 +1,7 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
-import haw.teamagochi.backend.pet.logic.Events.PetEvents;
+import haw.teamagochi.backend.pet.logic.game.events.PetEvents;
 
 /**
  * Use Case for the Status-Values of a pet:

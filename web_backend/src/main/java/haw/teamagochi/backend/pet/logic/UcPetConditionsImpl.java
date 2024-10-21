@@ -1,9 +1,7 @@
 package haw.teamagochi.backend.pet.logic;
 
 import haw.teamagochi.backend.pet.dataaccess.model.PetEntity;
-import haw.teamagochi.backend.pet.logic.Events.PetEvents;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

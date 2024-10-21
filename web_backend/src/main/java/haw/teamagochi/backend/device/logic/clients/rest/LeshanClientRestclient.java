@@ -1,5 +1,6 @@
 package haw.teamagochi.backend.device.logic.clients.rest;
 
+import haw.teamagochi.backend.leshanclient.datatypes.common.ResourceDto;
 import haw.teamagochi.backend.leshanclient.datatypes.rest.*;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.GET;
@@ -9,7 +10,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import java.util.Set;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 /**
@@ -67,6 +67,46 @@ public interface LeshanClientRestclient {
       @QueryParam("timeout") Integer timeout,
       @QueryParam("format") String format,
       ResourceDto resourceDto);
+
+  /**
+   * Observe a Teamagochi Device Object Instance.
+   *
+   * <p>Example:
+   * <pre>
+   *   http//example.com/clients/my-endpoint/32769/0/41/observe?timeout=5&format=TLV
+   *   {"status":"CONTENT(205)","valid":true,"success":true,"failure":false,"content":{
+   *     "kind":"singleResource","id":41,"type":"INTEGER","value":"0"}
+   *   }
+   * </pre>
+   */
+  @POST
+  @Path("/clients/{endpoint}/{object}/{instance}/{resource}/observe")
+  ResourceResponseDto observeClientResource(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance,
+      @PathParam("resource") Integer resource,
+      @QueryParam("timeout") Integer timeout,
+      @QueryParam("format") String format);
+
+  /**
+   * Write to a Teamagochi Device Object Instance.
+   *
+   * <p>Example:
+   * <pre>
+   *   http//example.com/clients/my-endpoint/3201/0?timeout=300&format=TLV
+   * </pre>
+   */
+  @PUT
+  @Path("/clients/{endpoint}/{object}/{instance}")
+  ResourceResponseDto writeClientObjectInstance(
+      @PathParam("endpoint") String endpoint,
+      @PathParam("object") Integer object,
+      @PathParam("instance") Integer instance,
+      @QueryParam("timeout") Integer timeout,
+      @QueryParam("format") String format,
+      @QueryParam("replace") boolean replace,
+      ObjectInstanceDto objectInstanceDto);
 
   @GET
   @Path("/objectspecs/{endpoint}")

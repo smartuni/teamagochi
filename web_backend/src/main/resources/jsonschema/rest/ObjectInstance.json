@@ -10,7 +10,7 @@
     "resources": {
       "type": "array",
       "items": {
-        "$ref": "Resource.json"
+        "$ref": "../common/Resource.json"
       }
     },
     "id": {

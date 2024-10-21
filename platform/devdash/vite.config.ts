@@ -7,7 +7,7 @@ export default defineConfig(({ command, mode }) => {
 
   const commonConfig: UserConfigExport = {
     plugins: [react()],
-    base: '/'
+    base: '/dev'
   };
 
   if (command === 'serve') {

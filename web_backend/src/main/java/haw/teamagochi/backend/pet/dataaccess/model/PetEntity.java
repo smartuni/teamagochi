@@ -1,32 +1,31 @@
 package haw.teamagochi.backend.pet.dataaccess.model;
 
-import haw.teamagochi.backend.device.dataaccess.model.DeviceEntity;
 import haw.teamagochi.backend.user.dataaccess.model.UserEntity;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
+/**
+ * Persist-able pet representation.
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 public class PetEntity {
 
@@ -34,44 +33,30 @@ public class PetEntity {
   @GeneratedValue
   private long id;
 
-  public PetEntity() {}
-
   @NonNull
   @ManyToOne
   private UserEntity owner;
-
 
   @NonNull
   @Size(max = 255)
   private String name;
 
-
-  /*
-  @NonNull
-  @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$") // source: https://www.geeksforgeeks.org/how-to-validate-hexadecimal-color-code-using-regular-expression/
-  private String color;
-  */
-
-  private int happiness = 0;
-  private int wellbeing = 0;
-  private int health = 100;
-  private int hunger = 0;
-  private int cleanliness = 100;
-  private int fun = 0;
-
-  @PositiveOrZero
-  private int xp = 0;
-
   @Nullable
   @Past
   private Date lastTimeOnDevice;
 
-
   @ManyToOne
   @NonNull
+  @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
   private PetTypeEntity petType;
 
-
+  @PositiveOrZero private int happiness = 0;
+  @PositiveOrZero private int wellbeing = 0;
+  @PositiveOrZero private int health = 100;
+  @PositiveOrZero private int hunger = 0;
+  @PositiveOrZero private int cleanliness = 100;
+  @PositiveOrZero private int fun = 0;
+  @PositiveOrZero private int xp = 0;
 
   @Override
   public boolean equals(Object o) {
@@ -90,7 +75,22 @@ public class PetEntity {
     return Objects.hash(id);
   }
 
-
-
+  @Override
+  public String toString() {
+    return "PetEntity{"
+        + "id=" + id
+        + ", owner=" + owner
+        + ", name='" + name + '\''
+        + ", happiness=" + happiness
+        + ", wellbeing=" + wellbeing
+        + ", health=" + health
+        + ", hunger=" + hunger
+        + ", cleanliness=" + cleanliness
+        + ", fun=" + fun
+        + ", xp=" + xp
+        + ", lastTimeOnDevice=" + lastTimeOnDevice
+        + ", petType=" + petType
+        + '}';
+  }
 }
 

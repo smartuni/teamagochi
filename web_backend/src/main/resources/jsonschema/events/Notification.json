@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Notification",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ep": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "res": {
+      "type": "string"
+    },
+    "val": {
+      "$ref": "../common/Resource.json"
+    }
+  },
+  "required": [
+    "ep",
+    "kind",
+    "res",
+    "val"
+  ]
+}
