@@ -95,6 +95,6 @@ void events_start(void (*fsm_callback)(EVENT_T event)){
     msg_init_queue(rcv_queue, RCV_QUEUE_SIZE);
     while (1) {
         msg_receive(&msg);
-        fsm_callback(msg.type);        
+        fsm_callback(msg.type);
     }
 }

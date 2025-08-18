@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 #include "events.h"
-#include "lwm2m_handler.h"
 #include "display_handler.h"
 #include "io_handler.h"
 
@@ -134,7 +133,7 @@ static const state_t *currentState = &Top_Level[1];
 void fsm_start_thread(void){
     set_t_events_pid(thread_create(fsm_thread_stack, sizeof(fsm_thread_stack),
                   THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST,
-                  fsm_thread, NULL, "fsm_thread"));    
+                  fsm_thread, NULL, "fsm_thread"));
 }
 
 void *fsm_thread(void *arg) {
@@ -170,7 +169,7 @@ void traverse_state(const state_t *target_state) {
         if (currentState->Exit) currentState->Exit();
         currentState = currentState->Parent;
         //if (currentState->Entry) currentState->Entry(); //dont call entry action if you come from a child state
-    } 
+    }
     while (target_state->Level > currentState->Level) {
         currentState = currentState->Child;
         if (currentState->Entry) currentState->Entry();
@@ -225,8 +224,6 @@ handler_result_t off_handler(EVENT_T event) {
 void off_entry(void) {
     if (firstStart) {
         firstStart = false;
-        lwm2m_handler_init();
-        lwm2m_handler_start();
         io_init();
         display_init();
         startDisplayThread();
@@ -358,7 +355,6 @@ handler_result_t mainView_handler(EVENT_T event) {
         case PET_FEED:
             if (!statsShowing) {
                 DEBUG("[FSM:mainView_handler]: PET_FEED\n");
-                lwm2m_handleEvent(PET_FEED);
             }
             return HANDLED;
         case PET_PLAY:
@@ -370,13 +366,11 @@ handler_result_t mainView_handler(EVENT_T event) {
         case PET_MEDICATE:
             if (!statsShowing) {
                 DEBUG("[FSM:mainView_handler]: PET_MEDICATE\n");
-                lwm2m_handleEvent(PET_MEDICATE);
             }
             return HANDLED;
         case PET_CLEAN:
             if (!statsShowing) {
                 DEBUG("[FSM:mainView_handler]: PET_CLEAN\n");
-                lwm2m_handleEvent(PET_CLEAN);
             }
             return HANDLED;
         case INFO_PRESSED:
@@ -427,7 +421,6 @@ handler_result_t gameView_handler(EVENT_T event) {
         case GAME_FINISHED:
             DEBUG("[FSM:gameView_handler]: GAME_FINISHED\n");
             traverse_state(&Pet_Level[0]); //transition to main_view
-            lwm2m_handleEvent(PET_PLAY);     
             return HANDLED;
         default:
             DEBUG("[FSM:gameView_handler]: UNHANDLED\n");
